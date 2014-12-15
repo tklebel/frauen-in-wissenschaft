@@ -34,7 +34,7 @@ motive <- df %>%
   data.matrix 
 
 
-# factormap 
+# factormap !!!! geht nicht ???
 result <- PCA(motive, graph=F)
 plot.PCA(motive, choix= "var")
 
@@ -58,6 +58,8 @@ ev <- eigen(cor(zukunft, use = "pairwise.complete.obs")) # get eigenvalues
 ap <- parallel(subject = nrow(zukunft), var = ncol(zukunft), rep = 100, cent = 0.05)
 nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
 plotnScree(nS)
+
+# -> 2 Faktorenlösung
 
 
 # balkendiagramme für abbruch und unterbrechung --------------
