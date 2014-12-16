@@ -3,6 +3,7 @@ title: "Erste Exploration"
 output:
   html_document:
     theme: cosmo
+    toc: yes
 ---
 
 Liebe Sarah,
@@ -46,14 +47,20 @@ df_sav <- df_sav %>%
 
 Zuerst hab ich mich an die beiden Blöcke *Motive* und *Zukunft* gemacht.
 
-## Motive
+### Motive
 Als erstes gibts hier eine *Factormap*, die einem graphisch helfen kann zu verstehen, wie sich die Faktoren bilden könnten. Dann hab ich einen Scree-Plot mit der Parallel-Analyse dazu gemacht. Eine Einleitung dazu, was die Parallel-Analyse macht gibts auf den ersten Seiten hier: http://pareonline.net/pdf/v12n2.pdf (Sie macht irgendwas mit Monte-Carlo-Simulation).
 
 ```{r motive, fig.width=8, fig.height=8}
 motive <- df_sav %>%
-  select(., q_6_1:q_6_16) %>%
+  select(., q_6_1:q_6_16) 
+
+# NAs setzen
+motive[motive=="weiß nicht"] <- NA
+
+# fälle mit NAs rauswerfen
+motive <- motive %>%
   data.matrix %>%
-  na.omit # fälle mit NAs rauswerfen
+  na.omit 
 
 
 # factormap
@@ -77,6 +84,7 @@ Hier hab ich das gleiche noch einmal für die Variablen betreffend der Zukunftsv
 
 ```{r zukunft, fig.width=8, fig.height=8, echo=F}
 # Zukunft
+# weiß nicht ist im Datensatz schon auf NA gesetzt gewesen
 zukunft <- df_sav %>%
   select(., q_19_1:q_19_6) %>%
   data.matrix %>%
@@ -107,4 +115,27 @@ unterbrecher <- df_sav %>%
 round(apply(unterbrecher, 2, function(col)sum(col=="Ja")/length(col))*100)
 ```
 Berechnet sind sie wie folgt: ich hab nur die Leute genommen, die gesagt haben, sie hätten schon einmal ans Unterbrechen gedacht. Von denen sind jeweils die Prozente auf ganze Zahlen gerundet wiedergegeben. Also, beim Grund *Unzufriedenheit mit dem Studium* (q_15_1) haben 29% angegeben, dass er zutrifft. Das kann man natürlich auch nach Geschlecht, Studienzweig oder sonst was anderem weiter splitten.  
-Der Vollständigkeit halber: Die Anzahl der möglichen "Unterbrecher_innen" ist `r nrow(unterbrecher)`.
+Der Vollständigkeit halber: Die Anzahl der möglichen "Unterbrecher_innen" ist `r nrow(unterbrecher)`.  
+
+
+**Erweiterung 16.12.:**  
+Hier hab ich noch eine einfache Grafik erstellt, um die Prozente zu visualisieren. Ist aber nur eine Arbeitsgrafik, ich bin erst am lernen, wie ich all diese Auswertungen mach, und dann auch graphisch umsetze...
+
+```{r graph}
+d <- round(apply(unterbrecher, 2, function(col)sum(col=="Ja")/length(col))*100)
+
+# setze "Names-Attribut" für barplot
+attributes(d)$names <- c("Unzufriedenheit mit dem Studium", "Fehlende Aussicht auf institutionelle Einbindung an einer Universität", "Probleme bei der Finanzierung des Doktoratsstudiums", "Mangelnde Vereinbarkeit mit Berufstätigkeit", "Mangelnde Vereinbarkeit mit Betreuungspflichten", "Attraktive Arbeit gefunden", "Erwartungen an meine Leistungen nicht erfüllbar", "Interesse verloren", "Stillstand bei der Dissertation", "Schwierigkeiten eine/n BetreuerIn zu finden", "Nur nebenbei studiert", "Fehlende Unterstützung durch den/die BetreuerIn", "Keine befriedigenden Berufsaussichten mit dem Doktoratsabschluss", "Doktoratsstudium ist zu schwierig", "Doktoratsstudium als zeitliche Überbrückung gedacht", "Studienförderung läuft aus", "Kind bekommen bzw. werde ein Kind bekommen")
+
+# margins setzen, damit beschriftung platz hat
+par(mar=c(5, 18, 4, 2) + 0.1)
+ 
+# plot
+d[order(d, decreasing=F)] %>%
+  barplot(., horiz=T, las=1, cex.names=.65, col="aquamarine3")
+title(main="Gründe für Unterbrechungsgedanken", xlab="Angaben in Prozent")
+
+# die konkreten Zahlen nochmal übersichtlicher hier:
+d[order(d, decreasing=T)]
+```
+
