@@ -1,0 +1,108 @@
+---
+title: "Erste Exploration"
+output: html_document
+---
+
+Liebe Sarah,
+
+ich hab hier ein paar erste Explorationen angestellt und zusammengestellt, damit du meine Ergebnisse sehen kannst.
+
+
+```{r daten, echo=FALSE, message=FALSE, warning=FALSE}
+# pakete ----------
+# faktorenanalyse
+library(psych)
+library(nFactors)
+library(FactoMineR)
+
+# allgemein
+library(ggplot2)
+library(foreign)
+library(Kmisc)
+library(Hmisc)
+library(car)
+library(plyr)
+library(dplyr)
+library(magrittr)
+
+
+# working directory
+setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
+
+# daten einlesen -----------
+df <- read.spss("Data/Datensatz_15-12.sav", use.value.labels=T, to.data.frame=T)
+
+# local data frame erstellen: wird besser dargestellt
+df_sav <- tbl_df(df)
+
+# nicht komplette Antworten aussortieren:
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+```
+
+## Faktorenanalysen
+
+Zuerst hab ich mich an die beiden Blöcke *Motive* und *Zukunft* gemacht.
+
+## Motive
+Als erstes gibts hier eine *Factormap*, die einem graphisch helfen kann zu verstehen, wie sich die Faktoren bilden könnten. Dann hab ich einen Scree-Plot mit der Parallel-Analyse dazu gemacht. Eine Einleitung dazu, was die Parallel-Analyse macht gibts auf den ersten Seiten hier: http://pareonline.net/pdf/v12n2.pdf (Sie macht irgendwas mit Monte-Carlo-Simulation).
+
+```{r motive, fig.width=8, fig.height=8}
+motive <- df_sav %>%
+  select(., q_6_1:q_6_16) %>%
+  data.matrix %>%
+  na.omit # fälle mit NAs rauswerfen
+
+
+# factormap
+PCA(motive, graph=F) %>%
+  plot.PCA(., choix="var")
+
+# parallel test
+ev <- eigen(cor(motive, use = "pairwise.complete.obs")) # get eigenvalues
+ap <- parallel(subject = nrow(motive), var = ncol(motive), rep = 100, cent = 0.05)
+nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
+plotnScree(nS)
+```
+
+Diese Analyse würde 5 Faktoren nahelegen. Das ist seltsam, weil vorhin kamen noch 4 Faktoren raus. Eventuell hatte ich vorhin nicht nur vollständige Fälle verwendet, das hab ich jetzt. Aber gut. Ich hab auch (mit 4 Faktoren) schon Lösungen gerechnet, aber nur mal zum anschauen. Da es jetzt eh nicht mehr passt (5 Faktoren) füg ichs nicht hinzu.
+
+**Heureka!**  
+Ich hab das Dokument jetzt mehrmals gesetzt, und zwischenzeitlich hätte die Parallel-Analyse nur 3 Faktoren für gehaltvoll gefunden. Das liegt halt dran, dass die Simulation jedes Mal ein bisschen anders ist. Spricht auch dafür, dass es mathematisch nicht eindeutig ist: alles zwischen 3 und 5 wäre wohl legitim. Was inhaltlich sinnvoll ist, muss man dann halt selbst entscheiden.
+
+### Zukunft  
+Hier hab ich das gleiche noch einmal für die Variablen betreffend der Zukunftsvorstellungen gemacht.
+
+```{r zukunft, fig.width=8, fig.height=8, echo=F}
+# Zukunft
+zukunft <- df_sav %>%
+  select(., q_19_1:q_19_6) %>%
+  data.matrix %>%
+  na.omit # fälle mit NAs rauswerfen
+
+# factormap
+PCA(zukunft, graph=F) %>%
+  plot.PCA(., choix="var")
+
+# parallel test
+ev <- eigen(cor(zukunft, use = "pairwise.complete.obs")) # get eigenvalues
+ap <- parallel(subject = nrow(zukunft), var = ncol(zukunft), rep = 100, quantile = 0.05)
+nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
+plotnScree(nS)
+```
+
+Da zeigt sich doch, dass die Antworten: *wiss. Karriere*, *Auslandsaufenthalt* und *Professor_in* zusammen gehören. Das kommt auch bei verschiedenen Berechnungen heraus. Ich würde auf jeden Fall empfehlen, nicht *varimax* sondern *oblimin* oder ähnlich zu rotieren: ich glaub, damit fällt es leichter zu verstehen, was dahinter stecken könnte. 
+
+
+##Prozente für die Unterbrechungsgründe 
+Schlussendlich hab ich mir deine Frage zu den Unterbrechungsgründen angeschaut. Eine schöne Grafik kann ich noch nicht präsentieren, aber ich hab immerhin die Prozente ausgerechnet. Die könntest du ja auch im Excel verwenden, wenn du magst.
+
+```{r unterbrecher}
+unterbrecher <- df_sav %>%
+  filter(q_14 == "Ja") %>%
+  select(., q_15_1:q_15_17)
+
+round(apply(unterbrecher, 2, function(col)sum(col=="Ja")/length(col))*100)
+```
+Berechnet sind sie wie folgt: ich hab nur die Leute genommen, die gesagt haben, sie hätten schon einmal ans Unterbrechen gedacht. Von denen sind jeweils die Prozente auf ganze Zahlen gerundet wiedergegeben. Also, beim Grund *Unzufriedenheit mit dem Studium* (q_15_1) haben 29% angegeben, dass er zutrifft. Das kann man natürlich auch nach Geschlecht, Studienzweig oder sonst was anderem weiter splitten.  
+Der Vollständigkeit halber: Die Anzahl der möglichen "Unterbrecher_innen" ist `r nrow(unterbrecher)`.
