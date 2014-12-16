@@ -1,6 +1,8 @@
 ---
 title: "Erste Exploration"
-output: html_document
+output:
+  html_document:
+    theme: cosmo
 ---
 
 Liebe Sarah,

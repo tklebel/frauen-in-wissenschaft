@@ -103,6 +103,40 @@ unterbrecher <- df_r %>%
   filter(q_14 == "Ja") %>%
   select(., q_15_1:q_15_17)
 
-round(apply(unterbrecher, 2, function(col)sum(col=="Ja")/length(col))*100)
+# berechne die Prozente
+d <- round(apply(unterbrecher, 2, function(col)sum(col=="Ja")/length(col))*100)
+
+
+
+######################
+# plotten ############
+# setze "Names-Attribut" für barplot
+attributes(d)$names <- c("Unzufriedenheit mit dem Studium", "Fehlende Aussicht auf institutionelle Einbindung an einer Universität", "Probleme bei der Finanzierung des Doktoratsstudiums", "Mangelnde Vereinbarkeit mit Berufstätigkeit", "Mangelnde Vereinbarkeit mit Betreuungspflichten", "Attraktive Arbeit gefunden", "Erwartungen an meine Leistungen nicht erfüllbar", "Interesse verloren", "Stillstand bei der Dissertation", "Schwierigkeiten eine/n BetreuerIn zu finden", "Nur nebenbei studiert", "Fehlende Unterstützung durch den/die BetreuerIn", "Keine befriedigenden Berufsaussichten mit dem Doktoratsabschluss", "Doktoratsstudium ist zu schwierig", "Doktoratsstudium als zeitliche Überbrückung gedacht", "Studienförderung läuft aus", "Kind bekommen bzw. werde ein Kind bekommen")
+
+# margins setzen, damit beschriftung platz hat
+par(mar=c(5, 18, 4, 2) + 0.1)
+d[order(d, decreasing=F)] %>%
+  barplot(., horiz=T, las=2, cex.names=.65, col="aquamarine3")
+title(main="Gründe für Unterbrechungsgedanken", xlab="Angaben in Prozent")
+
+# standard wiederherstellen
+par(mar=c(5, 4, 4, 2) + 0.1)
+#############################
+
+
+#################
+# versuch mit ggplot2
+bla <- data.frame(c(d[,1]), rep(1:17))
+ggplot(bla, aes(x=bla[,2], y=bla[,1])) + geom_bar(stat="identity") + coord_flip()
+###############
 
 # abbruch
+# muss eher qualitativ gemacht werden, sind ja nicht so viele, oder?
+describe(df_r$q_16)
+# hm, sind 18. sollte man sich durchaus anschauen
+
+# Anzahl der Semester
+describe(df_r$q_17)
+
+# Gründe
+df_r$q_18
