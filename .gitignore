@@ -1,8 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
-Berechnungen.Rproj
-
-
-Datensatz_15-12.sav
 .DS_Store
+
+Data
+*.Rproj
+*.html
+*.sav
