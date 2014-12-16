@@ -19,7 +19,7 @@ library(magrittr)
 setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
 
 # daten einlesen -----------
-df <- read.spss("Datensatz_15-12.sav", use.value.labels=T, to.data.frame=T)
+df <- read.spss("Data/Datensatz_15-12.sav", use.value.labels=T, to.data.frame=T)
 
 # alternative Daten, direkt aus LimeSurvey
 source("Data/survey_49753_R_syntax_file.R", encoding = "UTF-8")
@@ -40,9 +40,15 @@ df_r <- df_r %>%
 
 # Motive --
 motive <- df_r %>%
-  select(., q_6_1:q_6_16) %>%
+  select(., q_6_1:q_6_16) 
+
+# NAs setzen
+motive[motive=="weiß nicht"] <- NA
+
+# fälle mit NAs rauswerfen
+motive <- motive %>%
   data.matrix %>%
-  na.omit # fälle mit NAs rauswerfen
+  na.omit 
 
 
 # factormap
@@ -55,7 +61,7 @@ ap <- parallel(subject = nrow(motive), var = ncol(motive), rep = 100, cent = 0.0
 nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
 plotnScree(nS)
 
-# -> 4 Faktorenlösung angebracht
+# -> 5 Faktorenlösung angebracht
 
 fit_pca <- principal(motive, nfactors = 5, rotate = "oblimin")
 fit_fa <- fa(motive, nfactors = 5, fm = "pa", rotate = "oblimin")
@@ -65,7 +71,7 @@ print.psych(fit_fa, cut = 0.15, sort = TRUE)
 
 
 
-
+# FEHLT ÜBERPRÜFUNG: GIBT ES WEIß NICHT?!!!!!!! ######
 # Zukunft
 zukunft <- df_r %>%
   select(., q_19_1:q_19_6) %>%
