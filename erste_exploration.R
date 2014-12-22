@@ -39,7 +39,7 @@ df_r <- df_r %>%
 # faktorenplots ----------
 
 # Motive --
-motive <- df_r %>%
+motive <- df_sav %>%
   select(., q_6_1:q_6_16) 
 
 # NAs setzen
