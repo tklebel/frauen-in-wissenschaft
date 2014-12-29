@@ -1,0 +1,117 @@
+---
+title: "Berechnung Studiendauer"
+
+date: "27. Dezember 2014"
+
+output:
+  html_document:
+    theme: cosmo
+    toc: yes
+---
+
+Liebe Sarah,
+
+unten ist der Code zur Berechnung der Studiendauer nach dem Muster: in welchem Semester ist der/die Studierende? Die fertige Variable ist im .xls-File "studiendauer.xls". Du kannst sie einfach mit Excel öffnen, markieren, kopieren und in SPSS in einer von dir neu erstellen Variable einfügen. Bitte vergiss dann nicht, Werte über 99 als Missing zu definieren -> ich hab fehlenden Werten einfach "99999" zugewiesen, dann ist das mit SPSS kompatibel.
+
+Wenn du Fragen zur Berechnung hast, melde dich bitte einfach.
+
+
+```{r daten, echo=FALSE, message=FALSE, warning=FALSE}
+
+# allgemein
+library(ggplot2)
+library(foreign)
+library(Hmisc)
+library(car)
+library(plyr)
+library(dplyr)
+library(magrittr)
+
+# working directory
+setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
+
+# daten einlesen -----------
+df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df_sav <- tbl_df(df)
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+```
+
+# Transformieren in WS / SS
+```{r semester}
+# neuen vektor erstellen mit WS / SS
+# 7-12 = WS, 1-6 = SS
+
+df_sav$sem <- with(df_sav, recode(q_5_1, "1:6='SS'; 7:12='WS'")) %>%
+  factor
+
+# anschauen
+df_sav %>%
+  select(q_5_1, sem) 
+```
+
+# Berechnung der Dauer
+```{r berechnung}
+# Berechnung ########
+# Ausgangspunkt 
+basis <- 2014
+
+# Formeln:
+# WS: (basis-beginnjahr)*2 + 1
+# SS: (basis-beginnjahr)*2 + 2
+
+# verwendete Daten
+d <- data.frame(df_sav$id, df_sav$sem, df_sav$q_5_2)
+colnames(d) <- c("id", "sem", "q_5_2")
+
+# Berechnung
+d_1 <- d %>%
+  filter(sem=="SS") %>%
+  mutate(dauer = (basis - q_5_2)*2 + 2)
+
+d_2 <- d %>%
+  filter(sem=="WS") %>%
+  mutate(dauer = (basis - q_5_2)*2 + 1)
+
+d_3 <- d %>% # auch NAs mit filtern, damit alle Fälle bleiben
+  filter(sem %nin% c("WS", "SS")) %>%
+  mutate(dauer = NA)
+
+# Daten zusammenführen
+d_end <- rbind(d_1, d_2, d_3)
+
+# sortieren nach "id"
+d_end <- d_end %>%
+  arrange(id)
+
+# anschauen
+d_end 
+
+d_end$dauer %>%
+  median(., na.rm=T)
+describe(d_end$dauer)
+```
+
+# Explorationsgrafiken
+```{r grafiken}
+# plot 1
+d_end$dauer[order(d_end$dauer, decreasing=F)] %>%
+  barplot(., yaxt='n', names=d_end$dauer[order(d_end$dauer, decreasing=F)])
+title(main="Absolute Studiendauern", xlab="Dauer des Studiums in Semestern")
+
+# plot 2
+describe(d_end$dauer)$values[2,] %>%
+  barplot(., names=attributes(describe(d_end$dauer)$values)$dimnames[[2]])
+title(main="Studiendauer", ylab="Angaben in Prozent", xlab="Semester in dem die Studierenden sind")
+```
+
+
+# Export
+Nur der Vollständigkeit halber hier, wie ich die Daten exportiert hab:
+```
+# export des Vektors nach SPSS
+d_end$dauer <- recode(d_end$dauer, "NA = 99999")
+d_end$sem <- recode(d_end$sem, "NA = 99999")
+write.table(d_end$dauer, file="studiendauer.xls", col.names = TRUE, row.names = FALSE)
+```
+
