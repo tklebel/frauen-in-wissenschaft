@@ -5,7 +5,6 @@
 # allgemein
 library(ggplot2)
 library(foreign)
-library(Kmisc)
 library(Hmisc)
 library(car)
 library(plyr)
@@ -30,7 +29,7 @@ df_sav %>%
   select(q_5_1) 
 
 # sortieren, ob sommer oder wintersemester
-sem <- with(df_sav, recode(q_5_1, "1:6='SS'; 7:12='WS'")) %>%
+df_sav$sem <- with(df_sav, recode(q_5_1, "1:6='SS'; 7:12='WS'")) %>%
   factor
 
 df_sav %>%
@@ -53,28 +52,29 @@ df_sav %>%
 basis <- 2014
 
 # verwendete Daten
-d <- data.frame(df_sav$sem, df_sav$q_5_2, df_sav$id)
+d <- data.frame(df_sav$id, df_sav$sem, df_sav$q_5_2)
+colnames(d) <- c("id", "sem", "q_5_2")
 
 d_1 <- d %>%
-  filter(df_sav.sem=="SS") %>%
-  mutate(dauer = (basis - df_sav.q_5_2)*2 + 2)
+  filter(sem=="SS") %>%
+  mutate(dauer = (basis - q_5_2)*2 + 2)
 
 d_2 <- d %>%
-  filter(df_sav.sem=="WS") %>%
-  mutate(dauer = (basis - df_sav.q_5_2)*2 + 1)
+  filter(sem=="WS") %>%
+  mutate(dauer = (basis - q_5_2)*2 + 1)
 
 d_3 <- d %>% # auch NAs mit filtern, damit alle Fälle bleiben
-  filter(df_sav.sem %nin% c("WS", "SS")) %>%
+  filter(sem %nin% c("WS", "SS")) %>%
   mutate(dauer = NA)
 
 d_end <- rbind(d_1, d_2, d_3)
 
 d_end %>%
-  arrange(df_sav.id)
+  arrange(id)
  
 # fertiger Vektor. ÜBERPRÜFEN!!!!!!!!!!!!!
 d_end <- d_end %>%
-  arrange(df_sav.id)
+  arrange(id)
 
 d_end$dauer %>%
   median(., na.rm=T)
@@ -87,5 +87,11 @@ title(main="Absolute Studiendauern", xlab="Dauer des Studiums in Semestern")
 # plot 2
 describe(d_end$dauer)
 describe(d_end$dauer)$values[2,] %>%
-  barplot(., names=attributes(describe(d_end$dauer)$values)$dimnames[[2]])
+  barplot(., yaxt='n', names=attributes(describe(d_end$dauer)$values)$dimnames[[2]])
 title(main="Studiendauer", ylab="Angaben in Prozent", xlab="Semester in dem die Studierenden sind")
+
+
+# export des Vektors nach SPSS
+d_end$dauer <- recode(d_end$dauer, "NA = 99999")
+d_end$sem <- recode(d_end$sem, "NA = 99999")
+write.table(d_end$dauer, file="studiendauer.xls", col.names = TRUE, row.names = FALSE)
