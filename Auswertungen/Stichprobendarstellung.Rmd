@@ -1,0 +1,85 @@
+---
+title: "Stichprobendarstellung"
+date: "06. Jänner 2015"
+output:
+  html_document:
+    theme: cosmo
+    toc: yes
+---
+
+Hier habe ich einige Parameter der Stichprobe aufbereitet.
+
+```{r daten, echo=FALSE, message=FALSE, warning=FALSE}
+
+# allgemein
+library(ggplot2)
+library(foreign)
+library(Hmisc)
+library(car)
+library(plyr)
+library(dplyr)
+library(magrittr)
+
+# Kreuztabellen
+library(gmodels)
+
+# working directory
+setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
+
+# daten einlesen -----------
+df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df_sav <- tbl_df(df)
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+```
+
+# Studienfächer
+```{r fächer, echo=FALSE}
+df_sav %>%
+  select(q_1) %>%
+  describe
+
+ggplot(df_sav, aes(q_1)) + geom_bar() + labs(title="Studienfächer", x="Studienrichtung", y="Anzahl")
+```
+
+## nach Geschlecht unterteilt
+```{r fächer geschlecht, echo=FALSE}
+table(df_sav$q_1, df_sav$q_24)
+
+ggplot(df_sav, aes(q_1, color=q_24)) + geom_bar(aes(fill=q_24), position="dodge") + labs(title="Studienfächer", x="Studienrichtung", y="Anzahl")
+```
+
+# Geschlecht & Alter
+## Geschlecht
+```{r geschlecht, echo=FALSE}
+df_sav %>%
+  select(q_24) %>%
+  describe
+```
+
+## Alter
+```{r alter, echo=FALSE}
+df_sav %>%
+  select(q_25) %>%
+  describe
+```
+
+## Kombiniert
+```{r geschlecht + alter, echo=FALSE, warning=F}
+ggplot(df_sav, aes(q_25, fill=q_24)) + geom_histogram()
+ggplot(df_sav, aes(q_24, q_25)) + geom_boxplot() + labs(y="Alter")
+ggplot(df_sav, aes(q_24, q_25)) + geom_violin(adjust=.5, scale= "width") + labs(y="Alter")
+```
+
+# Rigorosum
+```{r rigorosum, echo=FALSE}
+df_sav %>%
+  select(q_99) %>%
+  describe
+```
+
+## unterteilt nach Geschlecht
+```{r rigorosum + geschlecht, echo=FALSE}
+by(df_sav$q_99, df_sav$q_24, describe)
+ggplot(df_sav, aes(q_99, color=q_24)) + geom_bar(aes(fill=q_24), position="dodge") 
+```
