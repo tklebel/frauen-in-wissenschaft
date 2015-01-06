@@ -1,0 +1,69 @@
+---
+title: "Darstellung der Betreuungssituation"
+output:
+  html_document:
+    theme: cosmo
+    toc: yes
+---
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
+```{r daten}
+
+# allgemein
+library(ggplot2)
+library(foreign)
+library(Hmisc)
+library(car)
+library(plyr)
+library(dplyr)
+library(magrittr)
+
+# Kreuztabellen
+library(gmodels)
+
+# working directory
+setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
+
+# daten einlesen -----------
+df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df_sav <- tbl_df(df)
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+```
+
+Diesmal werde ich mir die Betreuungssituation anschauen. Ich habe im Folgenden einige Male Kreuztabellen gemacht. Signifikanztests brauchen wir ja nicht - beizeiten les ich noch in ein Buch zur Analyse kategorialer Daten hinein.
+
+# Betreuer_in vorhanden?
+```{r betreuer_in}
+df_sav %>%
+  select(q_7) %>%
+  describe
+```
+
+## unterteilt nach Geschlecht
+```{r betreuer_in nach geschlecht}
+CrossTable(df_sav$q_7, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
+```
+Hier ist ein bisschen ein Unterschied, deutlich fällt er aber nicht aus.
+
+# Schwierigkeit, Betreuer_in zu finden
+```{r schwierigkeit}
+describe(df_sav$q_9)
+```
+
+## nach Geschlecht
+```{r schwierigkeit nach geschlecht}
+CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
+```
+Hier ist doch ein deutlicher Unterschied: die Frauen taten sich viel leichter eine/n Betreuer_in zu finden. Sicher interessant für weitere Untersuchung. Werde auch anschauen, wie das mit den Gründen für die Betreuer_innenauswahl zusammenhängt.
+
+## nach Masterstudienort
+```{r schwierigkeit nach masterstudienort}
+CrossTable(df_sav$q_9, df_sav$q_3, prop.r=F, prop.t=F, prop.chisq=F)
+```
+Hier gibt es schon Unterschiede, sind aber auf Grund der kleinen Zellbesetzungen nicht zuverlässig zu interpretieren.
+
