@@ -49,7 +49,7 @@ df_sav %>%
 ggplot(df_sav, aes(q_25, fill=q_24)) + geom_histogram()
 ggplot(df_sav, aes(id, q_25, colour=q_24)) + geom_point()
 ggplot(df_sav, aes(q_24, q_25)) + geom_boxplot()
-ggplot(df_sav, aes(q_24, q_25)) + geom_violin()
+ggplot(df_sav, aes(q_24, q_25)) + geom_violin(adjust=.5, scale= "width")
 
 
 # Rigorosum
