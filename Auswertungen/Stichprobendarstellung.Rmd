@@ -19,6 +19,7 @@ library(car)
 library(plyr)
 library(dplyr)
 library(magrittr)
+library(scales)
 
 # Kreuztabellen
 library(gmodels)
@@ -66,12 +67,12 @@ df_sav %>%
 
 ## Kombiniert
 ```{r geschlecht + alter, echo=FALSE, warning=F}
-ggplot(df_sav, aes(q_25, fill=q_24)) + geom_histogram()
-ggplot(df_sav, aes(q_24, q_25)) + geom_boxplot() + labs(y="Alter")
-ggplot(df_sav, aes(q_24, q_25)) + geom_violin(adjust=.5, scale= "width") + labs(y="Alter")
+ggplot(df_sav, aes(q_25, fill=q_24)) + geom_histogram() + labs(title="Alter der Stichprobe", x="Alter")
+ggplot(df_sav, aes(q_24, q_25)) + geom_boxplot() + labs(y="Alter") + labs(title="Alter der Stichprobe")
+ggplot(df_sav, aes(q_24, q_25)) + geom_violin(adjust=.5, scale= "width") + labs(title="Alter der Stichprobe", y="Alter")
 ```
 
-# Rigorosum
+# Rigorosum abgeschlossen?
 ```{r rigorosum, echo=FALSE}
 df_sav %>%
   select(q_99) %>%
@@ -81,5 +82,14 @@ df_sav %>%
 ## unterteilt nach Geschlecht
 ```{r rigorosum + geschlecht, echo=FALSE}
 by(df_sav$q_99, df_sav$q_24, describe)
-ggplot(df_sav, aes(q_99, color=q_24)) + geom_bar(aes(fill=q_24), position="dodge") 
+
+pdata <- df_sav %>%
+  with(., table(q_99, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Rigorosum = q_99, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Rigorosum, p)) 
+plot1 + geom_bar(stat="identity", position="dodge", aes(fill=Geschlecht)) + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Abschluss des Rigorosums", y="Prozentanteile innerhalb der Geschlechter") 
 ```

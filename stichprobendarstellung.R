@@ -10,6 +10,7 @@ library(car)
 library(plyr)
 library(dplyr)
 library(magrittr)
+library(scales)
 
 # Kreuztabellen
 library(gmodels)
@@ -59,4 +60,14 @@ df_sav %>%
 
 # nach geschlecht
 by(df_sav$q_99, df_sav$q_24, describe)
-ggplot(df_sav, aes(q_99, color=q_24)) + geom_bar(aes(fill=q_24), position="dodge") 
+
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_99, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Rigorosum = q_99, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Rigorosum, p)) 
+plot1 + geom_bar(stat="identity", position="dodge", aes(fill=Geschlecht)) + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Abschluss des Rigorosums", y="Prozentanteile innerhalb der Geschlechter") 
