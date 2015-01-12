@@ -2,7 +2,6 @@
 title: "Darstellung der Betreuungssituation"
 output:
   html_document:
-    theme: cosmo
     toc: yes
 ---
 ```{r global_options, include=FALSE}
@@ -21,6 +20,7 @@ library(car)
 library(plyr)
 library(dplyr)
 library(magrittr)
+library(scales)
 
 # Kreuztabellen
 library(gmodels)
@@ -35,7 +35,7 @@ df_sav <- df_sav %>%
   filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
 ```
 
-Diesmal werde ich mir die Betreuungssituation anschauen. Ich habe im Folgenden einige Male Kreuztabellen gemacht. Signifikanztests brauchen wir ja nicht - beizeiten les ich noch in ein Buch zur Analyse kategorialer Daten hinein.
+Diesmal werde ich mir die Betreuungssituation anschauen. Ich habe im Folgenden einige Male Kreuztabellen gemacht (die zweite Zeile sind immer Spaltenprozente). Signifikanztests brauchen wir ja nicht - beizeiten les ich noch in ein Buch zur Analyse kategorialer Daten hinein.
 
 # Betreuer_in vorhanden?
 ```{r betreuer_in}
@@ -58,12 +58,92 @@ describe(df_sav$q_9)
 ## nach Geschlecht
 ```{r schwierigkeit nach geschlecht}
 CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
+
+
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_9, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer = q_9, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Betreuer_in gefunden nach Geschlecht", y="Prozentanteile innerhalb der Geschlechter") 
 ```
+
 Hier ist doch ein deutlicher Unterschied: die Frauen taten sich viel leichter eine/n Betreuer_in zu finden. Sicher interessant für weitere Untersuchung. Werde auch anschauen, wie das mit den Gründen für die Betreuer_innenauswahl zusammenhängt.
 
 ## nach Masterstudienort
 ```{r schwierigkeit nach masterstudienort}
 CrossTable(df_sav$q_9, df_sav$q_3, prop.r=F, prop.t=F, prop.chisq=F)
+
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_9, q_3)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_3) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer = q_9, Studienort = q_3)
+
+plot1 <- ggplot(pdata, aes(Betreuer, p, fill=Studienort)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Betreuer_in gefunden nach Studienort", y="Prozentanteile innerhalb der Studienorte", x="Schwierigkeit, Betreuer_in zu finden") 
 ```
+
 Hier gibt es schon Unterschiede, sind aber auf Grund der kleinen Zellbesetzungen nicht zuverlässig zu interpretieren.
 
+# Geschlecht von Betreuer_in mit Geschlecht des/der Befragten als UV
+```{r geschlecht betreuer mit geschlecht als AV}
+CrossTable(df_sav$q_8, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
+
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_8, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer = q_8, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Geschlecht von Betreuer_in abhängig von Geschlecht der Befragten", y="Prozentanteile innerhalb Befragtengeschlecht", x="Geschlecht von Betreuer_in") 
+```
+
+Hier ist ganz klar: Frauen haben öfter Frauen als Betreuerinnen, bei den Männern ist es umgekehrt.
+
+# Gründe für die Wahl des/der Betreuer_in
+```{r gründe für betreuer, echo=F}
+# Filtern für Betreuer = Ja
+betreuer <- df_sav %>%
+  filter(q_7 == "Ja") %>%
+  select(., q_11_1:q_11_6)
+
+# Berechnung der Prozente
+f <- function(x) {
+  x == "Ja"
+}
+pdata <- betreuer %>%
+  summarise_each(., funs(sum(f(.))/n()))
+
+# Grafik
+attributes(pdata)$names <- c("Weil er/sie bereits meine Master-/Diplomarbeit betreut hat", "Weil er/sie in meinem Dissertationsbereich fachlich kompetent ist", "Weil er/sie mir von anderen empfohlen wurde", "Weil er/sie mich gut motivieren kann", "Weil er/sie mich angesprochen hat", "Weil er/sie mir sympathisch ist")
+
+par(mar=c(5, 18, 4, 2) + 0.1)
+pdata[order(pdata, decreasing=F)] %>%
+  as.matrix %>%
+  barplot(., horiz=T, las=1, cex.names=.7)
+```
+
+```{r, echo=T}
+# Prozentangaben: mean = Prozente
+pdata[order(pdata, decreasing=T)] %>%
+  describe
+```
+
+Die Angaben aus der offenen Angabe waren folgende, und kamen jeweils nur einmal vor:  
+
+- Er ist mein Chef  
+- wurde mir im Rahmen des DK-Climate Change zugeteilt   
+* Weil er sich bereit erklärte  
+* Ausgeschriebenes Projekt  
+* Offenheit für interdisziplinäre Kooperation  
+* Mögleichkeit Dissertation & Projektmitarbeit zu vereinbaren  
