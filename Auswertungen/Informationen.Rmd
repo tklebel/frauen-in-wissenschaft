@@ -1,0 +1,294 @@
+---
+title: "Informationen"
+output:
+  html_document:
+    toc: yes
+---
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
+```{r daten}
+
+# allgemein
+library(ggplot2)
+library(foreign)
+library(Hmisc)
+library(car)
+library(plyr)
+library(dplyr)
+library(magrittr)
+library(scales)
+library(ggvis)
+
+# Kreuztabellen
+library(gmodels)
+
+# working directory
+setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
+
+# daten einlesen -----------
+df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df_sav <- tbl_df(df)
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+```
+
+Liebe Sarah,  
+ich hab dir hier mal die Variable q_20 visualisiert. Wenn du zu einer Grafik genau Zahlen haben möchtest (Kreuztabellen) sags einfach, das ist schnell gemacht. Ich dachte mit Grafiken ist es für den Anfang mal übersichtlicher. Am Ende findet sich noch die Übersicht der sonstigen Antworten.
+
+
+# Haben Sie genügend Informationen in den folgenden Bereichen?
+## Unterteilt nach Geschlecht
+```{r Informationen1}
+# compute data to plot
+pdata <- df_sav %>%
+  select(q_1, q_24, q_20_1:q_20_8) %>%
+  with(., table(q_20_1, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_1, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Ablauf und Rahmenbedingungen des Doktoratsstudiums \n (z.B. Studienplan)", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+
+```{r Informationen2}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_2, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_2, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Verfassen von Forschungsanträgen", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+
+```{r Informationen3}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_3, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Möglichkeiten für finanzielle Förderungen während des \n Doktoratsstudiums (z.B. Stipendien)", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+
+```{r Informationen4}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_4, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_4, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Publikationsmöglichkeiten", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+
+```{r Informationen5}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_5, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_5, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Auslandsaufenthalte im Rahmen des Studiums", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+
+```{r Informationen6}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_6, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_6, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen zu wissenschaftlichen Konferenzen/Tagungen", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+```{r Informationen7}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_7, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_7, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Berufliche Perspektiven in der Wissenschaft", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+
+```{r Informationen8}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_8, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_8, Geschlecht = q_24)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Wissenschaftsinterne Abläufe \n (z.B. informeller Informationsaustausch, Netzwerkaufbau)", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+
+## Nach Studienrichtung
+
+**Achtung**: In den Gruppen VWL und WiPäd sind nur wenige Leute, daher sind die Balken evtl. nicht aussagekräftig. Die Unterschiede BWL-Soz kann man natürlich trotzdem interpretieren.
+
+```{r Informationen9}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_1, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_1, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Ablauf und Rahmenbedingungen des Doktoratsstudiums \n (z.B. Studienplan)", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+
+```{r Informationen10}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_2, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_2, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Verfassen von Forschungsanträgen", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+
+```{r Informationen11}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_3, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_3, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Möglichkeiten für finanzielle Förderungen während des \n Doktoratsstudiums (z.B. Stipendien)", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+
+```{r Informationen12}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_4, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_4, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Publikationsmöglichkeiten", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+
+```{r Informationen13}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_5, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_5, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Auslandsaufenthalte im Rahmen des Studiums", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+
+```{r Informationen14}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_6, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_6, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Informationen zu wissenschaftlichen Konferenzen/Tagungen", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+```{r Informationen15}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_7, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_7, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Berufliche Perspektiven in der Wissenschaft", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+
+```{r Informationen16}
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_20_8, q_1)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_1) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Informationen = q_20_8, Studienrichtung = q_1)
+
+
+plot1 <- ggplot(pdata, aes(Informationen, p, fill=Studienrichtung)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Accent") + labs(title="Wissenschaftsinterne Abläufe \n (z.B. informeller Informationsaustausch, Netzwerkaufbau)", y="Prozentanteile innerhalb der Studienrichtungen") 
+```
+
+
+# Sonstiger Bereich, in dem Informationen erwünscht sind:
+
+- Auswahl Betreuer -> ev organisationsübergreifende Liste mit Themenvorschlägen von BetreuerInnen
+- Berufliche Perspektiven in der Wissenschaft? Ist das ein PhD-Joke?
+- Man weiß nicht genau, welches Forschungsseminar zum gewählten Dissertationsthema passt. Wer kann einem Rigorosum Prüfungen abnehmen?
+- Suche eines Betreuers
+- Methodologien + Methoden -> Übersicht. Kumulative Diss. vs. Monographie -> unter welchen Rahmenbedingungen. Perspektiven/Karrierewege bei geringen nachzubesetzenden Stellen, etc
