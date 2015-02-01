@@ -1,8 +1,11 @@
 ---
 title: "Darstellung der Betreuungssituation"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     toc: yes
+  word_document: default
 ---
 ```{r global_options, include=FALSE}
 library(knitr)
@@ -26,10 +29,10 @@ library(scales)
 library(gmodels)
 
 # working directory
-setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
+#setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
 
 # daten einlesen -----------
-df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df <- read.spss("../Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
 df_sav <- tbl_df(df)
 df_sav <- df_sav %>%
   filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
@@ -111,7 +114,7 @@ plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_conti
 Hier ist ganz klar: Frauen haben öfter Frauen als Betreuerinnen, bei den Männern ist es umgekehrt.
 
 # Gründe für die Wahl des/der Betreuer_in
-```{r gründe für betreuer, echo=F}
+```{r gruende für betreuer, echo=F}
 # Filtern für Betreuer = Ja
 betreuer <- df_sav %>%
   filter(q_7 == "Ja") %>%
