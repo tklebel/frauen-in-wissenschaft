@@ -4,4 +4,4 @@ Data Analysis for KFU; Topic: Wissenschaftliche Karrieren von Frauen an der SOWI
 
 Code Files zur Datenmanipulation und Analyse für ein Projekt an der KFU-Graz.
 
-testing out the fix to detached HEAD state
+deleting the test for the fix to detached HEAD state
