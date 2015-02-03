@@ -80,5 +80,15 @@ plot1 <- ggplot(pdata, aes(Studienkolleg_innen, p, fill=Geschlecht))
 plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Studienkolleg_innen", y="Prozentanteile innerhalb der Geschlechter") 
 
 
+# Studienkolleg_innen mit facet_grid nach Studienrichtung
+pdata <- df_sav %>%
+  with(., table(q_21_4, q_24, q_1_a)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24, q_1_a) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Studienkolleg_innen = q_21_4, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Studienkolleg_innen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + facet_grid(.~ q_1_a) + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Studienkolleg_innen", y="Prozentanteile innerhalb der Geschlechter") 
 
 

@@ -1,10 +1,10 @@
 ---
 title: "Fachliche Unterstützung"
 output:
-  pdf_document:
-    toc: yes
-    number_sections: true
   html_document:
+    toc: yes
+  pdf_document:
+    number_sections: yes
     toc: yes
 ---
 
@@ -38,3 +38,141 @@ df_sav <- df_sav %>%
 ```
 
 
+Hier habe ich mir die Variablen *q_21* zur Frage, wer zur fachlichen Unterstützung herangezogen wird, angeschaut.
+
+Die zwei qualitativen Antworten gleich vorweg:
+```{r qualitative Antworten}
+df_sav$q_21a[24]
+df_sav$q_21a[68]
+```
+
+
+# Unterteilt nach Geschlecht
+
+```{r fachkundige}
+pdata <- df_sav %>%
+  with(., table(q_21_1, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Fachkundige = q_21_1, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Fachkundige, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von fachkundigen Personen außerhalb Universität", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+Frauen konsultieren externe Fachkundige deutlich häufiger, Männer eher selten. Gilt das auch für alle Fächer? (siehe unten: Gilt nur für Soziologie)
+
+```{r betreuer}
+pdata <- df_sav %>%
+  with(., table(q_21_2, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer_in = q_21_2, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Betreuer_in, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Betreuer_in", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+Hier habe ich die logische Prüfung eingebaut -> alle, die keine/n Betreuer_in haben, sind als fehlend gesetzt.
+
+Erstaunlich hier, dass immerhin 20% sich eher selten an den/die Betreuer_in wenden. Die Unterschiede zwischen häufig und sehr häufig würde ich nicht überinterpretieren: wichtig wäre, wie das in den Disziplinen aussieht.
+
+```{r mitarbeiterinnen SOWI}
+pdata <- df_sav %>%
+  with(., table(q_21_3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., wissMitarbeiter_in = q_21_3, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(wissMitarbeiter_in, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von wissenschafltichem/r Mitarbeiter_in", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+Interessant hier: Frauen wählen viel häufiger "nie". Haben sie eine schlechtere Einbindung an der Uni? **Vergleichen mit Geschlechterunterschieden bei den Uni-Anstellungen.**
+
+```{r studienkolleginnen}
+pdata <- df_sav %>%
+  with(., table(q_21_4, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Studienkolleg_innen = q_21_4, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Studienkolleg_innen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Studienkolleg_innen", y="Prozentanteile innerhalb der Geschlechter") 
+```
+
+Hier sind die Unterschieden in meinen Augen nicht sehr deutlich genug für eine Aussage.
+
+
+# Nach Studienrichtung & Geschlecht
+Allgemein zu beachten: VWL hat eine sehr kleine Gruppengröße, es ist überhaupt nur eine Frau -> die Werte sind nicht sehr aussagekräftig..
+
+
+```{r fachkundige2, fig.width=12}
+pdata <- df_sav %>%
+  with(., table(q_21_1, q_24, q_1_a)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24, q_1_a) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Fachkundige = q_21_1, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Fachkundige, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von fachkundigen Personen außerhalb Universität", y="Prozentanteile innerhalb der Geschlechter") + facet_grid(.~ q_1_a)
+```
+Bei BWL sind die Unterschiede nur im Bereich von eher selten - selten. Bei Soziologie gibt es schon Unterschiede: Frauen konsultieren externe häufiger als Männer.
+
+
+```{r betreuer2, fig.width=12}
+pdata <- df_sav %>%
+  with(., table(q_21_2, q_24, q_1_a)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24, q_1_a) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer_in = q_21_2, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Betreuer_in, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Betreuer_in", y="Prozentanteile innerhalb der Geschlechter") + facet_grid(.~ q_1_a)
+```
+
+- BWL: Frauen: 100% bei eher häufig, bei den Männern etwas differenzierter
+- Soziologie: Männer nur eher häufig oder häufig, Frauen twl. auch selten, dadurch insgesamt weniger oft
+
+```{r mitarbeiterinnen SOWI2, fig.width=12}
+pdata <- df_sav %>%
+  with(., table(q_21_3, q_24, q_1_a)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24, q_1_a) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., wissMitarbeiter_in = q_21_3, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(wissMitarbeiter_in, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von wissenschafltichem/r Mitarbeiter_in", y="Prozentanteile innerhalb der Geschlechter") + facet_grid(.~ q_1_a)
+```
+
+- **BWL: ausgeglichen**
+- **Soziologie: großer Unterschied: Männer suchen um viel mehr Rat bei SOWI-MitarbeiterInnen, Frauen zu mehr als zwei Drittel selten oder nie.**
+- VWL: Anbindung an Mittelbau scheint schlecht: Männer suchen selten oder nie Rat, die eine Frau sehr häufig (wahrscheinlich gut am Institut eingebunden)
+
+```{r studienkolleginnen2, fig.width=12}
+pdata <- df_sav %>%
+  with(., table(q_21_4, q_24, q_1_a)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24, q_1_a) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Studienkolleg_innen = q_21_4, Geschlecht = q_24)
+
+plot1 <- ggplot(pdata, aes(Studienkolleg_innen, p, fill=Geschlecht)) 
+plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Studienkolleg_innen", y="Prozentanteile innerhalb der Geschlechter")  + facet_grid(.~ q_1_a)
+```
+
+Insgesamt scheint es hier eher ausgeglichen zu sein - die Unterschiede heben sich meist auf.
+
+# Ausblick
+Interessant wären folgende Dinge:
+
+- Gibt es in der Soziologie bei der Anbindung an das wiss. Personal große Geschlechterunterschiede? Frauen fragen seltener um Rat, kommt das daher, dass sie schlechter eingebunden sind (also z.B. nicht angestellt, die Männer aber schon?) -> vergleichen mit der beruflichen Situation.
+- Wie schaut die Anbindung bei VWL aus? Die Männer fragen kaum Institutsmitarbeiter_innen um Rat.
