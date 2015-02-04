@@ -1,0 +1,96 @@
+---
+title: "Motivationsindex"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    number_sections: yes
+    toc: yes
+---
+
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
+```{r daten}
+# faktorenanalyse
+library(psych)
+library(nFactors)
+library(FactoMineR)
+
+# allgemein
+library(ggplot2)
+library(foreign)
+library(Hmisc)
+library(car)
+library(plyr)
+library(dplyr)
+library(magrittr)
+library(scales)
+
+
+
+# daten einlesen -----------
+df <- read.spss("../Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df_sav <- tbl_df(df)
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+
+# convenience function definieren
+fa_oblimin <- function(x, n) {
+  fit <- fa(x, nfactors = n, fm = "pa", rotate = "oblimin")
+  print.psych(fit, cut = 0.15, sort = TRUE)
+}
+
+```
+
+
+Ich habe mich diesmal an den Motivationsindex gemacht, bestehend aus den Items *q_6_1* bis *q_6_16*.
+Dazu habe ich den Datensatz von den Missings bereinigt - ich habe nur vollständige Fälle verwendet, daher sinkt die **Stichprobengröße** auf **69**.
+
+
+```{r daten erstellen}
+motive <- df_sav %>%
+  select(., q_6_1:q_6_16) %>%
+  data.matrix %>%
+  na.omit %>%
+  as.data.frame
+
+# parallel test
+ev <- eigen(cor(motive, use = "pairwise.complete.obs")) # get eigenvalues
+ap <- parallel(subject = nrow(motive), var = ncol(motive), rep = 100, cent = 0.05)
+nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
+plotnScree(nS)
+```
+
+
+Scree-Test und Parallel-Test sind nicht eindeutig. Eine Lösung mit 3-5 Faktoren scheint angebracht. Als Methode habe ich (damit wir ein bisschen einen Kontrast haben) die *factor analysis* mit *principal axes* als Vorgehensweise.
+
+Ich habe alle drei Lösungen angeschaut, die 4-Faktorenlösung schien mir aber am plausibelsten - es mussten keine inhaltlich wichtigen Items eliminiert werden, um eine sinnvoll interpretierbare Lösung zu finden.
+
+Nachfolgend der Output zur finalen Lösung.
+
+```{r 4 Faktoren, echo=TRUE}
+motive4 <- motive %>%
+  select(-q_6_13, -q_6_3, -q_6_8)
+
+fa_oblimin(motive4, 4)
+```
+
+Inhaltlich zu interpretieren ist es wie folgt:
+
+- **PA2** *Angebot durch Uni*: Items 4, 9, 16: Lehrende angeboten zu betreuen; Lehrende geraten, es zu tun; Arbeitsangebot bekommen. Item 12 (Doktoratsstipendium) passt nicht mehr ganz so gut, ist aber inhaltlich zu rechtfertigen
+- **PA1** *Wissenschaftliches Interesse*: Items 14, 2: wiss. Arbeiten macht Spaß; um in Wissenschaft arbeiten zu können. Item 1 (Interesse am Fach) lädt tlw. mehrfach, hier aber am stärksten. Item 6 (Theme erforschen) lädt schwächer, hier aber auch passend
+- **PA4** *Prestige*: Items 15, 7, 5: höheres Einkommen, in Gesellschaft etwas erreichen, bessere Chancen am Arbeitsmarkt
+- **PA3** *Verlegenheitsausweg*: Items 10, 11: länger StudentIn bleiben, keine adäquate Arbeit gefunden.
+
+
+Durch die schiefwinkelige Rotation wurde es glaube ich leichter, eine inhaltlich passende Lösung zu finden. Dadurch ergaben sich natürlich Korrelationen zwischen den Faktoren. Diese würde ich wie folgt interpretieren:
+
+- Prestige - wiss. Interesse: **-.31** Ganz klar: deutliche negative Korrelation - Personen mit hohem wiss. Interesse haben weniger interesse an Prestige, und umgekehrt
+- Prestige - Verlegenheitsausweg: **-.27** Habe keine klare Erklärung. Evtl: Personen, die aus Prestigegründen studieren (wohl eher BWL) unterscheiden sich von Personen, die weiterstudieren weil sie keine Arbeit gefunden haben.
+- wiss. Interesse - Angebot durch Uni: **.15** Kausalrichtung unklar, aber: hohes wiss. Interesse geht eher mit Angeboten durch die Uni einher
+- wiss Interesse - Verlegenheitsausweg: **.17** Bei hohem wiss. Interesse ist auch der Zusammenhang mit "keine Arbeit gefunden" und "um länger Student_in sein zu können" höher.
+
