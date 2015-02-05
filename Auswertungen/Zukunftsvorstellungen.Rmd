@@ -1,0 +1,106 @@
+---
+title: "Zukunftsvorstellungen"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    number_sections: yes
+    toc: yes
+---
+
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
+```{r daten}
+# faktorenanalyse
+library(psych)
+library(nFactors)
+library(FactoMineR)
+
+# allgemein
+library(ggplot2)
+library(foreign)
+library(Hmisc)
+library(car)
+library(plyr)
+library(dplyr)
+library(magrittr)
+library(scales)
+
+
+
+# daten einlesen -----------
+df <- read.spss("../Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df_sav <- tbl_df(df)
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+
+# convenience function definieren
+fa_oblimin <- function(x, n) {
+  fit <- fa(x, nfactors = n, fm = "pa", rotate = "oblimin")
+  print.psych(fit, cut = 0.15, sort = TRUE)
+}
+
+
+fa_parallel <- function(x) {
+  ev <- eigen(cor(x, use = "pairwise.complete.obs")) # get eigenvalues
+  ap <- parallel(subject = nrow(x), var = ncol(x), rep = 100, cent = 0.05)
+  nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
+  plotnScree(nS)
+}
+
+```
+
+
+Die Indexbildung zu den Zukunftsvorstellungen ist ein bisschen schwierig - es findet sich keine einfach zu interpretierende Lösung. Ich habe in der Folge eine normale Hauptkomponentenanalyse gemacht - sie lieferte das eindeutigste Ergebnis.
+
+Durch aussortieren der NAs bleiben nur noch 59 Fälle übrig.
+
+
+```{r daten erstellen}
+# Motive -------
+zukunft <- df_sav %>%
+  select(., q_19_1:q_19_6) %>%
+  data.matrix %>%
+  na.omit %>%
+  as.data.frame
+
+
+# parallel test
+fa_parallel(zukunft)
+```
+
+Der Parallel-Test legt eine 2-faktorielle Lösung nahe.
+
+
+Eine adäquate Lösung konnte ich finden, indem ich Item *q_19_5* (Auslandsaufenthalt) entfernte. Die Ladungen der restlichen Items lassen sich inhaltlich schlüssig erklären.
+
+```{r pca}
+zukunft <- zukunft %>%
+  select(-q_19_5)
+
+fit_pca <- principal(zukunft, nfactors = 2, rotate = "varimax")
+print.psych(fit_pca, cut = .20, sort = TRUE)
+```
+
+Interpretieren würde ich es wie folgt:
+
+- Komponente 2 == möchte Studium abschließen. 
+- Komponente 1 entspricht der wissenschaftlichen Motivation: Die Items *im universitären Bereich arbeiten*, *Professur* und *außeruniversitärer Forschungsbereich* laden alle hoch darauf. Das Item *außerhalb der wiss. Forschung* lädt stark negativ -> passt hier auch dazu.
+
+Zur Veranschaulichung hilft auch der Faktorplot:
+
+```{r faktormap}
+PCA(zukunft, graph=F) %>%
+  plot.PCA(., choix="var")
+```
+
+
+### Schlussfolgerungen
+Als zentrale AV würde ich einen Index aus den Items *q_19_2*, *q_19_3*, *q_19_6*, sowie negativ kodiert *q_19_4* bilden.
+
+
+
