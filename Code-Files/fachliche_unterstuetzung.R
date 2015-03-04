@@ -42,7 +42,6 @@ plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_conti
 # frauen deutlich häufiger -> warum? wie ist das in den disziplinen?
 
 # betreuer_in
-## logische Prüfung fehlt noch!!!!###
 pdata <- df_sav %>%
   with(., table(q_21_2, q_24)) %>% # create table with variables
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
@@ -51,9 +50,9 @@ pdata <- df_sav %>%
   rename(., Betreuer_in = q_21_2, Geschlecht = q_24)
 
 plot1 <- ggplot(pdata, aes(Betreuer_in, p, fill=Geschlecht)) 
-plot1 + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Betreuer_in", y="Prozentanteile innerhalb der Geschlechter") 
+plot1 + geom_bar(stat="identity", position="dodge")  + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(title="Informationen von Betreuer_in", y="Prozentanteile innerhalb der Geschlechter") 
 
-#noch nicht aussagekräftig, da prüfung fehlt
+
 
 # wiss. mitarbeiter an SOWI
 pdata <- df_sav %>%
