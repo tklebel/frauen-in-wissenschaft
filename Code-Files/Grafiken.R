@@ -9,6 +9,10 @@ library(plyr)
 library(dplyr)
 library(magrittr)
 library(scales)
+library(tidyr)
+
+library(RColorBrewer)
+
 
 # daten einlesen -----------
 df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
@@ -41,7 +45,83 @@ motivplot
 # alternativ in grau
 motivplot <- ggplot(test, aes(y, v, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_grey()
 
-# wir machen hier einen branch test
+
+# Better computation of graph -----------------------
+# calculate the percentages for all variables
+# dillentatic method, needs better computation
+
+# N für die einzelnen Items
+colSums(!is.na(motive))
+
+# calculate percentages
+calc_percentages <- function(x) {
+  prop.table(table(x)) %>%
+    as.numeric*100
+}
+
+motive %>%
+  select(q_6_1) %>%
+  calc_percentages -> prozente
+
+# do it manually for every variable :/
+motive %>%
+  select(q_6_16) %>%
+  calc_percentages %>%
+  append(prozente, .) -> prozente
+
+
+prozente <- c(61.250000, 35.000000,  3.750000,  0.000000, 41.772152, 25.316456, 22.784810, 10.126582, 47.500000, 31.250000, 12.500000,  8.750000, 13.580247,  6.172840, 11.111111, 69.135802, 22.784810, 31.645570, 31.645570, 13.924051, 35.443038, 32.911392, 20.253165, 11.392405,  7.594937, 27.848101, 26.582278, 37.974684, 20.000000, 15.000000, 22.500000, 42.500000,  7.500000, 15.000000, 12.500000, 65.000000, 8.641975,  8.641975,  9.876543, 72.839506,  2.500000,  8.750000, 10.000000, 78.750000,  8.750000, 2.500000,  1.250000, 87.500000,  1.234568,  6.172840,  2.469136, 90.123457, 53.750000, 35.000000, 8.750000,  2.500000, 15.384615, 29.487179, 37.179487, 17.948718, 23.750000,  3.750000,  6.250000, 66.250000)
+prozente <- round(prozente, digits=2)
+t <- factor(rep(c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"), 16), levels=c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
+y <- rep(1:16, each= 4)
+labels <- rep(c("Weil mich das Fach interessiert", "Um in Wissenschaft und Forschung\n arbeiten zu können", "Um mich in meinem Beruf weiterzubilden", "Weil ein/e Lehrende/r mir angeboten hat,\n meine Dissertation zu betreuen", "Um am Arbeitsmarkt\n bessere Chancen zu haben", "Um mein Dissertationsthema\n erforschen zu können", "Weil ein Doktor-Titel oft notwendig ist,\n wenn man in der Gesellschaft\n etwas erreichen will", "8", "9", "10", "11", "12", "13", "14", "15", "16"), each=4)
+pdata <- data.frame(prozente, y, t)
+motivplot <- ggplot(test, aes(y, prozente, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=rep(1:16), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Greens")
+motivplot
+
+# reverse colours
+colours <-  rev(brewer.pal(name="Greens", n=4))
+motivplot <- ggplot(test, aes(y, prozente, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=rep(1:16), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_manual(values=colours)
+motivplot
+
+# arrage df according to percentages
+pdata %>%
+  spread(y, prozente) 
+
+# take just the first two columns (trifft zu und trifft eher zu)
+pdata[1:2,] -> pdata
+
+# strip first column
+pdata %>% select(2:17) -> pdata
+
+colSums(pdata)
+
+# combine the steps
+pdata %>%
+  spread(y, prozente) %>%
+  select(2:17) %>%
+  .[1:2,] %>%
+  colSums -> reihenfolge
+
+# nur die ersten beiden zeilen
+pdata %>%
+  spread(y, prozente) %>%
+  select(2:17) %>%
+  .[1:2,] 
+##############################
+# transpose to columns, then include index, put in bigger df, then arrange
+#######################
+reihenfolge <- rep(reihenfolge, each = 4)
+
+pdatan
+
+pdatan <- data.frame(pdata, reihenfolge)
+
+pdatan %>%
+  arrange(desc(reihenfolge))
+
+
+
 
 # Schwierigkeit, BetreuerIn zu finden ----------
 # compute data to plot
