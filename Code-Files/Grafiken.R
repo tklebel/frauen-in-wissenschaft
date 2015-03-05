@@ -41,6 +41,7 @@ motivplot
 # alternativ in grau
 motivplot <- ggplot(test, aes(y, v, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_grey()
 
+# wir machen hier einen branch test
 
 # Schwierigkeit, BetreuerIn zu finden ----------
 # compute data to plot
