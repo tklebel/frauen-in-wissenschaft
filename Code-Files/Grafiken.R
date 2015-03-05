@@ -41,3 +41,15 @@ motivplot
 # alternativ in grau
 motivplot <- ggplot(test, aes(y, v, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_grey()
 
+
+# Schwierigkeit, BetreuerIn zu finden ----------
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_9, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer = q_9, Geschlecht = q_24)
+
+schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht))  + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
+schwierigkeitsplot
