@@ -62,13 +62,12 @@ schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
   labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
 schwierigkeitsplot
 
+# clean up
 rm(pdata)
 
 # Motivationsindizes ----------
 # 4 Indizes zur Motivation, gesplittet nach Geschlecht, mit Violin+Boxplot+Punkt für Mittelwert
 # Variabennamen: Inst_Einbindung_Motivation, Verlegenheit_Motivation, Wi_Interesse_Motivation, Prestige_Motivation
-
-describe(factor(df_haven$q_24, labels=c("weiblich", "männlich")))
 
 # select data to plot
 df_haven %>%
@@ -135,6 +134,11 @@ p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
 # zusammenführen
 grid.arrange(p1, p2, p3, p4)
 
+# clean up
+rm(pdata, p1, p2, p3, p4)
 
 # ToDo
 # Farben anpassen
+# man könnte untersuchen, in welchen Studienfächern Prestige stärker als Motiv fungiert (Hypothese: In BWL ist das stärker als in SOZ)
+
+
