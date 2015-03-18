@@ -11,7 +11,7 @@ library(magrittr)
 library(scales)
 
 # daten einlesen -----------
-df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df <- read.spss("Data/DATENSATZ_FiW-main12_2.sav", use.value.labels=T, to.data.frame=T)
 df_sav <- tbl_df(df)
 
 
@@ -53,3 +53,8 @@ pdata <- df_sav %>%
 
 schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht))  + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
 schwierigkeitsplot
+
+
+# Motivationsindizes ----------
+
+
