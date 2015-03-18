@@ -88,6 +88,7 @@ p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
   labs(title = "Institutionelle Einbindung als Motivation") +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
+  ylim(c(1, 12.5)) + # extend y scale to range of data
   theme(legend.position = "none") # remove superflous legend
 
   
@@ -96,11 +97,12 @@ p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
 p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
   theme_light() +  
   geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
-  geom_boxplot(width = .12, alpha = .95) +
-  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  geom_boxplot(width = .08, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 3.5, shape = 4) +
   labs(title = "Verlegenheit als Motivation") +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
+  ylim(c(1, 12.5)) + 
   theme(legend.position = "none") # remove superflous legend
 
 
@@ -113,6 +115,7 @@ p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
   labs(title = "Wissenschaftliches Interesse als Motivation") +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
+  ylim(c(1, 12.5)) + 
   theme(legend.position = "none") # remove superflous legend
 
 
@@ -125,6 +128,7 @@ p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
   labs(title = "Prestige als Motivation") +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
+  ylim(c(1, 12.5)) + 
   theme(legend.position = "none") # remove superflous legend
 
 
@@ -133,5 +137,4 @@ grid.arrange(p1, p2, p3, p4)
 
 
 # ToDo
-# Skalierung der Y-Achse angleichen
 # Farben anpassen
