@@ -9,11 +9,15 @@ library(plyr)
 library(dplyr)
 library(magrittr)
 library(scales)
+library(haven)
+library(gridExtra) # arrange mutliple plots with grid.arrange()
+
 
 # daten einlesen -----------
 df <- read.spss("Data/DATENSATZ_FiW-main12_2.sav", use.value.labels=T, to.data.frame=T)
 df_sav <- tbl_df(df)
 
+df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
 
 # link zu den Paletten
 # http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/
@@ -51,10 +55,51 @@ pdata <- df_sav %>%
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
   rename(., Betreuer = q_9, Geschlecht = q_24)
 
-schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht))  + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
+schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge") +
+  theme_bw() + scale_y_continuous(labels = percent_format()) +
+  scale_fill_brewer(palette="Paired") +
+  labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
 schwierigkeitsplot
 
+rm(pdata)
 
 # Motivationsindizes ----------
+# 4 Indizes zur Motivation, gesplittet nach Geschlecht, mit Violin+Boxplot+Punkt für Mittelwert
+# Variabennamen: Inst_Einbindung_Motivation, Verlegenheit_Motivation, Wi_Interesse_Motivation, Prestige_Motivation
+
+describe(factor(df_haven$q_24, labels=c("weiblich", "männlich")))
+
+# select data to plot
+df_haven %>%
+  select(contains("Motivation"), q_24)  %>% 
+  as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
+  data.frame %>%
+  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
 
 
+
+
+# Inst-Einbindung
+ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
+  theme_light() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Institutionelle Einbindung als Motivation") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Skalenwert") +
+  theme(legend.position = "none") # remove superflous legend
+
+  
+
+# Verlegenheit
+
+# Wi_interesse
+
+# Prestige_Motivation
+
+
+# ToDo
+# Farben anpassen
