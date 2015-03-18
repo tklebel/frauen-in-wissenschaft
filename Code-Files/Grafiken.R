@@ -79,10 +79,8 @@ df_haven %>%
   filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
 
 
-
-
 # Inst-Einbindung
-ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
+p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
   theme_light() +  
   geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
   geom_boxplot(width = .12, alpha = .95) +
@@ -95,11 +93,45 @@ ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
   
 
 # Verlegenheit
+p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
+  theme_light() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Verlegenheit als Motivation") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Skalenwert") +
+  theme(legend.position = "none") # remove superflous legend
+
 
 # Wi_interesse
+p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
+  theme_light() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Wissenschaftliches Interesse als Motivation") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Skalenwert") +
+  theme(legend.position = "none") # remove superflous legend
+
 
 # Prestige_Motivation
+p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
+  theme_light() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Prestige als Motivation") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Skalenwert") +
+  theme(legend.position = "none") # remove superflous legend
+
+
+# zusammenführen
+grid.arrange(p1, p2, p3, p4)
 
 
 # ToDo
+# Skalierung der Y-Achse angleichen
 # Farben anpassen
