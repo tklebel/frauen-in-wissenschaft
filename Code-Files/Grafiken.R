@@ -16,6 +16,8 @@ library(gridExtra) # arrange mutliple plots with grid.arrange()
 # daten einlesen -----------
 df <- read.spss("Data/DATENSATZ_FiW-main12_2.sav", use.value.labels=T, to.data.frame=T)
 df_sav <- tbl_df(df)
+df_sav <- df_sav %>%
+  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
 
 df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
 
