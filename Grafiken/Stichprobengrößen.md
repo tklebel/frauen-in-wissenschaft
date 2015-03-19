@@ -58,5 +58,14 @@ Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 ##     80     80     81     80     78     80
 ```
 
+# Motivationsindizes
+
+
+```
+## Inst_Einbindung_Motivation    Verlegenheit_Motivation 
+##                         79                         78 
+##    Wi_Interesse_Motivation        Prestige_Motivation 
+##                         79                         77
+```
 
 

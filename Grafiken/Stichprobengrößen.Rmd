@@ -23,6 +23,7 @@ library(plyr)
 library(dplyr)
 library(magrittr)
 library(scales)
+library(haven)
 
 # Kreuztabellen
 library(gmodels)
@@ -31,10 +32,13 @@ library(gmodels)
 #setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
 
 # daten einlesen -----------
-df <- read.spss("../Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
+df <- read.spss("../Data/DATENSATZ_FiW-main12_2.sav", use.value.labels=T, to.data.frame=T)
 df_sav <- tbl_df(df)
-df_sav <- df_sav %>%
-  filter(., id %nin% c(27, 30, 37, 43, 45, 46, 91))
+
+
+# alternativer datensatz für andere Grafiken
+df_haven <- read_sav("../Data/DATENSATZ_FiW-main12_2.sav")
+
 ```
 
 
@@ -60,5 +64,18 @@ colSums(!is.na(motive))
 
 ```
 
+# Motivationsindizes
+
+````{r motivationsindizes}
+df_haven %>%
+  select(contains("Motivation"), q_24)  %>% 
+  as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
+  data.frame %>%
+  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
+
+
+colSums(!is.na(pdata[,1:4]))
+````
 
 
