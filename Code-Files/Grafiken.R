@@ -196,5 +196,6 @@ ggplot(pdata_m, aes(varname, anzahl)) +
   geom_bar(stat = "identity", fill = "#74C476") +
   coord_flip() +
   labs(y = "Häufigkeit der Nennung", x = NULL) +
-  scale_y_continuous(breaks = pretty_breaks(8)) 
+  scale_y_continuous(breaks = pretty_breaks(8)) +
+  theme(axis.text.y = element_text(size = 13)) 
   
