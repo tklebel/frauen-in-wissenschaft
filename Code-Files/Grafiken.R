@@ -7,11 +7,12 @@ library(Hmisc)
 library(car)
 library(plyr)
 library(dplyr)
+library(tidyr)
 library(magrittr)
 library(scales)
 library(haven)
 library(gridExtra) # arrange mutliple plots with grid.arrange()
-
+library(RColorBrewer) # Farbton finden
 
 # daten einlesen -----------
 df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
@@ -21,6 +22,7 @@ df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
 
 # link zu den Paletten
 # http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/
+
 
 
 # Grafik zu Motiven ------------
@@ -142,3 +144,52 @@ rm(pdata, p1, p2, p3, p4)
 # man könnte untersuchen, in welchen Studienfächern Prestige stärker als Motiv fungiert (Hypothese: In BWL ist das stärker als in SOZ)
 
 
+# Nachgedacht, abzubrechen ------
+
+# select variables and convert them to factor
+# q_15_16 hat keine ausprägungen, kann deshalb weggelassen werden
+df_haven %>%
+  select(q_14:q_15_15, q_15_17, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  filter(q_14 == "Ja") %>%
+  tbl_df -> abbruchgedanken
+
+
+# split for gender
+abbruchgedanken %>%
+  filter(q_24 == "männlich")  %>%
+  select(q_15_1:q_15_17) -> abbruchgedanken_m
+
+abbruchgedanken %>%
+  filter(q_24 == "weiblich")  %>%
+  select(q_15_1:q_15_17) -> abbruchgedanken_w
+
+# Variablennamen (q_15_1:q_15_17, ohne q_15_16)
+
+# create factor for variable names, in the right order
+varname <- c("Unzufriedenheit mit dem Studium", "Fehlende Aussicht auf institutionelle Einbindung an einer Universität", "Probleme bei der Finanzierung des Doktoratsstudiums", "Mangelnde Vereinbarkeit mit Berufstätigkeit", "Mangelnde Vereinbarkeit mit Betreuungspflichten", "Attraktive Arbeit gefunden", "Erwartungen an meine Leistungen nicht erfüllbar", "Interesse verloren", "Stillstand bei der Dissertation", "Schwierigkeiten eine/n BetreuerIn zu finden", "Nur nebenbei studiert", "Fehlende Unterstützung durch den/die BetreuerIn", "Keine befriedigenden Berufsaussichten mit dem Doktoratsabschluss", "Doktoratsstudium ist zu schwierig", "Doktoratsstudium als zeitliche Überbrückung gedacht", "Kind bekommen bzw. werde ein Kind bekommen")
+varname <- factor(varnames)
+
+
+## Männer ##
+# wie oft wurde "gewählt"? 
+abbruchgedanken_m %>%
+  summarise_each(funs(sum(. == "Ja"))) %>%
+  gather("variable", "anzahl") %>%
+  cbind(., varname) %>%
+  arrange(anzahl) %>%
+  slice(11:16) -> pdata_m
+
+# reorder the levels for the plot, by the frequency of the "anzahl"
+pdata_m$varname <- factor(pdata_m$varname, levels = pdata_m$varname[order(pdata_m$anzahl)])
+
+# plot
+ggplot(pdata_m, aes(varname, anzahl)) +
+  theme_light() +
+  geom_bar(stat = "identity", fill = "#74C476") +
+  coord_flip() +
+  labs(y = "Häufigkeit der Nennung", x = NULL) +
+  scale_y_continuous(breaks = pretty_breaks(8)) 
+  
