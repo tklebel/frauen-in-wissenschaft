@@ -24,6 +24,11 @@ df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
 # http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/
 
 
+# Farbschema erstellen -----
+mypalette <- brewer.pal(7, "Greens")
+mypalette
+
+# #74C476 wird als Grundfarbe verwendet
 
 # Grafik zu Motiven ------------
 motive <- df_sav %>%
