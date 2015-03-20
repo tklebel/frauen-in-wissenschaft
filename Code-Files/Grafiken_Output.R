@@ -44,7 +44,13 @@ pdata <- df_sav %>%
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
   rename(., Betreuer = q_9, Geschlecht = q_24)
 
-schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht))  + geom_bar(stat="identity", position="dodge") + theme_bw() + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Paired") + labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
+schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge") +
+  theme_bw() + scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(values = colours) +
+
+# clean up
+rm(pdata)
 
 ggsave(plot = schwierigkeitsplot, filename = "Grafiken/schwierigkeit-BetreuerIn.png", dpi = 200)
 
