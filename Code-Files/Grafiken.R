@@ -104,8 +104,8 @@ p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
   ylim(c(1, 12.5)) + # extend y scale to range of data
-  theme(legend.position = "none") # remove superflous legend
-
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours)
   
 
 # Verlegenheit
@@ -118,8 +118,8 @@ p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
   ylim(c(1, 12.5)) + 
-  theme(legend.position = "none") # remove superflous legend
-
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours)
 
 # Wi_interesse
 p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
@@ -131,8 +131,8 @@ p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
   ylim(c(1, 12.5)) + 
-  theme(legend.position = "none") # remove superflous legend
-
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours)
 
 # Prestige_Motivation
 p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
@@ -144,8 +144,8 @@ p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
   labs(x = "Geschlecht") + 
   labs(y = "Skalenwert") +
   ylim(c(1, 12.5)) + 
-  theme(legend.position = "none") # remove superflous legend
-
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours)
 
 # zusammenführen
 grid.arrange(p1, p2, p3, p4)
@@ -154,7 +154,6 @@ grid.arrange(p1, p2, p3, p4)
 rm(pdata, p1, p2, p3, p4)
 
 # ToDo
-# Farben anpassen
 # man könnte untersuchen, in welchen Studienfächern Prestige stärker als Motiv fungiert (Hypothese: In BWL ist das stärker als in SOZ)
 
 
