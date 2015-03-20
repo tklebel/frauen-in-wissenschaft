@@ -41,13 +41,40 @@ colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
 
 # Grafik zu Motiven ------------
 motive <- df_sav %>%
-  select(., q_6_1:q_6_16)
+  select(q_6_1:q_6_16)
 motive
 
 
 # prozente für variable 1
 Hmisc::describe(motive[,1]) 
 Hmisc::describe(motive[,7])
+
+# neue Variante, mit aes-mapping pro layer
+
+# vorgehensweise:
+# reihenfolge der Variablen ausrechnen
+# als x- achsen variable die nummer der in der Reihenfolge angeben
+# tick labels extra hinzufügen
+# warum sind die balken teils nicht richtig ausgerichtet?
+
+# todo
+# reihenfolge der Faktoren korrigieren (für alle Variablen)
+# problematisch: fehlende werte verzerren derzeit die Balken
+#   dafür scheint es keinen so leichten ausweg zu geben, da ggplot sich beschwert, wen die längen der vektoren nicht gleich sind
+
+# ansonsten schaut der ansatz ganz ok aus, weniger manuell, schneller als der auf branch "alternatecomputation"
+
+ggplot(motive, aes(c(6), fill = q_6_1)) +
+  coord_flip() +
+  geom_bar(position = "fill") +
+  geom_bar(aes(c(2), fill = q_6_2), position = "fill") +
+  geom_bar(aes(c(3), fill = q_6_3), position = "fill") +
+  geom_bar(aes(c(4), fill = q_6_4), position = "fill") +
+  geom_bar(aes(c(5), fill = q_6_5), position = "fill") +
+  scale_fill_brewer(palette = "Greens")
+
+###########
+
 
 # v sind die prozente für die Variablen
 v <- c(61, 35, 4, 0, 42, 25, 23, 10 , 48, 31, 12, 9, 14, 6, 11, 69, 23, 32, 32, 14, 35, 33, 20, 11, 8, 28, 27, 38)
