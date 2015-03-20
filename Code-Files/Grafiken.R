@@ -232,8 +232,9 @@ abbruchplot_frauen <- ggplot(pdata_w, aes(varname, anzahl)) +
   theme(axis.text.y = element_text(size = 12)) 
 
 # join plots
-grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 2)
-
+grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 1)
+# Formatierung ist nicht optimal: bei zwei Spalten sind die plots nicht ausgerichtet, da nicht gleich breit
+# bei zeilen sind die männer etwas komprimiert, da sie 6, anstatt 5 variablen haben
 
 # clean up
 rm(abbruchplot_frauen, abbruchplot_männer, varname, pdata_m, pdata_w, abbruchgedanken, abbruchgedanken_m, abbruchgedanken_w)
