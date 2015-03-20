@@ -52,7 +52,7 @@ CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
 Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
 
 
-# Motive
+# Grafik: Motive ein Doktoratsstudium aufzunehmen
 Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
 ```{r motive}
@@ -64,7 +64,7 @@ colSums(!is.na(motive))
 
 ```
 
-# Motivationsindizes
+# Grafik: Motivationsindizes
 
 ````{r motivationsindizes}
 df_haven %>%
@@ -78,4 +78,31 @@ df_haven %>%
 colSums(!is.na(pdata[,1:4]))
 ````
 
+
+# Grafik: Nachgedacht, abzubrechen
+
+````{r abbruchgedanken}
+df_haven %>%
+  select(q_14:q_15_15, q_15_17, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  filter(q_14 == "Ja") %>%
+  tbl_df -> abbruchgedanken
+````
+
+**Stichprobengröße Frauen**
+```{r}
+abbruchgedanken %>%
+  filter(q_24 == "weiblich") %>%
+  tally
+```
+
+
+**Stichprobengröße Männer**
+```{r}
+abbruchgedanken %>%
+  filter(q_24 == "männlich") %>%
+  tally
+```
 

@@ -47,7 +47,7 @@ In diesem File finden sich die Kreuztabellen und sonstige Darstellungen mit den 
 Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
 
 
-# Motive
+# Grafik: Motive ein Doktoratsstudium aufzunehmen
 Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
 
@@ -58,7 +58,7 @@ Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 ##     80     80     81     80     78     80
 ```
 
-# Motivationsindizes
+# Grafik: Motivationsindizes
 
 
 ```
@@ -68,4 +68,27 @@ Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 ##                         79                         77
 ```
 
+
+# Grafik: Nachgedacht, abzubrechen
+
+
+
+**Stichprobengröße Frauen**
+
+```
+## Source: local data frame [1 x 1]
+## 
+##    n
+## 1 16
+```
+
+
+**Stichprobengröße Männer**
+
+```
+## Source: local data frame [1 x 1]
+## 
+##    n
+## 1 19
+```
 
