@@ -25,10 +25,19 @@ df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
 
 
 # Farbschema erstellen -----
-mypalette <- brewer.pal(7, "Greens")
-mypalette
+palette_green <- brewer.pal(7, "Greens")
+palette_green
 
-# #74C476 wird als Grundfarbe verwendet
+palette_blue <- brewer.pal(7, "Blues")
+palette_blue
+
+# #A1D99B für Männer (Grün) als Grundfarbe 
+# #4292C6 für Frauen (Blau)
+
+# Basisgrün: #74C476
+
+# Farben für "scale_fill_manual"
+colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
 
 # Grafik zu Motiven ------------
 motive <- df_sav %>%
@@ -65,7 +74,7 @@ pdata <- df_sav %>%
 schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge") +
   theme_bw() + scale_y_continuous(labels = percent_format()) +
-  scale_fill_brewer(palette="Paired") +
+  scale_fill_manual(values = colours) +
   labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
 schwierigkeitsplot
 
