@@ -175,7 +175,7 @@ abbruchgedanken %>%
 
 # create factor for variable names, in the right order
 varname <- c("Unzufriedenheit mit dem Studium", "Fehlende Aussicht auf institutionelle Einbindung an einer Universität", "Probleme bei der Finanzierung des Doktoratsstudiums", "Mangelnde Vereinbarkeit mit Berufstätigkeit", "Mangelnde Vereinbarkeit mit Betreuungspflichten", "Attraktive Arbeit gefunden", "Erwartungen an meine Leistungen nicht erfüllbar", "Interesse verloren", "Stillstand bei der Dissertation", "Schwierigkeiten eine/n BetreuerIn zu finden", "Nur nebenbei studiert", "Fehlende Unterstützung durch den/die BetreuerIn", "Keine befriedigenden Berufsaussichten mit dem Doktoratsabschluss", "Doktoratsstudium ist zu schwierig", "Doktoratsstudium als zeitliche Überbrückung gedacht", "Kind bekommen bzw. werde ein Kind bekommen")
-varname <- factor(varnames)
+varname <- factor(varname)
 
 
 ## Männer ##
@@ -191,11 +191,43 @@ abbruchgedanken_m %>%
 pdata_m$varname <- factor(pdata_m$varname, levels = pdata_m$varname[order(pdata_m$anzahl)])
 
 # plot
-ggplot(pdata_m, aes(varname, anzahl)) +
+abbruchplot_männer <- ggplot(pdata_m, aes(varname, anzahl)) +
   theme_light() +
   geom_bar(stat = "identity", fill = "#74C476") +
   coord_flip() +
-  labs(y = "Häufigkeit der Nennung", x = NULL) +
+  labs(y = "Häufigkeit der Nennung", x = NULL, title = "Männer") +
   scale_y_continuous(breaks = pretty_breaks(8)) +
-  theme(axis.text.y = element_text(size = 13)) 
-  
+  theme(axis.text.y = element_text(size = 12)) 
+
+
+## Frauen ##
+# wie oft wurde "gewählt"? 
+abbruchgedanken_w %>%
+  summarise_each(funs(sum(. == "Ja"))) %>%
+  gather("variable", "anzahl") %>%
+  cbind(., varname) %>%
+  arrange(anzahl) %>%
+  slice(12:16) -> pdata_w
+
+# bei Frauen: nach 5 Variablen abschneiden, da 6 und 7 doppelt, bei männern nicht. Insgeamt wurde bei weniger als 4 Nennungen abgeschnitten
+
+# reorder the levels for the plot, by the frequency of the "anzahl"
+pdata_w$varname <- factor(pdata_w$varname, levels = pdata_w$varname[order(pdata_w$anzahl)])
+
+# plot
+abbruchplot_frauen <- ggplot(pdata_w, aes(varname, anzahl)) +
+  theme_light() +
+  geom_bar(stat = "identity", fill = "#74C476") +
+  coord_flip() +
+  labs(y = "Häufigkeit der Nennung", x = NULL, title = "Frauen") +
+  scale_y_continuous(breaks = pretty_breaks(8)) +
+  theme(axis.text.y = element_text(size = 12)) 
+
+# join plots
+grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 2)
+
+
+# clean up
+rm(abbruchplot_frauen, abbruchplot_männer, varname, pdata_m, pdata_w, abbruchgedanken, abbruchgedanken_m, abbruchgedanken_w)
+
+
