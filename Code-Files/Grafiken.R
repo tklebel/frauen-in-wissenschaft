@@ -38,6 +38,7 @@ palette_blue
 
 # Farben für "scale_fill_manual"
 colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
+colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
 
 # Grafik zu Motiven ------------
 motive <- df_sav %>%
@@ -84,14 +85,19 @@ motive2 <- df_sav %>%
   na.omit
 motive2
 
+# reorder the levels for the plot
+motive2$variable <- factor(motive2$variable, levels = c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
+
+
 ggplot(motive2, aes(id, fill = variable))  +
   geom_bar(position = "fill") +
   coord_flip() +
-  scale_fill_brewer(palette = "Greens")
+  scale_fill_manual(values = colours_skala) +
+  theme_light()
 
 
 # yes!!!!!!
-# fehlt: factor releveln
+# fehlt: richtige Reihenfolge der Variablen, und die richtigen Namen der Variablen
 
 ###########
 
