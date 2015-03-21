@@ -41,7 +41,7 @@ colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
 
 # Grafik zu Motiven ------------
 motive <- df_sav %>%
-  select(q_6_1:q_6_16)
+  select(q_6_1:q_6_16) 
 motive
 
 
@@ -64,6 +64,7 @@ Hmisc::describe(motive[,7])
 
 # ansonsten schaut der ansatz ganz ok aus, weniger manuell, schneller als der auf branch "alternatecomputation"
 
+
 ggplot(motive, aes(c(6), fill = q_6_1)) +
   coord_flip() +
   geom_bar(position = "fill") +
@@ -72,6 +73,25 @@ ggplot(motive, aes(c(6), fill = q_6_1)) +
   geom_bar(aes(c(4), fill = q_6_4), position = "fill") +
   geom_bar(aes(c(5), fill = q_6_5), position = "fill") +
   scale_fill_brewer(palette = "Greens")
+
+####
+# neue idee:
+# long format: alle variablen in eine spalte transferieren
+
+motive2 <- df_sav %>%
+  select(q_6_1:q_6_16) %>%
+  gather(., id, variable) %>%
+  na.omit
+motive2
+
+ggplot(motive2, aes(id, fill = variable))  +
+  geom_bar(position = "fill") +
+  coord_flip() +
+  scale_fill_brewer(palette = "Greens")
+
+
+# yes!!!!!!
+# fehlt: factor releveln
 
 ###########
 
