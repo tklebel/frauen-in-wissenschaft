@@ -79,16 +79,26 @@ ggplot(motive, aes(c(6), fill = q_6_1)) +
 # neue idee:
 # long format: alle variablen in eine spalte transferieren
 
+# get order of variables for plot
+reihenfolge <- df_sav %>%
+  select(q_6_1:q_6_16) %>%
+  summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>%
+  gather(id, häufigkeit) %>%
+  arrange(häufigkeit)
+
+
+# select data to plot and gather it in long format, remove NAs
 motive2 <- df_sav %>%
   select(q_6_1:q_6_16) %>%
   gather(., id, variable) %>%
   na.omit
-motive2
+
 
 # reorder the levels for the plot
 motive2$variable <- factor(motive2$variable, levels = c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
+motive2$id <- factor(motive2$id, levels = reihenfolge$id)
 
-
+# plot data
 ggplot(motive2, aes(id, fill = variable))  +
   geom_bar(position = "fill") +
   coord_flip() +
@@ -97,7 +107,7 @@ ggplot(motive2, aes(id, fill = variable))  +
 
 
 # yes!!!!!!
-# fehlt: richtige Reihenfolge der Variablen, und die richtigen Namen der Variablen
+# fehlt: die richtigen Namen der Variablen
 
 ###########
 
