@@ -46,9 +46,6 @@ motive <- df_sav %>%
 motive
 
 
-# prozente für variable 1
-Hmisc::describe(motive[,1]) 
-Hmisc::describe(motive[,7])
 
 # neue Variante, mit aes-mapping pro layer
 
@@ -79,13 +76,30 @@ ggplot(motive, aes(c(6), fill = q_6_1)) +
 # neue idee:
 # long format: alle variablen in eine spalte transferieren
 
+# variablennamen für den motivationsplot
+labels_motivplot <- c("Weil mich das Fach interessiert", 
+            "Um in Wissenschaft und Forschung\n arbeiten zu können", 
+            "Um mich in meinem Beruf weiterzubilden", 
+            "Weil ein/e Lehrende/r mir angeboten hat,\n meine Dissertation zu betreuen", 
+            "Um am Arbeitsmarkt\n bessere Chancen zu haben", 
+            "Um mein Dissertationsthema\n erforschen zu können", 
+            "Weil ein Doktor-Titel oft notwendig ist,\n wenn man in der Gesellschaft\n etwas erreichen will", 
+            "Weil es in meinem Job erwartet wird", 
+            "Weil es mir Lehrende an der Universität\n geraten haben", 
+            "Um länger StudentIn sein zu können", 
+            "Weil ich keinen adäquaten Arbeitsplatz\n gefunden habe", 
+            "Weil ich ein Doktoratsstipendium bekommen habe", 
+            "Weil ich aus familiären Gründen\n nicht erwerbstätig war und die Zeit\n sinnvoll nützen wollte", 
+            "Weil mir wissenschaftliches Arbeiten Spaß macht", 
+            "Weil ich mit einem Doktoratsabschluss\n ein höheres Einkommen erzielen kann", 
+            "Weil ich ein Arbeitsangebot (z.B. Projektmitarbeit)\n an der Universität bekommen habe")
+
 # get order of variables for plot
 reihenfolge <- df_sav %>%
   select(q_6_1:q_6_16) %>%
-  summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>%
+  summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
   gather(id, häufigkeit) %>%
-  arrange(häufigkeit)
-
+  cbind(., labels_motivplot) 
 
 # select data to plot and gather it in long format, remove NAs
 motive2 <- df_sav %>%
@@ -93,21 +107,32 @@ motive2 <- df_sav %>%
   gather(., id, variable) %>%
   na.omit
 
+motive3 <- full_join(motive2, reihenfolge, by = "id")
 
 # reorder the levels for the plot
-motive2$variable <- factor(motive2$variable, levels = c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
-motive2$id <- factor(motive2$id, levels = reihenfolge$id)
+motive3$variable <- factor(motive3$variable, levels = c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
+motive3$labels_motivplot <- factor(motive3$labels_motivplot, levels = motive3$labels_motivplot[order(motive3$häufigkeit)])
+
 
 # plot data
-ggplot(motive2, aes(id, fill = variable))  +
-  geom_bar(position = "fill") +
+ggplot(motive3, aes(labels_motivplot, fill = variable))  +
+  geom_bar(position = "fill", width = .7) +
   coord_flip() +
   scale_fill_manual(values = colours_skala) +
-  theme_light()
+  theme_light() +
+  theme(legend.position=c(.8, .18), axis.text.y = element_text(size = 12),
+        legend.key.size = unit(1.3, "cm"),
+        legend.text=element_text(size=11)) +
+  scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
+
 
 
 # yes!!!!!!
-# fehlt: die richtigen Namen der Variablen
+# fehlt: farbschema überlegen: vielleicht doch blau und grün? dann ist die mitte besser zu erkennen. ist halt für sw schlechter
+
+# clean up 
+rm(motive, motive2, motive3, reihenfolge, labels_motivplot)
 
 ###########
 
