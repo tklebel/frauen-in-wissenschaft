@@ -38,43 +38,15 @@ palette_blue
 
 # Farben für "scale_fill_manual"
 colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
-colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
 
+
+
+############################################ Plots ##################################
 # Grafik zu Motiven ------------
-motive <- df_sav %>%
-  select(q_6_1:q_6_16) 
-motive
+# vorgehensweise: long format: alle variablen in eine spalte transferieren
 
-
-
-# neue Variante, mit aes-mapping pro layer
-
-# vorgehensweise:
-# reihenfolge der Variablen ausrechnen
-# als x- achsen variable die nummer der in der Reihenfolge angeben
-# tick labels extra hinzufügen
-# warum sind die balken teils nicht richtig ausgerichtet?
-
-# todo
-# reihenfolge der Faktoren korrigieren (für alle Variablen)
-# problematisch: fehlende werte verzerren derzeit die Balken
-#   dafür scheint es keinen so leichten ausweg zu geben, da ggplot sich beschwert, wen die längen der vektoren nicht gleich sind
-
-# ansonsten schaut der ansatz ganz ok aus, weniger manuell, schneller als der auf branch "alternatecomputation"
-
-
-ggplot(motive, aes(c(6), fill = q_6_1)) +
-  coord_flip() +
-  geom_bar(position = "fill") +
-  geom_bar(aes(c(2), fill = q_6_2), position = "fill") +
-  geom_bar(aes(c(3), fill = q_6_3), position = "fill") +
-  geom_bar(aes(c(4), fill = q_6_4), position = "fill") +
-  geom_bar(aes(c(5), fill = q_6_5), position = "fill") +
-  scale_fill_brewer(palette = "Greens")
-
-####
-# neue idee:
-# long format: alle variablen in eine spalte transferieren
+# Farben für skala
+colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
 
 # variablennamen für den motivationsplot
 labels_motivplot <- c("Weil mich das Fach interessiert", 
@@ -94,7 +66,7 @@ labels_motivplot <- c("Weil mich das Fach interessiert",
             "Weil ich mit einem Doktoratsabschluss\n ein höheres Einkommen erzielen kann", 
             "Weil ich ein Arbeitsangebot (z.B. Projektmitarbeit)\n an der Universität bekommen habe")
 
-# get order of variables for plot
+# get frequencies of first two levels, in order to get order of variables for plot
 reihenfolge <- df_sav %>%
   select(q_6_1:q_6_16) %>%
   summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
@@ -102,20 +74,20 @@ reihenfolge <- df_sav %>%
   cbind(., labels_motivplot) 
 
 # select data to plot and gather it in long format, remove NAs
-motive2 <- df_sav %>%
+motive <- df_sav %>%
   select(q_6_1:q_6_16) %>%
   gather(., id, variable) %>%
   na.omit
 
-motive3 <- full_join(motive2, reihenfolge, by = "id")
+# join datasets
+motive <- full_join(motive, reihenfolge, by = "id")
 
 # reorder the levels for the plot
-motive3$variable <- factor(motive3$variable, levels = c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
-motive3$labels_motivplot <- factor(motive3$labels_motivplot, levels = motive3$labels_motivplot[order(motive3$häufigkeit)])
-
+motive$variable <- factor(motive$variable, levels = c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
+motive$labels_motivplot <- factor(motive$labels_motivplot, levels = motive$labels_motivplot[order(motive$häufigkeit)])
 
 # plot data
-ggplot(motive3, aes(labels_motivplot, fill = variable))  +
+motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
   geom_bar(position = "fill", width = .7) +
   coord_flip() +
   scale_fill_manual(values = colours_skala) +
@@ -125,29 +97,13 @@ ggplot(motive3, aes(labels_motivplot, fill = variable))  +
         legend.text=element_text(size=11)) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
-
-
-
-# yes!!!!!!
-# fehlt: farbschema überlegen: vielleicht doch blau und grün? dann ist die mitte besser zu erkennen. ist halt für sw schlechter
-
-# clean up 
-rm(motive, motive2, motive3, reihenfolge, labels_motivplot)
-
-###########
-
-
-# v sind die prozente für die Variablen
-v <- c(61, 35, 4, 0, 42, 25, 23, 10 , 48, 31, 12, 9, 14, 6, 11, 69, 23, 32, 32, 14, 35, 33, 20, 11, 8, 28, 27, 38)
-t <- factor(rep(c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"), 7), levels=c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
-y <- rep(1:7, each= 4)
-test <- data.frame(v, y, t)
-labels <- c("Weil mich das Fach interessiert", "Um in Wissenschaft und Forschung\n arbeiten zu können", "Um mich in meinem Beruf weiterzubilden", "Weil ein/e Lehrende/r mir angeboten hat,\n meine Dissertation zu betreuen", "Um am Arbeitsmarkt\n bessere Chancen zu haben", "Um mein Dissertationsthema\n erforschen zu können", "Weil ein Doktor-Titel oft notwendig ist,\n wenn man in der Gesellschaft\n etwas erreichen will")
-motivplot <- ggplot(test, aes(y, v, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Greens")
 motivplot
 
-# alternativ in grau
-motivplot <- ggplot(test, aes(y, v, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_grey()
+# fehlt: farbschema überlegen: vielleicht doch blau und grün? dann ist die mitte besser zu erkennen. ist halt für sw schlechter
+#         fehler: duplicated factors nachgehen
+
+# clean up 
+rm(motive, reihenfolge, labels_motivplot, motivplot)
 
 
 # Schwierigkeit, BetreuerIn zu finden ----------
