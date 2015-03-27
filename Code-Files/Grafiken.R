@@ -47,6 +47,9 @@ colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
 
 # Farben für skala
 colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
+colours_skala_blue_green <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#9ECAE1", "trifft gar nicht zu" = "#4292C6")
+colours_skala_blue_green_sw <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#C6DBEF", "trifft gar nicht zu" = "#9ECAE1")
+
 
 # variablennamen für den motivationsplot
 labels_motivplot <- c("Weil mich das Fach interessiert", 
@@ -90,7 +93,7 @@ motive$labels_motivplot <- factor(motive$labels_motivplot, levels = motive$label
 motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
   geom_bar(position = "fill", width = .7) +
   coord_flip() +
-  scale_fill_manual(values = colours_skala) +
+  scale_fill_manual(values = colours_skala_blue_green) +
   theme_light() +
   theme(legend.position=c(.8, .18), axis.text.y = element_text(size = 12),
         legend.key.size = unit(1.3, "cm"),
@@ -106,7 +109,7 @@ motivplot
 rm(motive, reihenfolge, labels_motivplot, motivplot)
 
 
-# Schwierigkeit, BetreuerIn zu finden ----------
+# Schwierigkeit, BetreuerIn zu finden ----------------------------------------
 # compute data to plot
 pdata <- df_sav %>%
   with(., table(q_9, q_24)) %>% # create table with variables
