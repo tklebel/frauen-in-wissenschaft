@@ -44,27 +44,8 @@ df_haven <- read_sav("../Data/DATENSATZ_FiW-main12_2.sav")
 
 In diesem File finden sich die Kreuztabellen und sonstige Darstellungen mit den zu den Grafiken gehörenden Stichprobengrößen.
 
-# Schwierigkeit, BetreuerIn zu finden nach Geschlecht
-```{r betreuer_in}
-CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
-```
 
-Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
-
-
-# Grafik: Motive ein Doktoratsstudium aufzunehmen
-Dargestellt sind jeweils die Ns für die einzelnen Variablen.
-
-```{r motive}
-motive <- df_sav %>%
-  select(., q_6_1:q_6_16)
-
-# N für die einzelnen Items
-colSums(!is.na(motive))
-
-```
-
-# Grafik: Motivationsindizes
+# Grafik: Motivationsskalen
 
 ````{r motivationsindizes}
 df_haven %>%
@@ -78,6 +59,17 @@ df_haven %>%
 colSums(!is.na(pdata[,1:4]))
 ````
 
+# Grafik: Motive ein Doktoratsstudium aufzunehmen
+Dargestellt sind jeweils die Ns für die einzelnen Variablen.
+
+```{r motive}
+motive <- df_sav %>%
+  select(., q_6_1:q_6_16)
+
+# N für die einzelnen Items
+colSums(!is.na(motive))
+
+```
 
 # Grafik: Nachgedacht, abzubrechen
 
@@ -105,4 +97,17 @@ abbruchgedanken %>%
   filter(q_24 == "männlich") %>%
   tally
 ```
+
+
+# Schwierigkeit, BetreuerIn zu finden nach Geschlecht
+```{r betreuer_in}
+CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
+```
+
+Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
+
+
+
+
+
 

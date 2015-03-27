@@ -7,6 +7,52 @@
 
 In diesem File finden sich die Kreuztabellen und sonstige Darstellungen mit den zu den Grafiken gehörenden Stichprobengrößen.
 
+
+# Grafik: Motivationsskalen
+
+
+```
+## Inst_Einbindung_Motivation    Verlegenheit_Motivation 
+##                         79                         78 
+##    Wi_Interesse_Motivation        Prestige_Motivation 
+##                         79                         77
+```
+
+# Grafik: Motive ein Doktoratsstudium aufzunehmen
+Dargestellt sind jeweils die Ns für die einzelnen Variablen.
+
+
+```
+##  q_6_1  q_6_2  q_6_3  q_6_4  q_6_5  q_6_6  q_6_7  q_6_8  q_6_9 q_6_10 
+##     80     79     80     81     79     79     79     80     80     81 
+## q_6_11 q_6_12 q_6_13 q_6_14 q_6_15 q_6_16 
+##     80     80     81     80     78     80
+```
+
+# Grafik: Nachgedacht, abzubrechen
+
+
+
+**Stichprobengröße Frauen**
+
+```
+## Source: local data frame [1 x 1]
+## 
+##    n
+## 1 16
+```
+
+
+**Stichprobengröße Männer**
+
+```
+## Source: local data frame [1 x 1]
+## 
+##    n
+## 1 19
+```
+
+
 # Schwierigkeit, BetreuerIn zu finden nach Geschlecht
 
 ```
@@ -47,48 +93,7 @@ In diesem File finden sich die Kreuztabellen und sonstige Darstellungen mit den 
 Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
 
 
-# Grafik: Motive ein Doktoratsstudium aufzunehmen
-Dargestellt sind jeweils die Ns für die einzelnen Variablen.
-
-
-```
-##  q_6_1  q_6_2  q_6_3  q_6_4  q_6_5  q_6_6  q_6_7  q_6_8  q_6_9 q_6_10 
-##     80     79     80     81     79     79     79     80     80     81 
-## q_6_11 q_6_12 q_6_13 q_6_14 q_6_15 q_6_16 
-##     80     80     81     80     78     80
-```
-
-# Grafik: Motivationsindizes
-
-
-```
-## Inst_Einbindung_Motivation    Verlegenheit_Motivation 
-##                         79                         78 
-##    Wi_Interesse_Motivation        Prestige_Motivation 
-##                         79                         77
-```
-
-
-# Grafik: Nachgedacht, abzubrechen
 
 
 
-**Stichprobengröße Frauen**
-
-```
-## Source: local data frame [1 x 1]
-## 
-##    n
-## 1 16
-```
-
-
-**Stichprobengröße Männer**
-
-```
-## Source: local data frame [1 x 1]
-## 
-##    n
-## 1 19
-```
 
