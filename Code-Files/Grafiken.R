@@ -247,7 +247,7 @@ pdata_m$varname <- factor(pdata_m$varname, levels = pdata_m$varname[order(pdata_
 # plot
 abbruchplot_männer <- ggplot(pdata_m, aes(varname, anzahl)) +
   theme_light() +
-  geom_bar(stat = "identity", fill = "#74C476") +
+  geom_bar(stat = "identity", fill = "#74C476", width = .7) +
   coord_flip() +
   labs(y = "Häufigkeit der Nennung", x = NULL, title = "Männer") +
   scale_y_continuous(breaks = pretty_breaks(8)) +
@@ -271,7 +271,7 @@ pdata_w$varname <- factor(pdata_w$varname, levels = pdata_w$varname[order(pdata_
 # plot
 abbruchplot_frauen <- ggplot(pdata_w, aes(varname, anzahl)) +
   theme_light() +
-  geom_bar(stat = "identity", fill = "#74C476") +
+  geom_bar(stat = "identity", fill = "#74C476", width = .7) +
   coord_flip() +
   labs(y = "Häufigkeit der Nennung", x = NULL, title = "Frauen") +
   scale_y_continuous(breaks = pretty_breaks(8)) +
