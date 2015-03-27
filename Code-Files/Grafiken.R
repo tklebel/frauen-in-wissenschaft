@@ -102,11 +102,10 @@ p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Institutionelle Einbindung als Motivation") +
   labs(x = "Geschlecht") + 
-  labs(y = "Skalenwert") +
-  ylim(c(1, 12.5)) + # extend y scale to range of data
+  labs(y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours)
-  
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # Verlegenheit
 p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
@@ -116,10 +115,10 @@ p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
   stat_summary(fun.y = "mean", geom = "point", size = 3.5, shape = 4) +
   labs(title = "Verlegenheit als Motivation") +
   labs(x = "Geschlecht") + 
-  labs(y = "Skalenwert") +
-  ylim(c(1, 12.5)) + 
+  labs(y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours)
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # Wi_interesse
 p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
@@ -129,10 +128,10 @@ p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Wissenschaftliches Interesse als Motivation") +
   labs(x = "Geschlecht") + 
-  labs(y = "Skalenwert") +
-  ylim(c(1, 12.5)) + 
+  labs(y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours)
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # Prestige_Motivation
 p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
@@ -142,10 +141,10 @@ p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Prestige als Motivation") +
   labs(x = "Geschlecht") + 
-  labs(y = "Skalenwert") +
-  ylim(c(1, 12.5)) + 
+  labs(y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours)
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # zusammenführen
 grid.arrange(p1, p2, p3, p4)
