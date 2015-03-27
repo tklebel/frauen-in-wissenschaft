@@ -39,27 +39,71 @@ palette_blue
 # Farben für "scale_fill_manual"
 colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
 
+
+
+############################################ Plots ##################################
 # Grafik zu Motiven ------------
+# vorgehensweise: long format: alle variablen in eine spalte transferieren
+
+# Farben für skala
+colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
+
+# variablennamen für den motivationsplot
+labels_motivplot <- c("Weil mich das Fach interessiert", 
+            "Um in Wissenschaft und Forschung\n arbeiten zu können", 
+            "Um mich in meinem Beruf weiterzubilden", 
+            "Weil ein/e Lehrende/r mir angeboten hat,\n meine Dissertation zu betreuen", 
+            "Um am Arbeitsmarkt\n bessere Chancen zu haben", 
+            "Um mein Dissertationsthema\n erforschen zu können", 
+            "Weil ein Doktor-Titel oft notwendig ist,\n wenn man in der Gesellschaft\n etwas erreichen will", 
+            "Weil es in meinem Job erwartet wird", 
+            "Weil es mir Lehrende an der Universität\n geraten haben", 
+            "Um länger StudentIn sein zu können", 
+            "Weil ich keinen adäquaten Arbeitsplatz\n gefunden habe", 
+            "Weil ich ein Doktoratsstipendium bekommen habe", 
+            "Weil ich aus familiären Gründen\n nicht erwerbstätig war und die Zeit\n sinnvoll nützen wollte", 
+            "Weil mir wissenschaftliches Arbeiten Spaß macht", 
+            "Weil ich mit einem Doktoratsabschluss\n ein höheres Einkommen erzielen kann", 
+            "Weil ich ein Arbeitsangebot (z.B. Projektmitarbeit)\n an der Universität bekommen habe")
+
+# get frequencies of first two levels, in order to get order of variables for plot
+reihenfolge <- df_sav %>%
+  select(q_6_1:q_6_16) %>%
+  summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
+  gather(id, häufigkeit) %>%
+  cbind(., labels_motivplot) 
+
+# select data to plot and gather it in long format, remove NAs
 motive <- df_sav %>%
-  select(., q_6_1:q_6_16)
-motive
+  select(q_6_1:q_6_16) %>%
+  gather(., id, variable) %>%
+  na.omit
 
+# join datasets
+motive <- full_join(motive, reihenfolge, by = "id")
 
-# prozente für variable 1
-Hmisc::describe(motive[,1]) 
-Hmisc::describe(motive[,7])
+# reorder the levels for the plot
+motive$variable <- factor(motive$variable, levels = c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
+motive$labels_motivplot <- factor(motive$labels_motivplot, levels = motive$labels_motivplot[order(motive$häufigkeit)])
 
-# v sind die prozente für die Variablen
-v <- c(61, 35, 4, 0, 42, 25, 23, 10 , 48, 31, 12, 9, 14, 6, 11, 69, 23, 32, 32, 14, 35, 33, 20, 11, 8, 28, 27, 38)
-t <- factor(rep(c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"), 7), levels=c("trifft zu", "trifft eher zu", "trifft eher nicht zu", "trifft gar nicht zu"))
-y <- rep(1:7, each= 4)
-test <- data.frame(v, y, t)
-labels <- c("Weil mich das Fach interessiert", "Um in Wissenschaft und Forschung\n arbeiten zu können", "Um mich in meinem Beruf weiterzubilden", "Weil ein/e Lehrende/r mir angeboten hat,\n meine Dissertation zu betreuen", "Um am Arbeitsmarkt\n bessere Chancen zu haben", "Um mein Dissertationsthema\n erforschen zu können", "Weil ein Doktor-Titel oft notwendig ist,\n wenn man in der Gesellschaft\n etwas erreichen will")
-motivplot <- ggplot(test, aes(y, v, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_brewer(palette="Greens")
+# plot data
+motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
+  geom_bar(position = "fill", width = .7) +
+  coord_flip() +
+  scale_fill_manual(values = colours_skala) +
+  theme_light() +
+  theme(legend.position=c(.8, .18), axis.text.y = element_text(size = 12),
+        legend.key.size = unit(1.3, "cm"),
+        legend.text=element_text(size=11)) +
+  scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
 motivplot
 
-# alternativ in grau
-motivplot <- ggplot(test, aes(y, v, fill=t)) + geom_bar(stat="identity", position="fill", width=.7) + theme_light() + coord_flip() + scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7), labels=labels) + theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=13)) + scale_y_continuous(labels = percent_format()) + scale_fill_grey()
+# fehlt: farbschema überlegen: vielleicht doch blau und grün? dann ist die mitte besser zu erkennen. ist halt für sw schlechter
+#         fehler: duplicated factors nachgehen
+
+# clean up 
+rm(motive, reihenfolge, labels_motivplot, motivplot)
 
 
 # Schwierigkeit, BetreuerIn zu finden ----------
