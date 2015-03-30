@@ -286,3 +286,61 @@ grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 1)
 rm(abbruchplot_frauen, abbruchplot_männer, varname, pdata_m, pdata_w, abbruchgedanken, abbruchgedanken_m, abbruchgedanken_w)
 
 
+
+# Stichprobendarstellung ------------------
+
+# Grundgesamtheit erstellen
+# BWL
+# w = 118
+d1 <- data.frame(
+  Geschlecht = factor(rep(1, times = 118), levels = c(1, 2), labels = c("weiblich", "männlich")),
+  Studienrichtung = factor(rep(1, times = 118), levels = c(1, 2, 3), labels = c("BWL", "SOZ", "VWL")),
+  herkunft = factor(rep(1, times = 118), levels = c(1, 2), labels = c("Grundgesamtheit", "Stichprobe"))
+    )
+# m = 140
+d2 <- data.frame(
+  Geschlecht = factor(rep(2, times = 140), levels = c(1, 2), labels = c("weiblich", "männlich")),
+  Studienrichtung = factor(rep(1, times = 140), levels = c(1, 2, 3), labels = c("BWL", "SOZ", "VWL")),
+  herkunft = factor(rep(1, times = 140), levels = c(1, 2), labels = c("Grundgesamtheit", "Stichprobe"))
+)
+
+
+# SOZ
+# w = 53
+d3 <- data.frame(
+  Geschlecht = factor(rep(1, times = 53), levels = c(1, 2), labels = c("weiblich", "männlich")),
+  Studienrichtung = factor(rep(2, times = 53), levels = c(1, 2, 3), labels = c("BWL", "SOZ", "VWL")),
+  herkunft = factor(rep(1, times = 53), levels = c(1, 2), labels = c("Grundgesamtheit", "Stichprobe"))
+)
+# m = 24
+d4 <- data.frame(
+  Geschlecht = factor(rep(2, times = 24), levels = c(1, 2), labels = c("weiblich", "männlich")),
+  Studienrichtung = factor(rep(2, times = 24), levels = c(1, 2, 3), labels = c("BWL", "SOZ", "VWL")),
+  herkunft = factor(rep(1, times = 24), levels = c(1, 2), labels = c("Grundgesamtheit", "Stichprobe"))
+)
+
+# VWL
+# w = 10
+d5 <- data.frame(
+  Geschlecht = factor(rep(1, times = 10), levels = c(1, 2), labels = c("weiblich", "männlich")),
+  Studienrichtung = factor(rep(3, times = 10), levels = c(1, 2, 3), labels = c("BWL", "SOZ", "VWL")),
+  herkunft = factor(rep(1, times = 10), levels = c(1, 2), labels = c("Grundgesamtheit", "Stichprobe"))
+)
+# m = 23
+d6 <- data.frame(
+  Geschlecht = factor(rep(2, times = 23), levels = c(1, 2), labels = c("weiblich", "männlich")),
+  Studienrichtung = factor(rep(3, times = 23), levels = c(1, 2, 3), labels = c("BWL", "SOZ", "VWL")),
+  herkunft = factor(rep(1, times = 23), levels = c(1, 2), labels = c("Grundgesamtheit", "Stichprobe"))
+)
+
+# zusammenführen
+rbind(d1, d2, d3, d4, d5, d6) %>%
+  tbl_df -> Grundgesamtheit
+
+# kontrollieren
+describe(Grundgesamtheit$Geschlecht)
+describe(Grundgesamtheit$Studienrichtung)
+describe(Grundgesamtheit$herkunft)
+
+# aufräumen
+rm(d1, d2, d3, d4, d5, d6)
