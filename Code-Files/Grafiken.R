@@ -370,7 +370,15 @@ pdata <- bind_rows(pdata, Grundgesamtheit) %>%
   mutate(Geschlecht = as.factor(Geschlecht))  %>% # hack around error "unequal levels in factor"
   na.omit
 
+# absolute Zahlen ##
+Stichprobenplot_abs <- ggplot(pdata, aes(x = herkunft, fill = Geschlecht)) +
+  geom_bar() +
+  facet_wrap(~ Studienrichtung) +
+  theme_light() +
+  scale_fill_manual(values = colours)
+Stichprobenplot_abs
 
+# oder mit percent
 # summarise data
 pdata <- pdata %>% 
   group_by(Studienrichtung, herkunft, Geschlecht) %>% 
@@ -388,6 +396,7 @@ Stichprobenplot <- ggplot(pdata, aes(x = herkunft, y = perc, fill = Geschlecht))
 Stichprobenplot
 
 rm(pdata)
+
 # Rücklaufquote
 # line plot
 # prozente bwl
@@ -427,3 +436,60 @@ Rücklauf <- ggplot(d1, aes(x = Studienrichtung, y = perc, group = Geschlecht, c
   scale_y_continuous(limits = c(0, .5), labels = percent_format()) +
   labs(y = "Rücklaufquote")
 Rücklauf
+
+
+# Informationen über das Studium --------
+# Plot analog zu den Motiven
+
+# Farben für skala
+colours_skala <- c("mehr als genug" = "#238B45", "ausreichend" = "#74C476", "zu wenig" = "#BAE4B3", "ist für mich nicht wichtig" = "#EDF8E9")
+colours_skala_blue_green <- c("mehr als genug" = "#238B45", "ausreichend" = "#74C476", "zu wenig" = "#9ECAE1", "ist für mich nicht wichtig" = "#4292C6")
+colours_skala_blue_green_sw <- c("mehr als genug" = "#238B45", "ausreichend" = "#74C476", "zu wenig" = "#C6DBEF", "ist für mich nicht wichtig" = "#9ECAE1")
+
+# variablennamen für den motivationsplot
+labels_infoplot <- c("Ablauf und Rahmenbedingungen des\n Doktoratsstudiums (z.B. Studienplan)", 
+                      "Verfassen von Forschungsanträgen",
+                      "Möglichkeiten für finanzielle Förderungen\n während des Doktoratsstudiums (z.B. Stipendien)", 
+                      "Publikationsmöglichkeiten", 
+                      "Auslandsaufenthalte im Rahmen des Studiums", 
+                      "Informationen zu wissenschaftlichen\n Konferenzen/Tagungen", 
+                      "Berufliche Perspektiven in der Wissenschaft", 
+                      "Wissenschaftsinterne Abläufe\n (z.B. informeller Informationsaustausch,\n Netzwerkaufbau)")
+
+# get frequencies of first two levels, in order to get order of variables for plot
+reihenfolge <- df_sav %>%
+  select(q_20_1:q_20_8) %>%
+  summarise_each(., funs(sum(.== "mehr als genug" | . == "ausreichend", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
+  gather(id, häufigkeit) %>%
+  cbind(., labels_infoplot) 
+
+# select data to plot and gather it in long format, remove NAs
+infos <- df_sav %>%
+  select(q_20_1:q_20_8) %>%
+  gather(., id, variable) %>%
+  na.omit
+
+# join datasets
+infos <- full_join(infos, reihenfolge, by = "id")
+
+# reorder the levels for the plot
+infos$variable <- factor(infos$variable, levels = c("mehr als genug", "ausreichend", "zu wenig", "Ist für mich nicht wichtig"))
+infos$labels_infoplot <- factor(infos$labels_infoplot, levels = infos$labels_infoplot[order(infos$häufigkeit)])
+levels(infos$variable)[levels(infos$variable)=="Ist für mich nicht wichtig"] <- "ist für mich nicht wichtig" # level des Factors anpassen (Kleinschreibung)
+
+# plot data
+infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
+  geom_bar(position = "fill", width = .7) +
+  coord_flip() +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_light() +
+  scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = "Genügend Informationen?") # remove labels of axes and legend
+infoplot
+
+# fehlt: fehler: duplicated factors nachgehen
+
+# clean up 
+rm(infos, reihenfolge, labels_infoplot, infoplot)
+
+
