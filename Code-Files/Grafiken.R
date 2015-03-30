@@ -31,13 +31,18 @@ palette_green
 palette_blue <- brewer.pal(7, "Blues")
 palette_blue
 
+palette_red <- brewer.pal(7, "Reds")
+palette_red
+
+
 # #A1D99B für Männer (Grün) als Grundfarbe 
 # #4292C6 für Frauen (Blau)
+# #EF3B2C für gesamt (Rot)
 
 # Basisgrün: #74C476
 
 # Farben für "scale_fill_manual"
-colours <- c(männlich = "#A1D99B", weiblich = "#4292C6")
+colours <- c(männlich = "#A1D99B", weiblich = "#4292C6", gesamt = "#EF3B2C")
 
 
 
@@ -382,5 +387,43 @@ Stichprobenplot <- ggplot(pdata, aes(x = herkunft, y = perc, fill = Geschlecht))
   labs(x = NULL, y = "Prozentanteile nach Geschlecht")
 Stichprobenplot
 
+rm(pdata)
 # Rücklaufquote
+# line plot
+# prozente bwl
+# frauen
+9/118*100
+# männer
+31/140*100
+# gesamt
+((9/118*100) + (31/140*100)) / 2
 
+# soz
+# frauen
+23/53*100
+# männer
+9/24*100
+# gesamt
+((23/53*100) + (9/24*100)) / 2
+
+# vwl
+# frauen
+1/10*100
+# männer
+5/23*100
+# gesamt
+((1/10*100) + (5/23*100)) / 2
+
+d1 <- data.frame(Geschlecht = c("weiblich", "männlich", "gesamt", "weiblich", "männlich", "gesamt", "weiblich", "männlich", "gesamt"),
+                 Studienrichtung = c("BWL", "BWL", "BWL", "SOZ", "SOZ", "SOZ", "VWL", "VWL", "VWL"),
+                 perc = c(9/118, 31/140, ((9/118) + (31/140)) / 2, 23/53, 9/24, ((23/53) + (9/24)) / 2, 1/10, 5/23, ((1/10) + (5/23)) / 2)
+)
+
+Rücklauf <- ggplot(d1, aes(x = Studienrichtung, y = perc, group = Geschlecht, colour = Geschlecht)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 3) +
+  theme_light() +
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(0, .5), labels = percent_format()) +
+  labs(y = "Rücklaufquote")
+Rücklauf
