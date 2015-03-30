@@ -288,7 +288,11 @@ rm(abbruchplot_frauen, abbruchplot_männer, varname, pdata_m, pdata_w, abbruchge
 
 
 # Stichprobendarstellung ------------------
+# das Vorgehen ist ein dämlicher Hack. Eigentlich wäre es wohl leichter, gleich mit den Prozenten zu rechen,
+# da man sie ja eh für die Grafik dann braucht. 
 
+
+# Geschlechterverteilung
 # Grundgesamtheit erstellen
 # BWL
 # w = 118
@@ -344,3 +348,39 @@ describe(Grundgesamtheit$herkunft)
 
 # aufräumen
 rm(d1, d2, d3, d4, d5, d6)
+
+
+# Plotdaten erstellen
+pdata <- df_haven %>%
+  select(q_1, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  mutate(q_1 = recode(q_1, "1 = 1; 2 = 2; 3 = 3; 4 = 1")) %>%
+  mutate(q_1 = labelled(q_1, c(BWL = 1, SOZ = 2, VWL = 3))) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  rename(Studienrichtung = q_1, Geschlecht = q_24) %>%
+  mutate(herkunft = factor(rep(2, times = 82), levels = c(1, 2), labels = c("Grundgesamtheit", "Stichprobe"))) # zuordnung zur stichprobe erstellen
+
+pdata <- bind_rows(pdata, Grundgesamtheit) %>%
+  mutate(Geschlecht = as.factor(Geschlecht))  %>% # hack around error "unequal levels in factor"
+  na.omit
+
+
+# summarise data
+pdata <- pdata %>% 
+  group_by(Studienrichtung, herkunft, Geschlecht) %>% 
+  summarise(count = n()) %>% 
+  mutate(perc = count/sum(count))
+
+# Plot
+Stichprobenplot <- ggplot(pdata, aes(x = herkunft, y = perc, fill = Geschlecht)) +
+  geom_bar(stat = "identity", width = .8) +
+  facet_wrap(~ Studienrichtung) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(values = colours) +
+  labs(x = NULL, y = "Prozentanteile nach Geschlecht")
+Stichprobenplot
+
+# Rücklaufquote
+
