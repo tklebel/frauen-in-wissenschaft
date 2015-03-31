@@ -9,11 +9,11 @@ Ich habe jetzt einfach gleich für alle Variablen Grafiken erstellt. Die Zahlen 
 # Kommentare
 Einige Dinge sind mir aufgefallen:
 
-- Es gibt bei den Männern meist einen Anstieg der Aktivität mit der Studiendauer. Dieser fällt mitunter auch recht hoch aus. Allerdings gleicht sich dadurch das Niveau meist an: Die Frauen sind meist aktiver (z.B. bei den Lehrveranstaltungen). Einzig bei den Konferenzen haben die Männer die Nase vorne
+- Es gibt bei den Männern meist einen Anstieg der Aktivität mit der Studiendauer. Dieser fällt mitunter auch recht hoch aus. Allerdings gleicht sich dadurch das Niveau meist an: Die Frauen sind meist am Anfang des Studiums aktiver (z.B. bei den Lehrveranstaltungen). Einzig bei den Konferenzen haben die Männer die Nase vorne.
 
 Fragen, die sich für mich daraus ergeben:
 
-- Sind diese Unterschiede evtl. auf unterschiedliche Subgruppen zurückzuführen? (viele Soziologinnen, aber wenige BWLinnen) Diese Vermutung bräuchte noch Inspektion. **Kontrolliert man die Studienrichtung verschwinden diese Effekte evtl. wieder**.
+- Sind diese Unterschiede evtl. auf unterschiedliche Subgruppen zurückzuführen? (viele Soziologinnen, aber wenige BWLinnen) Diese Vermutung bräuchte noch Inspektion. **Kontrolliert man die Studienrichtung verschwinden diese Effekte wahrscheinlich wieder**.
 - Daraus abgeleitet: ist der ausbleibende Anstieg mit der Studiendauer bei den Frauen eine schlimme Sache? oder liegt er einfach daran, dass nur ein bestimmter Anteil überhaupt wiss. Ambitionen hat?
 
 
@@ -34,7 +34,7 @@ Fragen, die sich für mich daraus ergeben:
 
 
 
-Die erste Tabelle sind jeweils die Frauen, die zweite die Männer.
+Im Folgenden ist die erste Tabelle jeweils die der Frauen, die zweite die der Männer (eine dreifach geschichtete mit passenden Prozenten hab ich auf die Schnelle nicht zamgebracht)
 
 ### [einen wissenschaftlichen Text publiziert (z.B. Zeitschriftenaufsatz, Buchbeitrag, Buch, Projektbericht)] Haben Sie schon ...?
 
