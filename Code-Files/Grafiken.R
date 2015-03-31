@@ -437,6 +437,7 @@ Rücklauf <- ggplot(d1, aes(x = Studienrichtung, y = perc, group = Geschlecht, c
   labs(y = "Rücklaufquote")
 Rücklauf
 
+rm(d1)
 
 # Informationen über das Studium --------
 # Plot analog zu den Motiven
@@ -493,3 +494,33 @@ infoplot
 rm(infos, reihenfolge, labels_infoplot, infoplot)
 
 
+# q_23: XXX schon mal gemacht?? ------
+# q_23_1:q_23:8
+
+# q_23_1
+pdata <- df_haven %>%
+  select(q_23_1, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_1, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., wiss_publiziert = q_23_1, Geschlecht = q_24)
+
+
+ggplot(pdata, aes(wiss_publiziert, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_1)$label)
+
+
+
+ggplot(pdata, aes(x = studiendauer_2_bis3, fill = q_23_1)) +
+  geom_bar(position = "dodge") +
+  facet_wrap(~ q_24) +
+  labs(title = attributes(df_haven$q_23_1)$label)
