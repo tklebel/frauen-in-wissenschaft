@@ -494,7 +494,7 @@ infoplot
 rm(infos, reihenfolge, labels_infoplot, infoplot)
 
 
-# q_23: XXX schon mal gemacht?? ------
+# q_23: XXX schon mal gemacht?? ####################################################
 # q_23_1:q_23:8
 
 # q_23_1
@@ -508,19 +508,176 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., wiss_publiziert = q_23_1, Geschlecht = q_24)
+  rename(., Geschlecht = q_24)
 
 
-ggplot(pdata, aes(wiss_publiziert, p, fill=studiendauer_2_bis3)) +
+ggplot(pdata, aes(q_23_1, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
   theme_light() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_1)$label)
 
+rm(pdata)
+
+# q_23_2
+pdata <- df_haven %>%
+  select(q_23_2, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_2, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
 
 
-ggplot(pdata, aes(x = studiendauer_2_bis3, fill = q_23_1)) +
-  geom_bar(position = "dodge") +
-  facet_wrap(~ q_24) +
-  labs(title = attributes(df_haven$q_23_1)$label)
+ggplot(pdata, aes(q_23_2, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_2)$label)
+
+rm(pdata)
+
+# q_23_3
+pdata <- df_haven %>%
+  select(q_23_3, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_3, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_3, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_3)$label)
+
+rm(pdata)
+
+# q_23_4
+pdata <- df_haven %>%
+  select(q_23_4, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_4, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_4, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_4)$label)
+
+rm(pdata)
+
+# q_23_5
+pdata <- df_haven %>%
+  select(q_23_5, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_5, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_5, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_5)$label)
+
+rm(pdata)
+
+# q_23_6
+pdata <- df_haven %>%
+  select(q_23_6, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_6, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_6, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_6)$label)
+
+rm(pdata)
+
+# q_23_7
+pdata <- df_haven %>%
+  select(q_23_7, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_7, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_7, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_7)$label)
+
+rm(pdata)
+
+# q_23_8
+pdata <- df_haven %>%
+  select(q_23_8, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_8, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_8, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_8)$label)
+
+
+
