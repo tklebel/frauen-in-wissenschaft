@@ -1,0 +1,366 @@
+---
+title: "Grafiken zu den Items: Haben Sie schon...?"
+
+output:
+  html_document:
+    keep_md: true
+    toc: yes
+---
+
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, fig.width = 13)
+```
+
+```{r daten}
+
+# allgemein
+library(ggplot2)
+library(plyr)
+library(dplyr)
+library(magrittr)
+library(scales)
+library(haven)
+library(gmodels)
+
+# alternativer datensatz für andere Grafiken
+df_haven <- read_sav("../Data/DATENSATZ_FiW-main12_2.sav")
+
+```
+
+Ich habe jetzt einfach gleich für alle Variablen Grafiken erstellt. Die Zahlen mit den Kreuztabellen habe ich unten angehängt, aber ich fange mit den Grafiken mehr an...
+
+# Kommentare
+Einige Dinge sind mir aufgefallen:
+
+- Es gibt bei den Männern meist einen Anstieg der Aktivität mit der Studiendauer. Dieser fällt mitunter auch recht hoch aus. Allerdings gleicht sich dadurch das Niveau meist an: Die Frauen sind meist aktiver (z.B. bei den Lehrveranstaltungen). Einzig bei den Konferenzen haben die Männer die Nase vorne
+
+Fragen, die sich für mich daraus ergeben:
+
+- Sind diese Unterschiede evtl. auf unterschiedliche Subgruppen zurückzuführen? (viele Soziologinnen, aber wenige BWLinnen) Diese Vermutung bräuchte noch Inspektion. **Kontrolliert man die Studienrichtung verschwinden diese Effekte evtl. wieder**.
+- Daraus abgeleitet: ist der ausbleibende Anstieg mit der Studiendauer bei den Frauen eine schlimme Sache? oder liegt er einfach daran, dass nur ein bestimmter Anteil überhaupt wiss. Ambitionen hat?
+
+
+# Grafiken
+```{r Grafiken}
+
+# q_23_1
+pdata <- df_haven %>%
+  select(q_23_1, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_1, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_1, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_1)$label)
+
+rm(pdata)
+
+# q_23_2
+pdata <- df_haven %>%
+  select(q_23_2, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_2, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_2, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_2)$label)
+
+rm(pdata)
+
+# q_23_3
+pdata <- df_haven %>%
+  select(q_23_3, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_3, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_3, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_3)$label)
+
+rm(pdata)
+
+# q_23_4
+pdata <- df_haven %>%
+  select(q_23_4, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_4, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_4, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_4)$label)
+
+rm(pdata)
+
+# q_23_5
+pdata <- df_haven %>%
+  select(q_23_5, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_5, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_5, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_5)$label)
+
+rm(pdata)
+
+# q_23_6
+pdata <- df_haven %>%
+  select(q_23_6, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_6, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_6, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_6)$label)
+
+rm(pdata)
+
+# q_23_7
+pdata <- df_haven %>%
+  select(q_23_7, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_7, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_7, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_7)$label)
+
+rm(pdata)
+
+# q_23_8
+pdata <- df_haven %>%
+  select(q_23_8, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>%
+  with(., table(q_23_8, studiendauer_2_bis3, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Geschlecht = q_24)
+
+
+ggplot(pdata, aes(q_23_8, p, fill=studiendauer_2_bis3)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~ Geschlecht) +
+  theme_light() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_8)$label)
+
+```
+
+
+# Kreuztabellen
+
+**Stichprobenzahl gesamt**
+```{r}
+daten <- df_haven %>%
+  select(q_23_1:q_23_8, studiendauer_2_bis3, q_24) %>%
+  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit %>% # Fälle mit fehlenden Werte raus: es gibt eh nur fehlende Werte in der Studiendauer, die braucht man sowieso immer
+  tbl_df
+
+# stichprobenzahl
+tally(daten)
+```
+
+
+
+Die erste Tabelle sind jeweils die Frauen, die zweite die Männer.
+
+### `r attributes(df_haven$q_23_1)$label`
+```{r}
+# q_23_1
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_1, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+ 
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_1, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+
+  
+
+  
+```
+
+### `r attributes(df_haven$q_23_2)$label`
+```{r}
+# 2
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_2, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_2, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+
+
+```
+
+### `r attributes(df_haven$q_23_3)$label`
+```{r}
+# 3
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_3, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_3, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+
+
+```
+
+### `r attributes(df_haven$q_23_4)$label`
+```{r}
+# 4
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_4, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_4, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+
+
+```
+
+### `r attributes(df_haven$q_23_5)$label`
+```{r}
+# 5
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_5, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_5, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+
+
+```
+
+### `r attributes(df_haven$q_23_6)$label`
+```{r}
+# 6
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_6, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_6, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+
+
+```
+
+### `r attributes(df_haven$q_23_7)$label`
+```{r}
+# 7
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_7, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_7, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+
+
+```
+
+### `r attributes(df_haven$q_23_8)$label`
+```{r}
+# 8
+daten %>%
+  filter(q_24 == "weiblich") %>%
+  with(., CrossTable(x = q_23_8, y = studiendauer_2_bis3, prop.r = F, sresid = T, prop.t = F, prop.chisq = F, format = "SPSS"))
+
+daten %>%
+  filter(q_24 == "männlich") %>%
+  with(., CrossTable(x = q_23_8, y = studiendauer_2_bis3, prop.r = F, prop.t = F, prop.chisq = F, sresid = T, format = "SPSS"))
+```
+
+
+
+
