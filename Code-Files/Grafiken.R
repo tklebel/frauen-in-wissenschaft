@@ -149,7 +149,7 @@ df_haven %>%
 # Inst-Einbindung
 p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
   theme_light() +  
-  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
   geom_boxplot(width = .12, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Institutionelle Einbindung als Motivation") +
@@ -162,7 +162,7 @@ p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
 # Verlegenheit
 p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
   theme_light() +  
-  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .8, width = 1) + 
   geom_boxplot(width = .08, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 3.5, shape = 4) +
   labs(title = "Verlegenheit als Motivation") +
@@ -175,7 +175,7 @@ p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
 # Wi_interesse
 p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
   theme_light() +  
-  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .4, width = 1) + 
   geom_boxplot(width = .12, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Wissenschaftliches Interesse als Motivation") +
@@ -188,7 +188,7 @@ p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
 # Prestige_Motivation
 p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
   theme_light() +  
-  geom_violin(aes(fill = q_24), trim = T, alpha = .85) + 
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .4, width = 1) + 
   geom_boxplot(width = .12, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Prestige als Motivation") +
