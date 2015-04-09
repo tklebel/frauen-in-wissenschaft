@@ -392,8 +392,23 @@ Stichprobenplot <- ggplot(pdata, aes(x = herkunft, y = perc, fill = Geschlecht))
   theme_light() +
   scale_y_continuous(labels = percent_format()) +
   scale_fill_manual(values = colours) +
-  labs(x = NULL, y = "Prozentanteile nach Geschlecht")
+  labs(x = NULL, y = "Prozentanteile nach Geschlecht") +
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
 Stichprobenplot
+
+
+# Beschriftung mit den Stichprobengrößen
+# Stichprobengrößen kalkulieren
+pdata # anschauen -> manuell kalkulieren (dämlich!!!)
+
+# n's zu plot hinzufügen
+p <- arrangeGrob(Stichprobenplot, sub = textGrob(c("n = 258", "n = 40", "n = 77", "n = 32", "n = 33", "n = 6"),
+                                                 x = c(0.013, .152, .29, .40, .537, .675),
+                                                 hjust = -3.2, vjust = -2.8,
+                                                 gp = gpar(fontsize = 10, col = "grey40")))
+p
+
+# export ratio: 800 x 523
 
 rm(pdata)
 
