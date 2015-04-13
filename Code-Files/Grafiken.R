@@ -99,7 +99,7 @@ motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
   geom_bar(position = "fill", width = .7) +
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
-  theme_light() +
+  theme_bw() +
   theme(legend.position=c(.8, .18), axis.text.y = element_text(size = 12),
         legend.key.size = unit(1.3, "cm"),
         legend.text=element_text(size=11)) +
@@ -148,7 +148,7 @@ df_haven %>%
 
 # Inst-Einbindung
 p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
-  theme_light() +  
+  theme_bw() +  
   geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
   geom_boxplot(width = .12, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
@@ -161,7 +161,7 @@ p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
 
 # Verlegenheit
 p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
-  theme_light() +  
+  theme_bw() +  
   geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .8, width = 1) + 
   geom_boxplot(width = .08, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 3.5, shape = 4) +
@@ -174,7 +174,7 @@ p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
 
 # Wi_interesse
 p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
-  theme_light() +  
+  theme_bw() +  
   geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .4, width = 1) + 
   geom_boxplot(width = .12, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
@@ -187,7 +187,7 @@ p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
 
 # Prestige_Motivation
 p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
-  theme_light() +  
+  theme_bw() +  
   geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .4, width = 1) + 
   geom_boxplot(width = .12, alpha = .95) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
@@ -251,7 +251,7 @@ pdata_m$varname <- factor(pdata_m$varname, levels = pdata_m$varname[order(pdata_
 
 # plot
 abbruchplot_männer <- ggplot(pdata_m, aes(varname, anzahl)) +
-  theme_light() +
+  theme_bw() +
   geom_bar(stat = "identity", fill = "#74C476", width = .7) +
   coord_flip() +
   labs(y = "Häufigkeit der Nennung", x = NULL, title = "Männer") +
@@ -275,7 +275,7 @@ pdata_w$varname <- factor(pdata_w$varname, levels = pdata_w$varname[order(pdata_
 
 # plot
 abbruchplot_frauen <- ggplot(pdata_w, aes(varname, anzahl)) +
-  theme_light() +
+  theme_bw() +
   geom_bar(stat = "identity", fill = "#74C476", width = .7) +
   coord_flip() +
   labs(y = "Häufigkeit der Nennung", x = NULL, title = "Frauen") +
@@ -374,7 +374,7 @@ pdata <- bind_rows(pdata, Grundgesamtheit) %>%
 Stichprobenplot_abs <- ggplot(pdata, aes(x = herkunft, fill = Geschlecht)) +
   geom_bar() +
   facet_wrap(~ Studienrichtung) +
-  theme_light() +
+  theme_bw() +
   scale_fill_manual(values = colours)
 Stichprobenplot_abs
 
@@ -389,7 +389,7 @@ pdata <- pdata %>%
 Stichprobenplot <- ggplot(pdata, aes(x = herkunft, y = perc, fill = Geschlecht)) +
   geom_bar(stat = "identity", width = .8) +
   facet_wrap(~ Studienrichtung) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   scale_fill_manual(values = colours) +
   labs(x = NULL, y = "Prozentanteile nach Geschlecht") +
@@ -446,7 +446,7 @@ d1 <- data.frame(Geschlecht = c("weiblich", "männlich", "gesamt", "weiblich", "
 Rücklauf <- ggplot(d1, aes(x = Studienrichtung, y = perc, group = Geschlecht, colour = Geschlecht)) +
   geom_line(size = 1.5) +
   geom_point(size = 3) +
-  theme_light() +
+  theme_bw() +
   scale_fill_manual(values = colours) +
   scale_y_continuous(limits = c(0, .5), labels = percent_format()) +
   labs(y = "Rücklaufquote")
@@ -498,7 +498,7 @@ infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
   geom_bar(position = "fill", width = .7) +
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = "Genügend Informationen?") # remove labels of axes and legend
 infoplot
@@ -529,7 +529,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_1, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_1)$label)
 
@@ -552,7 +552,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_2, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_2)$label)
 
@@ -575,7 +575,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_3, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_3)$label)
 
@@ -598,7 +598,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_4, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_4)$label)
 
@@ -621,7 +621,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_5, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_5)$label)
 
@@ -644,7 +644,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_6, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_6)$label)
 
@@ -667,7 +667,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_7, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_7)$label)
 
@@ -690,7 +690,7 @@ pdata <- df_haven %>%
 ggplot(pdata, aes(q_23_8, p, fill=studiendauer_2_bis3)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~ Geschlecht) +
-  theme_light() +
+  theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_8)$label)
 
