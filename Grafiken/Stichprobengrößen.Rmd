@@ -101,11 +101,16 @@ abbruchgedanken %>%
 
 # Schwierigkeit, BetreuerIn zu finden nach Geschlecht
 ```{r betreuer_in}
-CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F)
+CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F, format = "SPSS")
 ```
 
 Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
 
+
+# Geschlecht von Betreuer_in mit Geschlecht des/der Befragten als UV
+```{r geschlecht betreuer mit geschlecht als AV}
+CrossTable(df_sav$q_8, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F, format = "SPSS")
+````
 
 
 
