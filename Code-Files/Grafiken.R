@@ -74,11 +74,18 @@ labels_motivplot <- c("Weil mich das Fach interessiert",
             "Weil ich mit einem Doktoratsabschluss\n ein höheres Einkommen erzielen kann", 
             "Weil ich ein Arbeitsangebot (z.B. Projektmitarbeit)\n an der Universität bekommen habe")
 
-# get frequencies of first two levels, in order to get order of variables for plot
+
+# get number of valid observations for further computation of percentages
+cases <- df_haven %>%
+  select(., q_6_1:q_6_16)
+cases <- colSums(!is.na(cases))
+
+# get counts of first two levels, in order to get order of variables for plot
 reihenfolge <- df_sav %>%
-  select(q_6_1:q_6_16) %>%
+  select(q_6_1:q_6_16) %>% 
   summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
   gather(id, häufigkeit) %>%
+  mutate(häufigkeit = häufigkeit / cases) %>% # divide counts by cases for correct percentages
   cbind(., labels_motivplot) 
 
 # select data to plot and gather it in long format, remove NAs
@@ -100,8 +107,8 @@ motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
-  theme(legend.position=c(.8, .18), axis.text.y = element_text(size = 12),
-        legend.key.size = unit(1.3, "cm"),
+  theme(legend.position=c(.8, .18), axis.text.y = element_text(size = 11),
+        legend.key.size = unit(1.2, "cm"),
         legend.text=element_text(size=11)) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
