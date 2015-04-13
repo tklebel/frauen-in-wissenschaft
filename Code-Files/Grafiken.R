@@ -121,25 +121,6 @@ motivplot
 rm(motive, reihenfolge, labels_motivplot, motivplot)
 
 
-# Schwierigkeit, BetreuerIn zu finden ----------------------------------------
-# compute data to plot
-pdata <- df_sav %>%
-  with(., table(q_9, q_24)) %>% # create table with variables
-  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
-  group_by(q_24) %>% # group by categorial variable
-  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Betreuer = q_9, Geschlecht = q_24)
-
-schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
-  geom_bar(stat="identity", position="dodge") +
-  theme_bw() + scale_y_continuous(labels = percent_format()) +
-  scale_fill_manual(values = colours) +
-  labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
-schwierigkeitsplot
-
-# clean up
-rm(pdata)
-
 # Motivationsindizes ----------
 # 4 Indizes zur Motivation, gesplittet nach Geschlecht, mit Violin+Boxplot+Punkt für Mittelwert
 # Variabennamen: Inst_Einbindung_Motivation, Verlegenheit_Motivation, Wi_Interesse_Motivation, Prestige_Motivation
@@ -700,6 +681,61 @@ ggplot(pdata, aes(q_23_8, p, fill=studiendauer_2_bis3)) +
   theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_8)$label)
+
+
+# Schwierigkeit, BetreuerIn zu finden ----------------------------------------
+colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B")
+
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_9, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer = q_9, Geschlecht = q_24)
+
+schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge") +
+  theme_bw() + scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(values = colours) +
+  labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
+schwierigkeitsplot
+
+# clean up
+rm(pdata)
+
+
+## Geschlecht der Studierenden abhängig von Geschlecht BetreuerIn ###########
+# compute data to plot
+pdata <- df_sav %>%
+  with(., table(q_8, q_24)) %>% # create table with variables
+  as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
+  group_by(q_24) %>% # group by categorial variable
+  mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
+  rename(., Betreuer = q_8, Geschlecht = q_24)
+
+betreuerplot_1 <- ggplot(pdata, aes(Geschlecht, p, fill=Betreuer)) +
+  geom_bar(stat="identity", position="dodge") +
+  theme_bw() +
+  scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(values = colours) +
+  labs(y    = "Prozentanteile innerhalb Geschlecht des/der Studierenden",
+       fill = "Geschlecht des/der\nBetreuerIn",
+       x    = "Geschlecht des/der Studierenden")
+
+betreuerplot_2 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge") +
+  theme_bw() +
+  scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(values = colours) +
+  labs(y    = "Prozentanteile innerhalb Geschlecht des/der Studierenden",
+       x    = "Geschlecht des/der BetreuerIn",
+       fill = "Geschlecht des/der\nStudierenden")
+
+betreuerplot_1
+betreuerplot_2
+
+rm(pdata, betreuerplot)
 
 
 
