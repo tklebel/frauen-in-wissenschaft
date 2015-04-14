@@ -3,10 +3,14 @@
 .RData
 .DS_Store
 
-Data
+
 *.Rproj
 *.html
 *.sav
 *.xls
 
 *.png
+
+# ignore folders
+debugging
+Data
