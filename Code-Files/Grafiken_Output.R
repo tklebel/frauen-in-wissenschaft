@@ -2,35 +2,10 @@
 
 # Grafiken für den Endbericht
 
-# allgemein
-# allgemein
-library(ggplot2)
-library(foreign)
-library(Hmisc)
-library(car)
-library(plyr)
-library(dplyr)
-library(tidyr)
-library(magrittr)
-library(scales)
-library(haven)
-library(gridExtra) # arrange mutliple plots with grid.arrange()
-library(RColorBrewer) # Farbton finden
-
-
 # working directory für script
 setwd("/Users/thomask/Dropbox/Soziologie/Frauen\ in\ der\ Wissenschaft/quantitative\ Erhebung/Arbeitsbereich\ Thomas/Berechnungen")
 
 
-# daten einlesen -----------
-df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
-df_sav <- tbl_df(df)
-
-df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
-
-
-# Grafiken für den Endbericht
-
 # allgemein
 library(ggplot2)
 library(foreign)
@@ -51,19 +26,6 @@ df_sav <- tbl_df(df)
 
 df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
 
-# link zu den Paletten
-# http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/
-
-
-# Farbschema erstellen -----
-palette_green <- brewer.pal(7, "Greens")
-palette_green
-
-palette_blue <- brewer.pal(7, "Blues")
-palette_blue
-
-palette_red <- brewer.pal(7, "Reds")
-palette_red
 
 
 # #A1D99B für Männer (Grün) als Grundfarbe 
@@ -261,7 +223,22 @@ abbruchgedanken %>%
 # Variablennamen (q_15_1:q_15_17, ohne q_15_16)
 
 # create factor for variable names, in the right order
-varname <- c("Unzufriedenheit mit dem Studium", "Fehlende Aussicht auf institutionelle\n Einbindung an einer Universität", "Probleme bei der Finanzierung des Doktoratsstudiums", "Mangelnde Vereinbarkeit mit Berufstätigkeit", "Mangelnde Vereinbarkeit\nmit Betreuungspflichten", "Attraktive Arbeit gefunden", "Erwartungen an meine Leistungen nicht erfüllbar", "Interesse verloren", "Stillstand bei der Dissertation", "Schwierigkeiten eine/n BetreuerIn zu finden", "Nur nebenbei studiert", "Fehlende Unterstützung durch den/die BetreuerIn", "Keine befriedigenden Berufsaussichten\n mit dem Doktoratsabschluss", "Doktoratsstudium ist zu schwierig", "Doktoratsstudium als zeitliche Überbrückung gedacht", "Kind bekommen bzw. werde ein Kind bekommen")
+varname <- c("Unzufriedenheit mit dem Studium",
+             "Fehlende Aussicht auf institutionelle\n Einbindung an einer Universität",
+             "Probleme bei der Finanzierung des Doktoratsstudiums",
+             "Mangelnde Vereinbarkeit mit Berufstätigkeit",
+             "Mangelnde Vereinbarkeit\nmit Betreuungspflichten",
+             "Attraktive Arbeit gefunden",
+             "Erwartungen an meine Leistungen nicht erfüllbar",
+             "Interesse verloren",
+             "Stillstand bei der Dissertation",
+             "Schwierigkeiten eine/n BetreuerIn zu finden",
+             "Nur nebenbei studiert",
+             "Fehlende Unterstützung durch den/die BetreuerIn",
+             "Keine befriedigenden Berufsaussichten\n mit dem Doktoratsabschluss",
+             "Doktoratsstudium ist zu schwierig",
+             "Doktoratsstudium als zeitliche Überbrückung gedacht",
+             "Kind bekommen bzw. werde ein Kind bekommen")
 varname <- factor(varname)
 
 
