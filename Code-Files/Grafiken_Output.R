@@ -450,7 +450,8 @@ infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
   labs(x = NULL, y = NULL, fill = "Haben Sie genügend\nInformationen?") # remove labels of axes and legend
 infoplot
 
-# fehlt: fehler: duplicated factors nachgehen
+ggsave(filename = "Grafiken/Informationen.png", plot = infoplot, dpi = 150, width = 10, height = 4)
+
 
 # clean up 
 rm(infos, reihenfolge, labels_infoplot, infoplot)
