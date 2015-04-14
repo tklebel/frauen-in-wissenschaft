@@ -112,7 +112,17 @@ Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n Betreue
 CrossTable(df_sav$q_8, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F, format = "SPSS")
 ````
 
+# Grafik: Informationen über das Studium
+Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
+```{r informationen}
+motive <- df_sav %>%
+  select(., q_20_1:q_20_8)
+
+# N für die einzelnen Items
+colSums(!is.na(motive))
+
+```
 
 
 

@@ -118,7 +118,14 @@ Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n Betreue
 ## 
 ```
 
+# Grafik: Informationen über das Studium
+Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
+
+```
+## q_20_1 q_20_2 q_20_3 q_20_4 q_20_5 q_20_6 q_20_7 q_20_8 
+##     81     79     81     81     80     81     80     79
+```
 
 
 
