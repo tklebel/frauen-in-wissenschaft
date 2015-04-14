@@ -237,10 +237,6 @@ dev.off()
 # clean up
 rm(pdata, p1, p2, p3, p4)
 
-# ToDo
-# man könnte untersuchen, in welchen Studienfächern Prestige stärker als Motiv fungiert (Hypothese: In BWL ist das stärker als in SOZ)
-
-
 # Nachgedacht, abzubrechen ------
 
 # select variables and convert them to factor
@@ -252,7 +248,6 @@ df_haven %>%
   data.frame %>%
   filter(q_14 == "Ja") %>%
   tbl_df -> abbruchgedanken
-
 
 # split for gender
 abbruchgedanken %>%
@@ -316,9 +311,9 @@ abbruchplot_frauen <- ggplot(pdata_w, aes(varname, anzahl)) +
   theme(axis.text.y = element_text(size = 12)) 
 
 # join plots
+png("Grafiken/Nachgedacht_abzubrechen.png", width = 800, height = 600, res = 200)
 grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 1)
-# Formatierung ist nicht optimal: bei zwei Spalten sind die plots nicht ausgerichtet, da nicht gleich breit
-# bei zeilen sind die männer etwas komprimiert, da sie 6, anstatt 5 variablen haben
+dev.off()
 
 # clean up
 rm(abbruchplot_frauen, abbruchplot_männer, varname, pdata_m, pdata_w, abbruchgedanken, abbruchgedanken_m, abbruchgedanken_w)
@@ -379,11 +374,6 @@ d6 <- data.frame(
 rbind(d1, d2, d3, d4, d5, d6) %>%
   tbl_df -> Grundgesamtheit
 
-# kontrollieren
-describe(Grundgesamtheit$Geschlecht)
-describe(Grundgesamtheit$Studienrichtung)
-describe(Grundgesamtheit$herkunft)
-
 # aufräumen
 rm(d1, d2, d3, d4, d5, d6)
 
@@ -403,16 +393,7 @@ pdata <- bind_rows(pdata, Grundgesamtheit) %>%
   mutate(Geschlecht = as.factor(Geschlecht))  %>% # hack around error "unequal levels in factor"
   na.omit
 
-# absolute Zahlen ##
-Stichprobenplot_abs <- ggplot(pdata, aes(x = herkunft, fill = Geschlecht)) +
-  geom_bar() +
-  facet_wrap(~ Studienrichtung) +
-  theme_bw() +
-  scale_fill_manual(values = colours)
-Stichprobenplot_abs
-
-# oder mit percent
-# summarise data
+# Daten prozentuieren
 pdata <- pdata %>% 
   group_by(Studienrichtung, herkunft, Geschlecht) %>% 
   summarise(count = n()) %>% 
@@ -427,65 +408,17 @@ Stichprobenplot <- ggplot(pdata, aes(x = herkunft, y = perc, fill = Geschlecht))
   scale_fill_manual(values = colours) +
   labs(x = NULL, y = "Prozentanteile nach Geschlecht") +
   theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
-Stichprobenplot
-
-
-# Beschriftung mit den Stichprobengrößen
-# Stichprobengrößen kalkulieren
-pdata # anschauen -> manuell kalkulieren (dämlich!!!)
 
 # n's zu plot hinzufügen
 p <- arrangeGrob(Stichprobenplot, sub = textGrob(c("n = 258", "n = 40", "n = 77", "n = 32", "n = 33", "n = 6"),
                                                  x = c(0.013, .152, .29, .40, .537, .675),
                                                  hjust = -3.2, vjust = -2.8,
                                                  gp = gpar(fontsize = 10, col = "grey40")))
-p
 
-# export ratio: 800 x 523
+
+ggsave("Grafiken/Stichprobendarstellung.png", p, width = 11, height = 7.2, dpi = 100)
 
 rm(pdata)
-
-# Rücklaufquote
-# line plot
-# prozente bwl
-# frauen
-9/118*100
-# männer
-31/140*100
-# gesamt
-((9/118*100) + (31/140*100)) / 2
-
-# soz
-# frauen
-23/53*100
-# männer
-9/24*100
-# gesamt
-((23/53*100) + (9/24*100)) / 2
-
-# vwl
-# frauen
-1/10*100
-# männer
-5/23*100
-# gesamt
-((1/10*100) + (5/23*100)) / 2
-
-d1 <- data.frame(Geschlecht = c("weiblich", "männlich", "gesamt", "weiblich", "männlich", "gesamt", "weiblich", "männlich", "gesamt"),
-                 Studienrichtung = c("BWL", "BWL", "BWL", "SOZ", "SOZ", "SOZ", "VWL", "VWL", "VWL"),
-                 perc = c(9/118, 31/140, ((9/118) + (31/140)) / 2, 23/53, 9/24, ((23/53) + (9/24)) / 2, 1/10, 5/23, ((1/10) + (5/23)) / 2)
-)
-
-Rücklauf <- ggplot(d1, aes(x = Studienrichtung, y = perc, group = Geschlecht, colour = Geschlecht)) +
-  geom_line(size = 1.5) +
-  geom_point(size = 3) +
-  theme_bw() +
-  scale_fill_manual(values = colours) +
-  scale_y_continuous(limits = c(0, .5), labels = percent_format()) +
-  labs(y = "Rücklaufquote")
-Rücklauf
-
-rm(d1)
 
 # Informationen über das Studium --------
 # Plot analog zu den Motiven
