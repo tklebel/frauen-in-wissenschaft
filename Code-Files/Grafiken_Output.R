@@ -654,10 +654,15 @@ pdata <- df_sav %>%
 
 schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge") +
-  theme_bw() + scale_y_continuous(labels = percent_format()) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   scale_fill_manual(values = colours) +
-  labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
-schwierigkeitsplot
+  labs(y="Prozentanteile innerhalb der Geschlechter",
+       x = "Schwierigkeit, eine/n BetreuerIn zu finden",
+       fill = "Geschlecht des/der\nStudierenden") 
+
+ggsave(filename = "Grafiken/Schwierigkeit_betreuer_finden.png", plot = schwierigkeitsplot, dpi = 150, width = 8, height = 5.6)
+
 
 # clean up
 rm(pdata)
@@ -690,24 +695,12 @@ betreuerplot_2 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
        x    = "Geschlecht des/der BetreuerIn",
        fill = "Geschlecht des/der\nStudierenden")
 
-betreuerplot_1
-betreuerplot_2
 
-rm(pdata, betreuerplot)
-
+ggsave(filename = "Grafiken/Geschlecht_betreuer_v1.png", plot = betreuerplot_1, dpi = 150, width = 8, height = 6.5)
+ggsave(filename = "Grafiken/Geschlecht_betreuer_v2.png", plot = betreuerplot_2, dpi = 150, width = 8, height = 6.5)
 
 
-
-
-
-#ggsave(plot = motivplot, filename = "Grafiken/test.png", dpi = 200, width=10, height=4)
-
-ggsave(plot = schwierigkeitsplot, filename = "Grafiken/schwierigkeit-BetreuerIn.png", dpi = 200)
-
-
-
-
-
+rm(pdata, betreuerplot_1, betreuerplot_2)
 
 
 # copy all graphs and the html documentation to delivery folder
