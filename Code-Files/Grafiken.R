@@ -42,7 +42,7 @@ palette_red
 # Basisgrün: #74C476
 
 # Farben für "scale_fill_manual"
-colours <- c(männlich = "#A1D99B", weiblich = "#4292C6", gesamt = "#EF3B2C")
+colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B")
 
 
 
@@ -107,7 +107,7 @@ motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
-  theme(legend.position=c(.8, .18), axis.text.y = element_text(size = 11),
+  theme(legend.position=c(.8, .19), axis.text.y = element_text(size = 11),
         legend.key.size = unit(1.2, "cm"),
         legend.text=element_text(size=11)) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
@@ -118,7 +118,7 @@ motivplot
 #         fehler: duplicated factors nachgehen
 
 # clean up 
-rm(motive, reihenfolge, labels_motivplot, motivplot)
+rm(motive, reihenfolge, labels_motivplot, motivplot, cases)
 
 
 # Motivationsindizes ----------
@@ -488,7 +488,7 @@ infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
-  labs(x = NULL, y = NULL, fill = "Genügend Informationen?") # remove labels of axes and legend
+  labs(x = NULL, y = NULL, fill = "Haben Sie genügend\nInformationen?") # remove labels of axes and legend
 infoplot
 
 # fehlt: fehler: duplicated factors nachgehen
@@ -684,8 +684,6 @@ ggplot(pdata, aes(q_23_8, p, fill=studiendauer_2_bis3)) +
 
 
 # Schwierigkeit, BetreuerIn zu finden ----------------------------------------
-colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B")
-
 # compute data to plot
 pdata <- df_sav %>%
   with(., table(q_9, q_24)) %>% # create table with variables
