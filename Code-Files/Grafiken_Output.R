@@ -205,7 +205,6 @@ rm(pdata, p1, p2, p3, p4)
 # q_15_16 hat keine ausprägungen, kann deshalb weggelassen werden
 df_haven %>%
   select(q_14:q_15_15, q_15_17, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   filter(q_14 == "Ja") %>%
@@ -362,7 +361,6 @@ rm(d1, d2, d3, d4, d5, d6)
 # Plotdaten erstellen
 pdata <- df_haven %>%
   select(q_1, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   mutate(q_1 = recode(q_1, "1 = 1; 2 = 2; 3 = 3; 4 = 1")) %>%
   mutate(q_1 = labelled(q_1, c(BWL = 1, SOZ = 2, VWL = 3))) %>%
   lapply(., as_factor) %>%
@@ -463,7 +461,6 @@ rm(infos, reihenfolge, labels_infoplot, infoplot)
 # q_23_1
 pdata <- df_haven %>%
   select(q_23_1, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
@@ -486,7 +483,6 @@ rm(pdata)
 # q_23_2
 pdata <- df_haven %>%
   select(q_23_2, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
@@ -509,7 +505,6 @@ rm(pdata)
 # q_23_3
 pdata <- df_haven %>%
   select(q_23_3, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
@@ -532,7 +527,6 @@ rm(pdata)
 # q_23_4
 pdata <- df_haven %>%
   select(q_23_4, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
@@ -555,7 +549,6 @@ rm(pdata)
 # q_23_5
 pdata <- df_haven %>%
   select(q_23_5, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
@@ -578,7 +571,6 @@ rm(pdata)
 # q_23_6
 pdata <- df_haven %>%
   select(q_23_6, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
@@ -601,7 +593,6 @@ rm(pdata)
 # q_23_7
 pdata <- df_haven %>%
   select(q_23_7, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
@@ -624,7 +615,6 @@ rm(pdata)
 # q_23_8
 pdata <- df_haven %>%
   select(q_23_8, studiendauer_2_bis3, q_24) %>%
-  mutate(q_24 = labelled(q_24, c(weiblich = 1, männlich = 2))) %>% # bug in as_factor umgehen: geschlecht hat 3 ausprägungen, es kommen aber nur 2 vor
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit %>%
