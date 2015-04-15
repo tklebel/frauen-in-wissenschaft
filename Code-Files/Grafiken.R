@@ -807,9 +807,10 @@ p1 <- ggplot(pdata, aes(q_24, q_26_1)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Studium") +
   labs(x = "Geschlecht") + 
-  labs(y = "Aufwand in Stunden") +
+  labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours) 
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
 
 
 # Aufwand für Erwerbstätigkeit
@@ -827,9 +828,10 @@ p2 <- ggplot(pdata, aes(q_24, q_26_2)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Erwerbstätigkeit") +
   labs(x = "Geschlecht") + 
-  labs(y = "Aufwand in Stunden") +
+  labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours) 
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
 
 
 
@@ -848,9 +850,10 @@ p3 <- ggplot(pdata, aes(q_24, q_26_3)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Haushaltsführung") +
   labs(x = "Geschlecht") + 
-  labs(y = "Aufwand in Stunden") +
+  labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours) 
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
 
 
 
@@ -869,9 +872,10 @@ p4 <- ggplot(pdata, aes(q_24, q_26_4)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Hobbies und Sport") +
   labs(x = "Geschlecht") + 
-  labs(y = "Aufwand in Stunden") +
+  labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours) 
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
 
 
 # Aufwand für Betreungspflichten (Kinder/Angehörige)
@@ -889,12 +893,115 @@ p5 <- ggplot(pdata, aes(q_24, q_26_5)) +
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Betreungspflichten (Kinder/Angehörige)") +
   labs(x = "Geschlecht") + 
-  labs(y = "Aufwand in Stunden") +
+  labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours)
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
 
 
-grid.arrange(p1, p2, p3, p4, nrow = 2)
+grid.arrange(p1, p2, p3, p4, p5, nrow = 2)
+
+
+## Berufstätigkeit ---------------
+
+# Farben für skala
+colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
+colours_skala_blue_green <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#9ECAE1", "trifft gar nicht zu" = "#4292C6")
+colours_skala_blue_green_sw <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#C6DBEF", "trifft gar nicht zu" = "#9ECAE1")
+
+
+# variablennamen für den motivationsplot
+labels_berufstätigkeit <- c("Meine derzeitige Erwerbstätigkeit\nlässt sich sehr gut mit den Inhalten\ndes Doktoratsstudiums/der Dissertation vereinen",
+                            "Es ist schwierig, Doktoratsstudium\nund Erwerbstätigkeit zu vereinbaren", 
+                            "Meine derzeitige Erwerbstätigkeit\nist für den weiteren Verlauf\nmeiner beruflichen Laufbahn förderlich",
+                            "Ich kann meine Arbeitszeit\nim Hinblick auf die Anforderungen\ndes Doktoratsstudiums frei einteilen",
+                            "Ich würde gerne den Umfang meiner\nErwerbstätigkeit reduzieren, um\nmehr Zeit für das Doktoratsstudium zu haben")
+
+labels_berufstätigkeit_1n <- c("Meine derzeitige Erwerbstätigkeit lässt sich sehr gut\nmit den Inhalten des Doktoratsstudiums/der Dissertation vereinen",
+                               "Es ist schwierig, Doktoratsstudium und Erwerbstätigkeit zu vereinbaren", 
+                               "Meine derzeitige Erwerbstätigkeit ist für den\nweiteren Verlauf meiner beruflichen Laufbahn förderlich",
+                               "Ich kann meine Arbeitszeit im Hinblick auf die\nAnforderungen des Doktoratsstudiums frei einteilen",
+                               "Ich würde gerne den Umfang meiner Erwerbstätigkeit reduzieren,\nummehr Zeit für das Doktoratsstudium zu haben")
+
+
+# q_35_1
+df_haven_neu %>%
+  select(q_35_1, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p1 <- ggplot(pdata, aes(q_24, fill = q_35_1))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_berufstätigkeit[1]) 
+# q_35_2
+df_haven_neu %>%
+  select(q_35_2, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p2 <- ggplot(pdata, aes(q_24, fill = q_35_2))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_berufstätigkeit[2]) 
+# q_35_3
+df_haven_neu %>%
+  select(q_35_3, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p3 <- ggplot(pdata, aes(q_24, fill = q_35_3))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_berufstätigkeit[3]) 
+# q_35_4
+df_haven_neu %>%
+  select(q_35_4, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p4 <- ggplot(pdata, aes(q_24, fill = q_35_4))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_berufstätigkeit[4]) 
+# q_35_5
+df_haven_neu %>%
+  select(q_35_5, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p5 <- ggplot(pdata, aes(q_24, fill = q_35_5))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_berufstätigkeit[5]) 
+
+grid.arrange(p1, p2, p3, p4, p5, nrow = 3)
+
 
 
 
