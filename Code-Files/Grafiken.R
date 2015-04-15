@@ -46,6 +46,13 @@ palette_red
 colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B")
 
 
+# helper function: strip label from vector
+unlabelled <- function(x) {
+  attr(x, "label") <- NULL
+  x
+}
+
+
 
 ############################################ Plots ##################################
 # Grafik zu Motiven ------------
@@ -750,7 +757,7 @@ schwierigkeitsplot
 rm(pdata)
 
 
-## Geschlecht der Studierenden abhängig von Geschlecht BetreuerIn ###########
+## Geschlecht der Studierenden abhängig von Geschlecht BetreuerIn ------------------------
 # compute data to plot
 pdata <- df_sav %>%
   with(., table(q_8, q_24)) %>% # create table with variables
@@ -781,6 +788,113 @@ betreuerplot_1
 betreuerplot_2
 
 rm(pdata, betreuerplot)
+
+
+## Zeitliche Aufwendungen pro Woche --------------------------------------
+
+# Aufwand für Studium
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_1 != "NA") -> pdata
+
+p1 <- ggplot(pdata, aes(q_24, q_26_1)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Studium") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand in Stunden") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) 
+
+
+# Aufwand für Erwerbstätigkeit
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_2 != "NA") -> pdata
+
+p2 <- ggplot(pdata, aes(q_24, q_26_2)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Erwerbstätigkeit") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand in Stunden") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) 
+
+
+
+# Aufwand für Haushaltsführung
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_3 != "NA") -> pdata
+
+p3 <- ggplot(pdata, aes(q_24, q_26_3)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Haushaltsführung") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand in Stunden") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) 
+
+
+
+# Aufwand für Hobbies und Sport
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_4 != "NA") -> pdata
+
+p4 <- ggplot(pdata, aes(q_24, q_26_4)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Hobbies und Sport") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand in Stunden") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) 
+
+
+# Aufwand für Betreungspflichten (Kinder/Angehörige)
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_5 != "NA") -> pdata 
+
+p5 <- ggplot(pdata, aes(q_24, q_26_5)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Betreungspflichten (Kinder/Angehörige)") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand in Stunden") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours)
+
+
+grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 
 
