@@ -23,3 +23,7 @@
 \lipsum[1]
 
 
+### Haben Sie schon...?
+![Haben Sie schon...?](../Haben_Sie_schon.png)
+
+\lipsum[1]
