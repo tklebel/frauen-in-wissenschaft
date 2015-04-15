@@ -1004,4 +1004,68 @@ grid.arrange(p1, p2, p3, p4, p5, nrow = 3)
 
 
 
+## Zufriedenheit mit Betreuung ----------
+colours_skala_blue_green <- c("sehr zufrieden" = "#238B45", "eher zufrieden" = "#74C476",
+                              "eher nicht zufrieden" = "#9ECAE1", "gar nicht zufrieden" = "#4292C6")
+
+labels_betreuung <- c("Häufigkeit der Betreuung",
+                      "Fachliche Betreuung",
+                      "Unterstützung bei der wissenschaftlichen Laufbahnplanung")
+
+
+# q_12_1
+df_haven_neu %>%
+  select(q_12_1, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p1 <- ggplot(pdata, aes(q_24, fill = q_12_1))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_betreuung[1]) +
+  coord_flip()
+
+# q_12_2
+df_haven_neu %>%
+  select(q_12_2, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p2 <- ggplot(pdata, aes(q_24, fill = q_12_2))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_betreuung[2]) +
+  coord_flip()
+
+# q_12_3
+df_haven_neu %>%
+  select(q_12_3, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p3 <- ggplot(pdata, aes(q_24, fill = q_12_3))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_betreuung[3]) +
+       coord_flip() 
+
+grid.arrange(p1, p2, p3, nrow = 3, main = "Wie zufrieden sind Sie mit der Betreuung Ihrer Dissertation?")
+
+
+
 
