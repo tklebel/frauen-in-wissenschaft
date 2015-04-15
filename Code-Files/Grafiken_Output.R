@@ -458,6 +458,7 @@ rm(infos, reihenfolge, labels_infoplot, infoplot)
 # q_23: XXX schon mal gemacht?? ####################################################
 # q_23_1:q_23:8
 
+
 # q_23_1
 pdata <- df_haven %>%
   select(q_23_1, studiendauer_2_bis3, q_24) %>%
@@ -468,15 +469,18 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_1 == "Ja")
 
-
-ggplot(pdata, aes(q_23_1, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p1 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", width = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_1)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_1)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
 
 rm(pdata)
 
@@ -490,15 +494,19 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_2 == "Ja")
 
-
-ggplot(pdata, aes(q_23_2, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p2 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_2)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6),
+                     labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_2)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
 
 rm(pdata)
 
@@ -512,15 +520,18 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_3 == "Ja")
 
-
-ggplot(pdata, aes(q_23_3, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p3 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_3)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_3)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
 
 rm(pdata)
 
@@ -534,15 +545,18 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_4 == "Ja")
 
-
-ggplot(pdata, aes(q_23_4, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p4 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_4)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_4)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
 
 rm(pdata)
 
@@ -556,15 +570,18 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_5 == "Ja")
 
-
-ggplot(pdata, aes(q_23_5, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p5 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_5)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_5)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
 
 rm(pdata)
 
@@ -578,15 +595,18 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_6 == "Ja")
 
-
-ggplot(pdata, aes(q_23_6, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p6 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_6)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_6)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
 
 rm(pdata)
 
@@ -600,15 +620,18 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_7 == "Ja")
 
-
-ggplot(pdata, aes(q_23_7, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p7 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_7)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_7)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
 
 rm(pdata)
 
@@ -622,15 +645,37 @@ pdata <- df_haven %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(studiendauer_2_bis3, q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Geschlecht = q_24)
+  rename(., Geschlecht = q_24) %>%
+  filter(Geschlecht != "keine Angabe", q_23_8 == "Ja")
 
-
-ggplot(pdata, aes(q_23_8, p, fill=studiendauer_2_bis3)) +
-  geom_bar(stat="identity", position="dodge") +
-  facet_wrap(~ Geschlecht) +
+p8 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
+  geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_8)$label)
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = attributes(df_haven$q_23_8)$label) +
+  scale_fill_manual(values = colours) +
+  labs(x = "Studiendauer in Semestern",
+       y = "Prozentanteile für Antwort 'Ja'")
+  
+
+rm(pdata)
+
+
+ggsave(filename = "Grafiken/Haben_Sie_schon/wiss_publiziert.png", plot = p1, dpi = 150, width = 6.5, height = 6)
+ggsave(filename = "Grafiken/Haben_Sie_schon/buch_herausgegeben.png", plot = p2, dpi = 150, width = 6.5, height = 6)
+ggsave(filename = "Grafiken/Haben_Sie_schon/lv_abgehalten.png", plot = p3, dpi = 150, width = 6.5, height = 6)
+ggsave(filename = "Grafiken/Haben_Sie_schon/projektantrag_mitgearbeitet.png", plot = p4, dpi = 150, width = 6.5, height = 6)
+ggsave(filename = "Grafiken/Haben_Sie_schon/konferenz_teilgenommen.png", plot = p5, dpi = 150, width = 6.5, height = 6)
+ggsave(filename = "Grafiken/Haben_Sie_schon/vortrag_gehalten.png", plot = p6, dpi = 150, width = 6.5, height = 6)
+ggsave(filename = "Grafiken/Haben_Sie_schon/konferenz_organisiert.png", plot = p7, dpi = 150, width = 6.5, height = 6)
+ggsave(filename = "Grafiken/Haben_Sie_schon/weiterbildung_teilgenommen.png", plot = p8, dpi = 150, width = 6.5, height = 6)
+
+
+png("Grafiken/Haben_Sie_schon/Haben_Sie_schon.png", width = 2000, height = 2600, res = 200)
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8,
+             nrow = 4,
+             main = textGrob("Haben Sie schon...?", gp = gpar(cex = 2)))
+dev.off()
 
 
 # Schwierigkeit, BetreuerIn zu finden ----------------------------------------
@@ -695,7 +740,9 @@ rm(pdata, betreuerplot_1, betreuerplot_2)
 
 # copy all graphs and the html documentation to delivery folder
 filelist <- list.files("Grafiken", pattern = "png|html", full.names = TRUE)
+folderlist <- list.files("Grafiken/Haben_Sie_schon", pattern = "png", full.names = TRUE)
 file.copy(filelist, "../Fertige_Grafiken")
+file.copy(folderlist, "../Fertige_Grafiken/Haben_Sie_schon")
 
 
 
