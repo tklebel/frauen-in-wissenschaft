@@ -1133,5 +1133,109 @@ p3 <- ggplot(pdata, aes(q_24, fill = q_22_6))  +
 grid.arrange(p1, p2, p3, nrow = 3)
 
 
+## Bild der Wissenschaft - Indizes ------------
 
 
+# select data to plot
+df_haven %>%
+  select(unterbrechung_index, mobilität_index, engagement_index, q_24)  %>% 
+  as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
+  data.frame %>%
+  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
+
+
+# unterbrechung_index
+p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
+  theme_bw() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = .9) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Unterbrechungen haben hemmende Auswirkungen auf eine wissenschaftliche Laufbahn",
+       x = "Geschlecht",
+       y = NULL) +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 4), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung"))  # extend y scale to range of data
+
+
+# engagement_index
+p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
+  theme_bw() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = .9) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Wissenschaft erfordert ein überdurchschnittliches Engagement",
+       x = "Geschlecht",
+       y = NULL) +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 4), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung"))  # extend y scale to range of data
+
+# mobilität_index
+p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
+  theme_bw() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = .9) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Räumliche Mobilität ist für eine wissenschaftliche Laufbahn erforderlich",
+       x = "Geschlecht",
+       y = NULL) +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 4), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung"))  # extend y scale to range of data
+
+grid.arrange(p1, p2, p3, nrow = 2)
+
+
+# alternativ als jitterplot (violinplot ist für die Daten nicht ehrlich)
+# unterbrechung_index
+p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
+  geom_boxplot(width = .6, alpha = .7) +
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_24)) +
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(title = "Unterbrechungen haben eine\nhemmende Auswirkungen auf\neine wissenschaftliche Laufbahn",
+       x = "Geschlecht",
+       y = NULL) +
+  scale_fill_manual(values = colours) +
+  theme_bw() +
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
+  theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
+  guides(colour = FALSE) # remove legend
+
+# engagement_index
+p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
+  geom_boxplot(width = .6, alpha = .7) +
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_24)) +
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(title = "Wissenschaft erfordert\nein überdurchschnittliches\nEngagement",
+       x = "Geschlecht",
+       y = NULL) +
+  scale_fill_manual(values = colours) +
+  theme_bw() +
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
+  theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
+  guides(colour = FALSE) # remove legend
+
+
+# mobilität_index
+p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
+  geom_boxplot(width = .6, alpha = .7) +
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_24)) +
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(title = "Für eine wissenschaftliche\nLaufbahn ist räumliche Mobilität\nerforderlich",
+       x = "Geschlecht",
+       y = NULL) +
+  scale_fill_manual(values = colours) +
+  theme_bw() +
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
+  theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
+  guides(colour = FALSE) # remove legend
+
+
+grid.arrange(p1, p2, p3, nrow = 1)
+
+  
