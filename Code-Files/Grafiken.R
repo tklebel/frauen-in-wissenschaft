@@ -1134,8 +1134,6 @@ grid.arrange(p1, p2, p3, nrow = 3)
 
 
 ## Bild der Wissenschaft - Indizes ------------
-
-
 # select data to plot
 df_haven %>%
   select(unterbrechung_index, mobilität_index, engagement_index, q_24)  %>% 
@@ -1238,4 +1236,59 @@ p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
 
 grid.arrange(p1, p2, p3, nrow = 1)
 
-  
+## Perspektiven wissenschaftliche Karriere -----------------
+# angelehnt an plot "Motive"
+
+labels_wiss_karriere <- c("Ich möchte das Doktoratsstudium abschließen",
+                          "Ich möchte im universitären Bereich\nin der Forschung tätig sein",
+                          "Ich möchte im außeruniversitären Bereich\nin der Forschung tätig sein",
+                          "Ich strebe eine berufliche Laufbahn\naußerhalb der wissenschaftlichen Forschung an",
+                          "Ich plane in Zukunft einen Auslandsaufenthalt,\num an einer anderen Universität zu studieren\noder zu arbeiten",
+                          "Ich strebe eine Professur an einer Universität an")
+
+colours_skala_blue_green <- c("ja, sicher" = "#238B45",
+                              "eher ja" = "#74C476",
+                              "eher nein" = "#9ECAE1",
+                              "nein, sicher nicht" = "#4292C6")
+
+
+# get number of valid observations for further computation of percentages
+cases <- df_haven %>%
+  select(., q_19_1:q_19_6)
+cases <- colSums(!is.na(cases))
+
+# get counts of first two levels, in order to get order of variables for plot
+reihenfolge <- df_sav %>%
+  select(q_19_1:q_19_6) %>% 
+  summarise_each(., funs(sum(.== "ja, sicher" | . == "eher ja", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
+  gather(id, häufigkeit) %>%
+  mutate(häufigkeit = häufigkeit / cases) %>% # divide counts by cases for correct percentages
+  cbind(., labels_wiss_karriere) 
+
+# select data to plot and gather it in long format, remove NAs
+wiss_karriere <- df_sav %>%
+  select(q_19_1:q_19_6) %>%
+  gather(., id, variable) %>%
+  na.omit
+
+# join datasets
+wiss_karriere <- full_join(wiss_karriere, reihenfolge, by = "id")
+
+# # reorder the levels for the plot
+wiss_karriere$variable <- factor(wiss_karriere$variable, levels = c("ja, sicher", "eher ja", "eher nein", "nein, sicher nicht"))
+wiss_karriere$labels_wiss_karriere <- factor(wiss_karriere$labels_wiss_karriere, levels = wiss_karriere$labels_wiss_karriere[order(wiss_karriere$häufigkeit)])
+
+# plot data
+wiss_karriere_plot <- ggplot(wiss_karriere, aes(labels_wiss_karriere, fill = variable))  +
+  geom_bar(position = "fill", width = .7) +
+  coord_flip() +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  theme(legend.position=c(.8, .19), axis.text.y = element_text(size = 11),
+        legend.key.size = unit(1.2, "cm"),
+        legend.text=element_text(size=11)) +
+  scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
+wiss_karriere_plot
+
+
