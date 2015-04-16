@@ -931,7 +931,6 @@ df_haven_neu %>%
   data.frame %>%
   na.omit -> pdata
 
-
 p1 <- ggplot(pdata, aes(q_24, fill = q_35_1))  +
   geom_bar(position = "fill", width = .7) +
   scale_fill_manual(values = colours_skala_blue_green) +
@@ -939,13 +938,14 @@ p1 <- ggplot(pdata, aes(q_24, fill = q_35_1))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_berufstätigkeit[1]) 
+
+
 # q_35_2
 df_haven_neu %>%
   select(q_35_2, q_24) %>%
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit -> pdata
-
 
 p2 <- ggplot(pdata, aes(q_24, fill = q_35_2))  +
   geom_bar(position = "fill", width = .7) +
@@ -954,13 +954,14 @@ p2 <- ggplot(pdata, aes(q_24, fill = q_35_2))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_berufstätigkeit[2]) 
+
+
 # q_35_3
 df_haven_neu %>%
   select(q_35_3, q_24) %>%
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit -> pdata
-
 
 p3 <- ggplot(pdata, aes(q_24, fill = q_35_3))  +
   geom_bar(position = "fill", width = .7) +
@@ -969,13 +970,14 @@ p3 <- ggplot(pdata, aes(q_24, fill = q_35_3))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_berufstätigkeit[3]) 
+
+
 # q_35_4
 df_haven_neu %>%
   select(q_35_4, q_24) %>%
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit -> pdata
-
 
 p4 <- ggplot(pdata, aes(q_24, fill = q_35_4))  +
   geom_bar(position = "fill", width = .7) +
@@ -984,13 +986,14 @@ p4 <- ggplot(pdata, aes(q_24, fill = q_35_4))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_berufstätigkeit[4]) 
+
+
 # q_35_5
 df_haven_neu %>%
   select(q_35_5, q_24) %>%
   lapply(., as_factor) %>%
   data.frame %>%
   na.omit -> pdata
-
 
 p5 <- ggplot(pdata, aes(q_24, fill = q_35_5))  +
   geom_bar(position = "fill", width = .7) +
@@ -1284,11 +1287,112 @@ wiss_karriere_plot <- ggplot(wiss_karriere, aes(labels_wiss_karriere, fill = var
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
-  theme(legend.position=c(.8, .19), axis.text.y = element_text(size = 11),
-        legend.key.size = unit(1.2, "cm"),
+  theme(axis.text.y = element_text(size = 13),
+        axis.text.x = element_text(size = 12),
         legend.text=element_text(size=11)) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
 wiss_karriere_plot
 
 
+## gesplittet nach geschlecht
+
+# q_19_1
+df_haven_neu %>%
+  select(q_19_1, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+p1 <- ggplot(pdata, aes(q_24, fill = q_19_1))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_wiss_karriere[1]) 
+
+
+# q_19_2
+df_haven_neu %>%
+  select(q_19_2, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+p2 <- ggplot(pdata, aes(q_24, fill = q_19_2))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_wiss_karriere[2]) 
+
+
+# q_19_3
+df_haven_neu %>%
+  select(q_19_3, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+p3 <- ggplot(pdata, aes(q_24, fill = q_19_3))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_wiss_karriere[3]) 
+
+
+# q_19_4
+df_haven_neu %>%
+  select(q_19_4, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+p4 <- ggplot(pdata, aes(q_24, fill = q_19_4))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_wiss_karriere[4]) 
+
+
+# q_19_5
+df_haven_neu %>%
+  select(q_19_5, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+p5 <- ggplot(pdata, aes(q_24, fill = q_19_5))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_wiss_karriere[5]) 
+
+
+# q_19_6
+df_haven_neu %>%
+  select(q_19_6, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+p6 <- ggplot(pdata, aes(q_24, fill = q_19_6))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_wiss_karriere[5]) 
+
+grid.arrange(p1, p2, p3, p4, p5, p6, nrow = 3)
+
+# verstärkt das Bild: Frauen sind in unserer Stichprobe ein bisschen wissenschaftlichier orientiert.
+# die Unterschiede sind aber nicht groß, würde daher nicht getrennt darstellen...
