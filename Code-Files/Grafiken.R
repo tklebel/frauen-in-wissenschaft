@@ -43,7 +43,7 @@ palette_red
 # Basisgrün: #74C476
 
 # Farben für "scale_fill_manual"
-colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B")
+colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B", Betriebswirtschaftslehre = "#A1D99B", Soziologie = "#4292C6", Volkswirtschaftslehre = "#EF3B2C")
 
 
 # helper function: strip label from vector
@@ -1194,12 +1194,14 @@ grid.arrange(p1, p2, p3, nrow = 2)
 p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
   geom_boxplot(width = .6, alpha = .7) +
   geom_jitter(position = position_jitter(height = .1, width = .1),
-              aes(colour = q_24)) +
+              aes(colour = q_24),
+              size = 4,
+              alpha = .7) +
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(title = "Unterbrechungen haben eine\nhemmende Auswirkungen auf\neine wissenschaftliche Laufbahn",
        x = "Geschlecht",
        y = NULL) +
-  scale_fill_manual(values = colours) +
+  scale_colour_manual(values = colours) +
   theme_bw() +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
   theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
@@ -1209,12 +1211,14 @@ p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
 p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
   geom_boxplot(width = .6, alpha = .7) +
   geom_jitter(position = position_jitter(height = .1, width = .1),
-              aes(colour = q_24)) +
+              aes(colour = q_24),
+              size = 4,
+              alpha = .7) + 
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(title = "Wissenschaft erfordert\nein überdurchschnittliches\nEngagement",
        x = "Geschlecht",
        y = NULL) +
-  scale_fill_manual(values = colours) +
+  scale_colour_manual(values = colours) +
   theme_bw() +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
   theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
@@ -1225,12 +1229,14 @@ p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
 p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
   geom_boxplot(width = .6, alpha = .7) +
   geom_jitter(position = position_jitter(height = .1, width = .1),
-              aes(colour = q_24)) +
+              aes(colour = q_24),
+              size = 4,
+              alpha = .7) +
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(title = "Für eine wissenschaftliche\nLaufbahn ist räumliche Mobilität\nerforderlich",
        x = "Geschlecht",
        y = NULL) +
-  scale_fill_manual(values = colours) +
+  scale_colour_manual(values = colours) +
   theme_bw() +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
   theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
@@ -1436,7 +1442,9 @@ unlabelled_complete <- function(x) {
 df_haven_neu %>%
   select(q_1) %>% 
   mutate(q_1 = recode(q_1, "1 = 1; 2 = 2; 3 = 3; 4 = 1")) %>%
-  mutate(q_1 = factor(q_1, labels=c("BWL", "SOZ", "VWL"))) -> pdata_1
+  mutate(q_1 = factor(q_1, labels=c("Betriebswirtschaftslehre",
+                                    "Soziologie",
+                                    "Volkswirtschaftslehre"))) -> pdata_1
 
 df_haven_neu %>%
   select(WiKarrierewunsch_Index) %>% 
@@ -1455,7 +1463,7 @@ wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewu
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(x = "Studienrichtung",
        y = NULL) +
-  scale_fill_manual(values = colours) +
+  scale_colour_manual(values = colours) +
   theme_bw() +
   scale_y_continuous(limits = c(.8, 17.2), breaks = c(1, 17),
                      labels = c("keine wiss.\nKarriereorientierung", "hohe wiss.\nKarriereorientierung")) +
