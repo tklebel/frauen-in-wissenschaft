@@ -1396,3 +1396,70 @@ grid.arrange(p1, p2, p3, p4, p5, p6, nrow = 3)
 
 # verstärkt das Bild: Frauen sind in unserer Stichprobe ein bisschen wissenschaftlichier orientiert.
 # die Unterschiede sind aber nicht groß, würde daher nicht getrennt darstellen...
+
+
+## Indizes wiss. Karrierewunsch ------------
+# select data to plot
+df_haven_neu %>%
+  select(WiKarrierewunsch_Index, q_24)  %>% 
+  as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
+  data.frame %>%
+  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
+
+
+# karrierewunsch nach geschlecht
+wiss_laufbahnorientierung_geschlecht <- ggplot(pdata, aes(q_24, WiKarrierewunsch_Index)) +
+  theme_bw() +  
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .4, width = .9) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(x = "Geschlecht",
+       y = NULL) +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  scale_y_continuous(limits = c(1, 17), breaks = c(1, 17),
+                     labels = c("keine wiss.\nKarriereorientierung", "hohe wiss.\nKarriereorientierung")) +
+  theme(axis.text.y = element_text(size = 12)) 
+  
+
+# nach studienrichtung
+unlabelled_complete <- function(x) {
+  attr(x, "label") <- NULL
+  attr(x, "class") <- NULL
+  attr(x, "labels") <- NULL
+  attr(x, "levels") <- NULL
+  x
+}
+
+
+df_haven_neu %>%
+  select(q_1) %>% 
+  mutate(q_1 = recode(q_1, "1 = 1; 2 = 2; 3 = 3; 4 = 1")) %>%
+  mutate(q_1 = factor(q_1, labels=c("BWL", "SOZ", "VWL"))) -> pdata_1
+
+df_haven_neu %>%
+  select(WiKarrierewunsch_Index) %>% 
+  lapply(., unlabelled_complete) %>% # strip labels from vectors for dplyr
+  data.frame -> pdata_2
+
+pdata <- bind_cols(pdata_1, pdata_2) %>%
+  filter(q_1 != "NA")
+
+wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewunsch_Index)) +
+  geom_boxplot(width = .6, alpha = .7) +
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_1),
+              size = 4,
+              alpha = .7) +
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(x = "Studienrichtung",
+       y = NULL) +
+  scale_fill_manual(values = colours) +
+  theme_bw() +
+  scale_y_continuous(limits = c(.8, 17.2), breaks = c(1, 17),
+                     labels = c("keine wiss.\nKarriereorientierung", "hohe wiss.\nKarriereorientierung")) +
+  theme(axis.text.y = element_text(size = 12)) +
+  guides(colour = FALSE) # remove legend 
+
+
