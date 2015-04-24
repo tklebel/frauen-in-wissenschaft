@@ -115,9 +115,11 @@ motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
-  theme(legend.position=c(.8, .19), axis.text.y = element_text(size = 11),
+  theme(legend.position = c(.8, .19),
+        axis.text = element_text(size = 12.5),
         legend.key.size = unit(1.2, "cm"),
-        legend.text=element_text(size=11)) +
+        legend.text = element_text(size=11),
+        legend.background = element_rect(fill = "#F7FBFF"))) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
 motivplot
@@ -1031,7 +1033,8 @@ p1 <- ggplot(pdata, aes(q_24, fill = q_12_1))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_betreuung[1]) +
-  coord_flip()
+  coord_flip() +
+  theme(axis.text = element_text(size = 12))
 
 # q_12_2
 df_haven_neu %>%
@@ -1048,7 +1051,8 @@ p2 <- ggplot(pdata, aes(q_24, fill = q_12_2))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_betreuung[2]) +
-  coord_flip()
+  coord_flip() +
+  theme(axis.text = element_text(size = 12))
 
 # q_12_3
 df_haven_neu %>%
@@ -1065,7 +1069,8 @@ p3 <- ggplot(pdata, aes(q_24, fill = q_12_3))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_betreuung[3]) +
-       coord_flip() 
+  coord_flip() +
+  theme(axis.text = element_text(size = 12))
 
 grid.arrange(p1, p2, p3, nrow = 3, main = "Wie zufrieden sind Sie mit der Betreuung Ihrer Dissertation?")
 
@@ -1203,8 +1208,11 @@ p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
        y = NULL) +
   scale_colour_manual(values = colours) +
   theme_bw() +
-  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
-  theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
+                     labels = c("Zustimmung", "Ablehung")) + 
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 13)) +
   guides(colour = FALSE) # remove legend
 
 # engagement_index
@@ -1220,8 +1228,11 @@ p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
        y = NULL) +
   scale_colour_manual(values = colours) +
   theme_bw() +
-  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
-  theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
+                     labels = c("Zustimmung", "Ablehung")) + 
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 13)) +
   guides(colour = FALSE) # remove legend
 
 
@@ -1238,8 +1249,11 @@ p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
        y = NULL) +
   scale_colour_manual(values = colours) +
   theme_bw() +
-  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4), labels = c("Zustimmung", "Ablehung")) + # extend y scale to range of data
-  theme(axis.text.y = element_text(angle = 90, hjust = .5, size = 10)) + 
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
+                     labels = c("Zustimmung", "Ablehung")) + 
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 13)) +
   guides(colour = FALSE) # remove legend
 
 
@@ -1430,7 +1444,7 @@ wiss_laufbahnorientierung_geschlecht <- ggplot(pdata, aes(q_24, WiKarrierewunsch
   scale_y_continuous(limits = c(.89, 17.11), breaks = seq(1, 17, 2), # breaks an den ungeraden Zahlen
                      labels = c("niedrig", seq(3, 15, 2), "hoch")) +
   theme(axis.text = element_text(size = 12),
-        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 13),
         title = element_text(size = 14)) +
   scale_colour_manual(values = colours)
 wiss_laufbahnorientierung_geschlecht 
@@ -1478,7 +1492,7 @@ wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewu
                                 seq(3, 15, 2),
                                 "hoch")) +
   theme(axis.text = element_text(size = 12),
-        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 13),
         title = element_text(size = 14)) +
   guides(colour = FALSE) # remove legend 
 wiss_laufbahnorientierung_studienrichtung

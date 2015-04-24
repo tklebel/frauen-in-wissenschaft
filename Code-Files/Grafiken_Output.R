@@ -100,13 +100,16 @@ motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
-  theme(legend.position=c(.8, .19), axis.text.y = element_text(size = 11),
+  theme(legend.position = c(.8, .16),
+        axis.text = element_text(size = 12.5),
         legend.key.size = unit(1.2, "cm"),
-        legend.text=element_text(size=11)) +
+        legend.text = element_text(size = 11),
+        legend.background = element_rect(fill = "#F7FBFF")) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
 
-ggsave(filename = "Grafiken/Motive_Studienanfang.png", plot = motivplot, dpi = 150, width = 12.8, height = 7.73)
+
+ggsave(filename = "Grafiken/Motive_Studienanfang.png", plot = motivplot, dpi = 150, width = 11.5, height = 9)
 
 
 
@@ -677,6 +680,7 @@ grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8,
              main = textGrob("Haben Sie schon...?", gp = gpar(cex = 2)))
 dev.off()
 
+rm(p1, p2, p3, p4, p5, p6, p7, p8)
 
 # Schwierigkeit, BetreuerIn zu finden ----------------------------------------
 # compute data to plot
