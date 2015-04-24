@@ -43,7 +43,7 @@ palette_red
 # Basisgrün: #74C476
 
 # Farben für "scale_fill_manual"
-colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B", Betriebswirtschaftslehre = "#A1D99B", Soziologie = "#4292C6", Volkswirtschaftslehre = "#EF3B2C")
+colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B", BWL = "#A1D99B", SOZ = "#4292C6", VWL = "#EF3B2C")
 
 
 # helper function: strip label from vector
@@ -539,7 +539,7 @@ pdata <- df_haven %>%
 p1 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", width = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_1)$label) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
@@ -564,7 +564,7 @@ pdata <- df_haven %>%
 p2 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6),
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6),
                      labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_2)$label) +
   scale_fill_manual(values = colours) +
@@ -590,7 +590,7 @@ pdata <- df_haven %>%
 p3 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_3)$label) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
@@ -615,7 +615,7 @@ pdata <- df_haven %>%
 p4 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_4)$label) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
@@ -640,7 +640,7 @@ pdata <- df_haven %>%
 p5 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_5)$label) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
@@ -665,7 +665,7 @@ pdata <- df_haven %>%
 p6 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_6)$label) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
@@ -690,7 +690,7 @@ pdata <- df_haven %>%
 p7 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_7)$label) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
@@ -715,7 +715,7 @@ pdata <- df_haven %>%
 p8 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(title = attributes(df_haven$q_23_8)$label) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
@@ -899,7 +899,7 @@ p5 <- ggplot(pdata, aes(q_24, q_26_5)) +
   ylim(c(0, 80))
 
 
-grid.arrange(p1, p2, p3, p4, p5, nrow = 2)
+grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 
 ## Berufstätigkeit ---------------
@@ -1005,7 +1005,7 @@ p5 <- ggplot(pdata, aes(q_24, fill = q_35_5))  +
 
 grid.arrange(p1, p2, p3, p4, p5, nrow = 3)
 
-
+# Frauen haben insgesamt bessere Vereinbarkeit, trotzdem würde ich es univariat darstellen
 
 ## Zufriedenheit mit Betreuung ----------
 colours_skala_blue_green <- c("sehr zufrieden" = "#238B45", "eher zufrieden" = "#74C476",
@@ -1417,18 +1417,25 @@ df_haven_neu %>%
 # karrierewunsch nach geschlecht
 wiss_laufbahnorientierung_geschlecht <- ggplot(pdata, aes(q_24, WiKarrierewunsch_Index)) +
   theme_bw() +  
-  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .4, width = .9) + 
-  geom_boxplot(width = .12, alpha = .95) +
+  geom_boxplot(width = .7, alpha = .95) + 
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_24),
+              size = 4,
+              alpha = .7)  +  
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(x = "Geschlecht",
-       y = NULL) +
+       y = NULL,
+       title = "Wissenschaftliche Karriereorientierung") +
   theme(legend.position = "none") + # remove superflous legend
-  scale_fill_manual(values = colours) +
-  scale_y_continuous(limits = c(1, 17), breaks = c(1, 17),
-                     labels = c("keine wiss.\nKarriereorientierung", "hohe wiss.\nKarriereorientierung")) +
-  theme(axis.text.y = element_text(size = 12)) 
-  
+  scale_y_continuous(limits = c(.89, 17.11), breaks = seq(1, 17, 2), # breaks an den ungeraden Zahlen
+                     labels = c("niedrig", seq(3, 15, 2), "hoch")) +
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 14)) +
+  scale_colour_manual(values = colours)
+wiss_laufbahnorientierung_geschlecht 
 
+  
 # nach studienrichtung
 unlabelled_complete <- function(x) {
   attr(x, "label") <- NULL
@@ -1442,9 +1449,9 @@ unlabelled_complete <- function(x) {
 df_haven_neu %>%
   select(q_1) %>% 
   mutate(q_1 = recode(q_1, "1 = 1; 2 = 2; 3 = 3; 4 = 1")) %>%
-  mutate(q_1 = factor(q_1, labels=c("Betriebswirtschaftslehre",
-                                    "Soziologie",
-                                    "Volkswirtschaftslehre"))) -> pdata_1
+  mutate(q_1 = factor(q_1, labels=c("BWL",
+                                    "SOZ",
+                                    "VWL"))) -> pdata_1
 
 df_haven_neu %>%
   select(WiKarrierewunsch_Index) %>% 
@@ -1462,12 +1469,17 @@ wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewu
               alpha = .7) +
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(x = "Studienrichtung",
-       y = NULL) +
+       y = NULL,
+       title = "Wissenschaftliche Karriereorientierung") +
   scale_colour_manual(values = colours) +
   theme_bw() +
-  scale_y_continuous(limits = c(.8, 17.2), breaks = c(1, 17),
-                     labels = c("keine wiss.\nKarriereorientierung", "hohe wiss.\nKarriereorientierung")) +
-  theme(axis.text.y = element_text(size = 12)) +
+  scale_y_continuous(limits = c(.89, 17.11), breaks = seq(1, 17, 2), # breaks an den ungeraden Zahlen
+                     labels = c("niedrig",
+                                seq(3, 15, 2),
+                                "hoch")) +
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 14)) +
   guides(colour = FALSE) # remove legend 
-
+wiss_laufbahnorientierung_studienrichtung
 
