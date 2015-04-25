@@ -925,7 +925,6 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 
 ## Berufstätigkeit ---------------
-
 # Farben für skala
 colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
 colours_skala_blue_green <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#9ECAE1", "trifft gar nicht zu" = "#4292C6")

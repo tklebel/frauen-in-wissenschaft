@@ -55,7 +55,7 @@ wiss_laufbahnorientierung_geschlecht <- ggplot(pdata, aes(q_24, WiKarrierewunsch
        title = "Wissenschaftliche Karriereorientierung ohne WiPäd") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  scale_y_continuous(limits = c(1, 17), breaks = c(1, 17),
+  scale_y_continuous(limits = c(.9, 17.1), breaks = c(1, 17),
                      labels = c("niedrig", "hoch")) +
   theme(axis.text.y = element_text(size = 12)) 
 wiss_laufbahnorientierung_geschlecht

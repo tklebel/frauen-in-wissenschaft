@@ -261,7 +261,7 @@ abbruchplot_männer <- ggplot(pdata_m, aes(varname, anzahl)) +
   theme_bw() +
   geom_bar(stat = "identity", fill = "#A1D99B", width = .7) +
   coord_flip() +
-  labs(y = "Häufigkeit der Nennung", x = NULL, title = "Männer") +
+  labs(y = "Häufigkeit der Nennung", x = NULL, title = "Männlich") +
   scale_y_continuous(breaks = pretty_breaks(8)) +
   theme(axis.text.y = element_text(size = 12)) 
 
@@ -285,12 +285,12 @@ abbruchplot_frauen <- ggplot(pdata_w, aes(varname, anzahl)) +
   theme_bw() +
   geom_bar(stat = "identity", fill = "#4292C6", width = .7) +
   coord_flip() +
-  labs(y = "Häufigkeit der Nennung", x = NULL, title = "Frauen") +
+  labs(y = "Häufigkeit der Nennung", x = NULL, title = "Weiblich") +
   scale_y_continuous(breaks = pretty_breaks(8)) +
   theme(axis.text.y = element_text(size = 12)) 
 
 # join plots
-png("Grafiken/Nachgedacht_abzubrechen_hoch.png", width = 1100, height = 1000, res = 150)
+png("Grafiken/Nachgedacht_abzubrechen.png", width = 1100, height = 1000, res = 150)
 grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 2)
 dev.off()
 
@@ -448,7 +448,6 @@ infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
         axis.text.x = element_text(size = 12),
         legend.text = element_text(size=11)) +
   labs(x = NULL, y = NULL, fill = "Haben Sie genügend\nInformationen?") # remove labels of axes and legend
-infoplot
 
 ggsave(filename = "Grafiken/Informationen.png", plot = infoplot, dpi = 150, width = 12.5, height = 5.2)
 
