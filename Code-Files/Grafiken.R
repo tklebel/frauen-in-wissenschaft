@@ -525,6 +525,23 @@ rm(infos, reihenfolge, labels_infoplot, infoplot)
 # q_23: XXX schon mal gemacht?? ####################################################
 # q_23_1:q_23:8
 
+# labels finden
+label_data <- df_haven_neu %>% select(q_23_1:q_23_8)
+
+print_titles <- function(x){
+  attributes(x)$label
+}
+lapply(label_data, print_titles)
+
+labels_haben_sie_schon <- c("einen wissenschaftlichen Text publiziert\n(Zeitschriftenaufsatz, Buchbeitrag, Buch, Projektbericht)?",
+                            "ein Buch herausgegeben?",
+                            "eine Lehrveranstaltung\nan der Universität abgehalten?",
+                            "an einem Projektantrag mitgearbeitet?",
+                            "an einer (wissenschaftlichen)\nKonferenz/Tagung teilgenommen?",
+                            "bei einer (wissenschaftlichen) Konferenz/Tagung\neinen Vortrag gehalten/ein Poster präsentiert",
+                            "eine (wissenschaftliche)\nKonferenz/Tagung organisiert",
+                            "an einer extra-curricularen\nWeiterbildungsveranstaltung teilgenommen")
+
 # q_23_1
 pdata <- df_haven %>%
   select(q_23_1, studiendauer_2_bis3, q_24) %>%
@@ -542,7 +559,7 @@ p1 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", width = .8) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_1)$label) +
+  labs(title = labels_haben_sie_schon[1]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
@@ -568,7 +585,7 @@ p2 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6),
                      labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_2)$label) +
+  labs(title = labels_haben_sie_schon[2]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
@@ -593,7 +610,7 @@ p3 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_3)$label) +
+  labs(title = labels_haben_sie_schon[3]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
@@ -618,7 +635,7 @@ p4 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_4)$label) +
+  labs(title = labels_haben_sie_schon[4]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
@@ -643,7 +660,7 @@ p5 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_5)$label) +
+  labs(title = labels_haben_sie_schon[5]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
@@ -668,7 +685,7 @@ p6 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_6)$label) +
+  labs(title = labels_haben_sie_schon[6]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
@@ -693,7 +710,7 @@ p7 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_7)$label) +
+  labs(title = labels_haben_sie_schon[7]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
@@ -718,7 +735,7 @@ p8 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
   scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_8)$label) +
+  labs(title = labels_haben_sie_schon[8]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
