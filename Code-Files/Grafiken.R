@@ -119,7 +119,7 @@ motivplot <- ggplot(motive, aes(labels_motivplot, fill = variable))  +
         axis.text = element_text(size = 12.5),
         legend.key.size = unit(1.2, "cm"),
         legend.text = element_text(size=11),
-        legend.background = element_rect(fill = "#F7FBFF"))) +
+        legend.background = element_rect(fill = "#F7FBFF")) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
 motivplot
@@ -798,6 +798,7 @@ betreuerplot_2 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge") +
   theme_bw() +
   scale_y_continuous(labels = percent_format()) +
+  scale_x_discrete(breaks = c("Frau", "Mann"), labels = c("weiblich", "männlich")) +
   scale_fill_manual(values = colours) +
   labs(y    = "Prozentanteile innerhalb Geschlecht des/der Studierenden",
        x    = "Geschlecht des/der BetreuerIn",
@@ -937,12 +938,63 @@ labels_berufstätigkeit <- c("Meine derzeitige Erwerbstätigkeit\nlässt sich se
                             "Ich würde gerne den Umfang meiner\nErwerbstätigkeit reduzieren, um\nmehr Zeit für das Doktoratsstudium zu haben")
 
 labels_berufstätigkeit_1n <- c("Meine derzeitige Erwerbstätigkeit lässt sich sehr gut\nmit den Inhalten des Doktoratsstudiums/der Dissertation vereinen",
-                               "Es ist schwierig, Doktoratsstudium und Erwerbstätigkeit zu vereinbaren", 
+                               "Es ist schwierig, Doktoratsstudium\nund Erwerbstätigkeit zu vereinbaren", 
                                "Meine derzeitige Erwerbstätigkeit ist für den\nweiteren Verlauf meiner beruflichen Laufbahn förderlich",
                                "Ich kann meine Arbeitszeit im Hinblick auf die\nAnforderungen des Doktoratsstudiums frei einteilen",
-                               "Ich würde gerne den Umfang meiner Erwerbstätigkeit reduzieren,\nummehr Zeit für das Doktoratsstudium zu haben")
+                               "Ich würde gerne den Umfang meiner Erwerbstätigkeit reduzieren,\num mehr Zeit für das Doktoratsstudium zu haben")
 
 
+# univariat
+# get number of valid observations for further computation of percentages
+cases <- df_haven_neu %>%
+  select(q_35_1:q_35_5)
+cases <- colSums(!is.na(cases))
+
+# get counts of first two levels, in order to get order of variables for plot
+reihenfolge <- df_haven_neu %>%
+  select(q_35_1:q_35_5) %>% 
+  lapply(as_factor) %>% as_data_frame %>% 
+  summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
+  gather(id, häufigkeit) %>%
+  mutate(häufigkeit = häufigkeit / cases) %>% # divide counts by cases for correct percentages
+  cbind(., `labels_berufstätigkeit_1n`) 
+
+# select data to plot and gather it in long format, remove NAs
+berufstätigkeit <- df_haven_neu %>%
+  select(q_35_1:q_35_5) %>%
+  lapply(., as_factor) %>% 
+  as_data_frame %>% 
+  gather(., id, variable) %>%
+  na.omit
+
+# join datasets
+berufstätigkeit <- full_join(berufstätigkeit, reihenfolge, by = "id")
+
+# reorder the levels for the plot
+berufstätigkeit$variable <- factor(berufstätigkeit$variable,
+                                   levels = c("trifft zu",
+                                              "trifft eher zu",
+                                              "trifft eher nicht zu",
+                                              "trifft gar nicht zu"))
+
+berufstätigkeit$labels_berufstätigkeit_1n <- factor(berufstätigkeit$labels_berufstätigkeit_1n,
+                                           levels = berufstätigkeit$labels_berufstätigkeit_1n[order(berufstätigkeit$häufigkeit)])
+
+# plot data
+berufsplot <- ggplot(berufstätigkeit, aes(`labels_berufstätigkeit_1n`, fill = variable))  +
+  geom_bar(position = "fill", width = .7) +
+  coord_flip() +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 13),
+        axis.text.x = element_text(size = 12),
+        legend.text = element_text(size=11)) +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
+berufsplot
+
+
+# nach Geschlecht gesplittet
 # q_35_1
 df_haven_neu %>%
   select(q_35_1, q_24) %>%
@@ -1326,7 +1378,7 @@ wiss_karriere_plot <- ggplot(wiss_karriere, aes(labels_wiss_karriere, fill = var
   theme_bw() +
   theme(axis.text.y = element_text(size = 13),
         axis.text.x = element_text(size = 12),
-        legend.text=element_text(size=11)) +
+        legend.text = element_text(size=11)) +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
 wiss_karriere_plot
