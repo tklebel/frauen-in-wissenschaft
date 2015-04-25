@@ -839,6 +839,144 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 dev.off()
 
 
+## Berufstätigkeit ---------------
+# Farben für skala
+colours_skala <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#BAE4B3", "trifft gar nicht zu" = "#EDF8E9")
+colours_skala_blue_green <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#9ECAE1", "trifft gar nicht zu" = "#4292C6")
+colours_skala_blue_green_sw <- c("trifft zu" = "#238B45", "trifft eher zu" = "#74C476", "trifft eher nicht zu" = "#C6DBEF", "trifft gar nicht zu" = "#9ECAE1")
+
+
+# variablennamen für den motivationsplot
+labels_berufstätigkeit_1n <- c("Meine derzeitige Erwerbstätigkeit lässt sich sehr gut\nmit den Inhalten des Doktoratsstudiums/der Dissertation vereinen",
+                               "Es ist schwierig, Doktoratsstudium\nund Erwerbstätigkeit zu vereinbaren", 
+                               "Meine derzeitige Erwerbstätigkeit ist für den\nweiteren Verlauf meiner beruflichen Laufbahn förderlich",
+                               "Ich kann meine Arbeitszeit im Hinblick auf die\nAnforderungen des Doktoratsstudiums frei einteilen",
+                               "Ich würde gerne den Umfang meiner Erwerbstätigkeit reduzieren,\num mehr Zeit für das Doktoratsstudium zu haben")
+
+
+# univariat
+# get number of valid observations for further computation of percentages
+cases <- df_haven_neu %>%
+  select(q_35_1:q_35_5)
+cases <- colSums(!is.na(cases))
+
+# get counts of first two levels, in order to get order of variables for plot
+reihenfolge <- df_haven_neu %>%
+  select(q_35_1:q_35_5) %>% 
+  lapply(as_factor) %>% as_data_frame %>% 
+  summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
+  gather(id, häufigkeit) %>%
+  mutate(häufigkeit = häufigkeit / cases) %>% # divide counts by cases for correct percentages
+  cbind(., `labels_berufstätigkeit_1n`) 
+
+# select data to plot and gather it in long format, remove NAs
+berufstätigkeit <- df_haven_neu %>%
+  select(q_35_1:q_35_5) %>%
+  lapply(., as_factor) %>% 
+  as_data_frame %>% 
+  gather(., id, variable) %>%
+  na.omit
+
+# join datasets
+berufstätigkeit <- full_join(berufstätigkeit, reihenfolge, by = "id")
+
+# reorder the levels for the plot
+berufstätigkeit$variable <- factor(berufstätigkeit$variable,
+                                   levels = c("trifft zu",
+                                              "trifft eher zu",
+                                              "trifft eher nicht zu",
+                                              "trifft gar nicht zu"))
+
+berufstätigkeit$labels_berufstätigkeit_1n <- factor(berufstätigkeit$labels_berufstätigkeit_1n,
+                                                    levels = berufstätigkeit$labels_berufstätigkeit_1n[order(berufstätigkeit$häufigkeit)])
+
+# plot data
+berufsplot <- ggplot(berufstätigkeit, aes(`labels_berufstätigkeit_1n`, fill = variable))  +
+  geom_bar(position = "fill", width = .7) +
+  coord_flip() +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 13),
+        axis.text.x = element_text(size = 12),
+        legend.text = element_text(size=11)) +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
+
+
+ggsave(filename = "Grafiken/Berufstätigkeit.png",
+       plot = berufsplot,
+       dpi = 150, height = 4, width = 12.5)
+
+
+## Zufriedenheit mit Betreuung ----------
+colours_skala_blue_green <- c("sehr zufrieden" = "#238B45", "eher zufrieden" = "#74C476",
+                              "eher nicht zufrieden" = "#9ECAE1", "gar nicht zufrieden" = "#4292C6")
+
+labels_betreuung <- c("Häufigkeit der Betreuung",
+                      "Fachliche Betreuung",
+                      "Unterstützung bei der wissenschaftlichen Laufbahnplanung")
+
+
+# q_12_1
+df_haven_neu %>%
+  select(q_12_1, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p1 <- ggplot(pdata, aes(q_24, fill = q_12_1))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_betreuung[1]) +
+  coord_flip() +
+  theme(axis.text = element_text(size = 12))
+
+# q_12_2
+df_haven_neu %>%
+  select(q_12_2, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p2 <- ggplot(pdata, aes(q_24, fill = q_12_2))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_betreuung[2]) +
+  coord_flip() +
+  theme(axis.text = element_text(size = 12))
+
+# q_12_3
+df_haven_neu %>%
+  select(q_12_3, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p3 <- ggplot(pdata, aes(q_24, fill = q_12_3))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_betreuung[3]) +
+  coord_flip() +
+  theme(axis.text = element_text(size = 12))
+
+png("Grafiken/Betreuungszufriedenheit.png", width = 1400, height = 1200, res = 200)
+grid.arrange(p1, p2, p3, nrow = 3,
+             main = textGrob("Wie zufrieden sind Sie mit der Betreuung Ihrer Dissertation?",
+                             gp = gpar(fontsize = 16)))
+dev.off()
+
 # copy all graphs and the html documentation to delivery folder
 filelist <- list.files("Grafiken", pattern = "png|html", full.names = TRUE)
 folderlist <- list.files("Grafiken/Haben_Sie_schon", pattern = "png", full.names = TRUE)
