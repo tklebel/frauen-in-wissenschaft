@@ -977,6 +977,155 @@ grid.arrange(p1, p2, p3, nrow = 3,
                              gp = gpar(fontsize = 16)))
 dev.off()
 
+
+
+## Bild der Wissenschaft ------------------
+colours_skala_blue_green <- c("trifft zu" = "#238B45",
+                              "trifft eher zu" = "#74C476",
+                              "trifft eher nicht zu" = "#9ECAE1",
+                              "trifft gar nicht zu" = "#4292C6")
+
+labels_bild <- c("Frauen haben im universitären Umfeld gleich\nhohe Chancen auf eine erfolgreiche Laufbahn wie Männer",
+                 "Es ist schwierig, eine wissenschaftliche\nLaufbahn zeitlich zu planen",
+                 "Eine Vereinbarkeit von Familie und Beruf\nist im wissenschaftlichen Berufsfeld gut möglich")
+
+
+
+# q_22_2
+df_haven_neu %>%
+  select(q_22_2, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p1 <- ggplot(pdata, aes(q_24, fill = q_22_2))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_bild[1]) +
+  coord_flip() 
+
+# q_22_3
+df_haven_neu %>%
+  select(q_22_3, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p2 <- ggplot(pdata, aes(q_24, fill = q_22_3))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_bild[2]) +
+  coord_flip() 
+
+# q_22_6
+df_haven_neu %>%
+  select(q_22_6, q_24) %>%
+  lapply(., as_factor) %>%
+  data.frame %>%
+  na.omit -> pdata
+
+
+p3 <- ggplot(pdata, aes(q_24, fill = q_22_6))  +
+  geom_bar(position = "fill", width = .7) +
+  scale_fill_manual(values = colours_skala_blue_green) +
+  theme_bw() +
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
+       title = labels_bild[3]) +
+  coord_flip() 
+
+
+png("Grafiken/Bild_der_Wissenschaft.png", width = 1400, height = 1200, res = 200)
+grid.arrange(p1, p2, p3, nrow = 3)
+dev.off()
+
+
+## Bild der Wissenschaft - Indizes ------------
+# select data to plot
+df_haven %>%
+  select(unterbrechung_index, mobilität_index, engagement_index, q_24)  %>% 
+  as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
+  data.frame %>%
+  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
+
+
+# alternativ als jitterplot (violinplot ist für die Daten nicht ehrlich)
+# unterbrechung_index
+p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
+  geom_boxplot(width = .6, alpha = .7) +
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_24),
+              size = 4,
+              alpha = .7) +
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(title = "Unterbrechungen haben eine\nhemmende Auswirkungen auf\neine wissenschaftliche Laufbahn",
+       x = "Geschlecht",
+       y = NULL) +
+  scale_colour_manual(values = colours) +
+  theme_bw() +
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
+                     labels = c("Zustimmung", "Ablehung")) + 
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 13)) +
+  guides(colour = FALSE) # remove legend
+
+# engagement_index
+p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
+  geom_boxplot(width = .6, alpha = .7) +
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_24),
+              size = 4,
+              alpha = .7) + 
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(title = "Wissenschaft erfordert\nein überdurchschnittliches\nEngagement",
+       x = "Geschlecht",
+       y = NULL) +
+  scale_colour_manual(values = colours) +
+  theme_bw() +
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
+                     labels = c("Zustimmung", "Ablehung")) + 
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 13)) +
+  guides(colour = FALSE) # remove legend
+
+
+# mobilität_index
+p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
+  geom_boxplot(width = .6, alpha = .7) +
+  geom_jitter(position = position_jitter(height = .1, width = .1),
+              aes(colour = q_24),
+              size = 4,
+              alpha = .7) +
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(title = "Für eine wissenschaftliche\nLaufbahn ist räumliche Mobilität\nerforderlich",
+       x = "Geschlecht",
+       y = NULL) +
+  scale_colour_manual(values = colours) +
+  theme_bw() +
+  scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
+                     labels = c("Zustimmung", "Ablehung")) + 
+  theme(axis.text = element_text(size = 12),
+        axis.text = element_text(size = 13),
+        title = element_text(size = 13)) +
+  guides(colour = FALSE) # remove legend
+
+
+png("Grafiken/Bild_der_Wissenschaft_Indizes.png", width = 1400, height = 1000, res = 100)
+grid.arrange(p1, p2, p3, nrow = 1)
+dev.off()
+
+
 # copy all graphs and the html documentation to delivery folder
 filelist <- list.files("Grafiken", pattern = "png|html", full.names = TRUE)
 folderlist <- list.files("Grafiken/Haben_Sie_schon", pattern = "png", full.names = TRUE)
