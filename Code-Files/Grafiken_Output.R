@@ -25,7 +25,7 @@ df <- read.spss("Data/DATENSATZ_FiW.sav", use.value.labels=T, to.data.frame=T)
 df_sav <- tbl_df(df)
 
 df_haven <- read_sav("Data/DATENSATZ_FiW-main12_2.sav")
-
+df_haven_neu <- read_sav("Data/DATENSATZ_FiW-main10-4-2015.sav")
 
 
 # #A1D99B für Männer (Grün) als Grundfarbe 
@@ -290,10 +290,6 @@ abbruchplot_frauen <- ggplot(pdata_w, aes(varname, anzahl)) +
   theme(axis.text.y = element_text(size = 12)) 
 
 # join plots
-png("Grafiken/Nachgedacht_abzubrechen_breit.png", width = 2000, height = 500, res = 150)
-grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 1)
-dev.off()
-
 png("Grafiken/Nachgedacht_abzubrechen_hoch.png", width = 1100, height = 1000, res = 150)
 grid.arrange(abbruchplot_frauen, abbruchplot_männer, nrow = 2)
 dev.off()
@@ -448,10 +444,13 @@ infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
+  theme(axis.text.y = element_text(size = 13),
+        axis.text.x = element_text(size = 12),
+        legend.text = element_text(size=11)) +
   labs(x = NULL, y = NULL, fill = "Haben Sie genügend\nInformationen?") # remove labels of axes and legend
 infoplot
 
-ggsave(filename = "Grafiken/Informationen.png", plot = infoplot, dpi = 150, width = 10, height = 4)
+ggsave(filename = "Grafiken/Informationen.png", plot = infoplot, dpi = 150, width = 12.5, height = 5.2)
 
 
 # clean up 
@@ -461,6 +460,14 @@ rm(infos, reihenfolge, labels_infoplot, infoplot)
 # q_23: XXX schon mal gemacht?? ####################################################
 # q_23_1:q_23:8
 
+labels_haben_sie_schon <- c("einen wissenschaftlichen Text publiziert\n(Zeitschriftenaufsatz, Buchbeitrag, Buch, Projektbericht)?",
+                            "ein Buch herausgegeben?",
+                            "eine Lehrveranstaltung\nan der Universität abgehalten?",
+                            "an einem Projektantrag mitgearbeitet?",
+                            "an einer (wissenschaftlichen)\nKonferenz/Tagung teilgenommen?",
+                            "bei einer (wissenschaftlichen) Konferenz/Tagung\neinen Vortrag gehalten/ein Poster präsentiert",
+                            "eine (wissenschaftliche)\nKonferenz/Tagung organisiert",
+                            "an einer extra-curricularen\nWeiterbildungsveranstaltung teilgenommen")
 
 # q_23_1
 pdata <- df_haven %>%
@@ -478,12 +485,12 @@ pdata <- df_haven %>%
 p1 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", width = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_1)$label) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = labels_haben_sie_schon[1]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
+
 
 rm(pdata)
 
@@ -503,13 +510,13 @@ pdata <- df_haven %>%
 p2 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6),
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6),
                      labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_2)$label) +
+  labs(title = labels_haben_sie_schon[2]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
+
 
 rm(pdata)
 
@@ -529,12 +536,12 @@ pdata <- df_haven %>%
 p3 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_3)$label) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = labels_haben_sie_schon[3]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
+
 
 rm(pdata)
 
@@ -554,12 +561,12 @@ pdata <- df_haven %>%
 p4 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_4)$label) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = labels_haben_sie_schon[4]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
+
 
 rm(pdata)
 
@@ -579,12 +586,12 @@ pdata <- df_haven %>%
 p5 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_5)$label) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = labels_haben_sie_schon[5]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
+
 
 rm(pdata)
 
@@ -604,12 +611,12 @@ pdata <- df_haven %>%
 p6 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_6)$label) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = labels_haben_sie_schon[6]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
+
 
 rm(pdata)
 
@@ -629,12 +636,12 @@ pdata <- df_haven %>%
 p7 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_7)$label) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = labels_haben_sie_schon[7]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
+
 
 rm(pdata)
 
@@ -654,28 +661,15 @@ pdata <- df_haven %>%
 p8 <- ggplot(pdata, aes(studiendauer_2_bis3, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge", widht = .8) +
   theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
-  labs(title = attributes(df_haven$q_23_8)$label) +
+  scale_y_continuous(limits = c(0, 1), breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  labs(title = labels_haben_sie_schon[8]) +
   scale_fill_manual(values = colours) +
   labs(x = "Studiendauer in Semestern",
        y = "Prozentanteile für Antwort 'Ja'")
-  
-
 rm(pdata)
 
-
-ggsave(filename = "Grafiken/Haben_Sie_schon/wiss_publiziert.png", plot = p1, dpi = 150, width = 6.5, height = 6)
-ggsave(filename = "Grafiken/Haben_Sie_schon/buch_herausgegeben.png", plot = p2, dpi = 150, width = 6.5, height = 6)
-ggsave(filename = "Grafiken/Haben_Sie_schon/lv_abgehalten.png", plot = p3, dpi = 150, width = 6.5, height = 6)
-ggsave(filename = "Grafiken/Haben_Sie_schon/projektantrag_mitgearbeitet.png", plot = p4, dpi = 150, width = 6.5, height = 6)
-ggsave(filename = "Grafiken/Haben_Sie_schon/konferenz_teilgenommen.png", plot = p5, dpi = 150, width = 6.5, height = 6)
-ggsave(filename = "Grafiken/Haben_Sie_schon/vortrag_gehalten.png", plot = p6, dpi = 150, width = 6.5, height = 6)
-ggsave(filename = "Grafiken/Haben_Sie_schon/konferenz_organisiert.png", plot = p7, dpi = 150, width = 6.5, height = 6)
-ggsave(filename = "Grafiken/Haben_Sie_schon/weiterbildung_teilgenommen.png", plot = p8, dpi = 150, width = 6.5, height = 6)
-
-
-png("Grafiken/Haben_Sie_schon/Haben_Sie_schon.png", width = 2000, height = 2600, res = 200)
-grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8,
+png("Grafiken/Haben_Sie_schon/Haben_Sie_schon.png", width = 2280, height = 2800, res = 200)
+grid.arrange(p1, p3, p2, p4, p5, p6, p7, p8,
              nrow = 4,
              main = textGrob("Haben Sie schon...?", gp = gpar(cex = 2)))
 dev.off()
@@ -693,12 +687,10 @@ pdata <- df_sav %>%
 
 schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge") +
-  theme_bw() +
-  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
+  theme_bw() + scale_y_continuous(labels = percent_format()) +
   scale_fill_manual(values = colours) +
-  labs(y="Prozentanteile innerhalb der Geschlechter",
-       x = "Schwierigkeit, eine/n BetreuerIn zu finden",
-       fill = "Geschlecht des/der\nStudierenden") 
+  labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
+schwierigkeitsplot
 
 ggsave(filename = "Grafiken/Schwierigkeit_betreuer_finden.png", plot = schwierigkeitsplot, dpi = 150, width = 8, height = 5.6)
 
@@ -716,37 +708,142 @@ pdata <- df_sav %>%
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
   rename(., Betreuer = q_8, Geschlecht = q_24)
 
-betreuerplot_1 <- ggplot(pdata, aes(Geschlecht, p, fill=Betreuer)) +
-  geom_bar(stat="identity", position="dodge") +
-  theme_bw() +
-  scale_y_continuous(labels = percent_format()) +
-  scale_fill_manual(values = colours) +
-  labs(y    = "Prozentanteile innerhalb Geschlecht des/der Studierenden",
-       fill = "Geschlecht des/der\nBetreuerIn",
-       x    = "Geschlecht des/der Studierenden")
-
 betreuerplot_2 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
   geom_bar(stat="identity", position="dodge") +
   theme_bw() +
   scale_y_continuous(labels = percent_format()) +
+  scale_x_discrete(breaks = c("Frau", "Mann"), labels = c("weiblich", "männlich")) +
   scale_fill_manual(values = colours) +
   labs(y    = "Prozentanteile innerhalb Geschlecht des/der Studierenden",
        x    = "Geschlecht des/der BetreuerIn",
        fill = "Geschlecht des/der\nStudierenden")
 
-
-ggsave(filename = "Grafiken/Geschlecht_betreuer_v1.png", plot = betreuerplot_1, dpi = 150, width = 8, height = 6.5)
-ggsave(filename = "Grafiken/Geschlecht_betreuer_v2.png", plot = betreuerplot_2, dpi = 150, width = 8, height = 6.5)
-
-
+ggsave(filename = "Grafiken/Geschlecht_betreuer.png",
+       plot = betreuerplot_2,
+       dpi = 150, width = 8, height = 6.5)
 rm(pdata, betreuerplot_1, betreuerplot_2)
+
+
+## Zeitliche Aufwendungen pro Woche --------------------------------------
+
+# Aufwand für Studium
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_1 != "NA") -> pdata
+
+p1 <- ggplot(pdata, aes(q_24, q_26_1)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Studium") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand [in Stunden]") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
+
+
+# Aufwand für Erwerbstätigkeit
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_2 != "NA") -> pdata
+
+p2 <- ggplot(pdata, aes(q_24, q_26_2)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Erwerbstätigkeit") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand [in Stunden]") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
+
+
+
+# Aufwand für Haushaltsführung
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_3 != "NA") -> pdata
+
+p3 <- ggplot(pdata, aes(q_24, q_26_3)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Haushaltsführung") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand [in Stunden]") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
+
+
+
+# Aufwand für Hobbies und Sport
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_4 != "NA") -> pdata
+
+p4 <- ggplot(pdata, aes(q_24, q_26_4)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Hobbies und Sport") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand [in Stunden]") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
+
+
+# Aufwand für Betreungspflichten (Kinder/Angehörige)
+df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  mutate(q_24 = as_factor(q_24)) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  data.frame %>% 
+  filter(q_24 != "NA", q_26_5 != "NA") -> pdata 
+
+p5 <- ggplot(pdata, aes(q_24, q_26_5)) +
+  geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
+  geom_boxplot(width = .12, alpha = .95) +
+  theme_bw() +    
+  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
+  labs(title = "Betreungspflichten (Kinder/Angehörige)") +
+  labs(x = "Geschlecht") + 
+  labs(y = "Aufwand [in Stunden]") +
+  theme(legend.position = "none") + # remove superflous legend
+  scale_fill_manual(values = colours) +
+  ylim(c(0, 80))
+
+
+
+png("Grafiken/Zeitaufwand.png", width = 1500, height = 1400, res = 200)
+grid.arrange(p1, p2, p3, p4, nrow = 2)
+dev.off()
 
 
 # copy all graphs and the html documentation to delivery folder
 filelist <- list.files("Grafiken", pattern = "png|html", full.names = TRUE)
 folderlist <- list.files("Grafiken/Haben_Sie_schon", pattern = "png", full.names = TRUE)
 file.copy(filelist, "../Fertige_Grafiken")
-file.copy(folderlist, "../Fertige_Grafiken/Haben_Sie_schon")
+file.copy(folderlist, "../Fertige_Grafiken")
 
 
 

@@ -513,6 +513,9 @@ infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
+  theme(axis.text.y = element_text(size = 13),
+        axis.text.x = element_text(size = 12),
+        legend.text = element_text(size=11)) +
   labs(x = NULL, y = NULL, fill = "Haben Sie genügend\nInformationen?") # remove labels of axes and legend
 infoplot
 
@@ -804,10 +807,9 @@ betreuerplot_2 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
        x    = "Geschlecht des/der BetreuerIn",
        fill = "Geschlecht des/der\nStudierenden")
 
-betreuerplot_1
 betreuerplot_2
 
-rm(pdata, betreuerplot)
+rm(pdata, betreuerplot_1, betreuerplot_2)
 
 
 ## Zeitliche Aufwendungen pro Woche --------------------------------------
