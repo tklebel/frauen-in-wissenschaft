@@ -38,6 +38,29 @@ df_sav <- tbl_df(df)
 
 # alternativer datensatz für andere Grafiken
 df_haven <- read_sav("../Data/DATENSATZ_FiW-main12_2.sav")
+df_haven_neu <- read_sav("../Data/DATENSATZ_FiW-main10-4-2015.sav")
+```
+
+
+```{r helper_functions}
+unlabelled <- function(x) {
+  attr(x, "label") <- NULL
+  x
+}
+
+unlabelled_part <- function(x) {
+  attr(x, "label") <- NULL
+  attr(x, "class") <- NULL
+  x
+}
+
+unlabelled_complete <- function(x) {
+  attr(x, "label") <- NULL
+  attr(x, "class") <- NULL
+  attr(x, "labels") <- NULL
+  attr(x, "levels") <- NULL
+  x
+}
 
 ```
 
@@ -45,7 +68,9 @@ df_haven <- read_sav("../Data/DATENSATZ_FiW-main12_2.sav")
 In diesem File finden sich die Kreuztabellen und sonstige Darstellungen mit den zu den Grafiken gehörenden Stichprobengrößen.
 
 
-# Grafik: Motivationsskalen
+--------
+
+## Grafik: Motivationsskalen
 
 ````{r motivationsindizes}
 df_haven %>%
@@ -59,20 +84,26 @@ df_haven %>%
 colSums(!is.na(pdata[,1:4]))
 ````
 
-# Grafik: Motive ein Doktoratsstudium aufzunehmen
+--------
+
+## Grafik: Motive ein Doktoratsstudium aufzunehmen
 Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
 ```{r motive}
 motive <- df_sav %>%
   select(., q_6_1:q_6_16)
 
-# N für die einzelnen Items
+--------
+
+## N für die einzelnen Items
 colSums(!is.na(motive))
 
 ```
 
-# Grafik: Nachgedacht, abzubrechen
 
+--------
+
+## Grafik: Nachgedacht, abzubrechen
 ````{r abbruchgedanken}
 df_haven %>%
   select(q_14:q_15_15, q_15_17, q_24) %>%
@@ -99,7 +130,10 @@ abbruchgedanken %>%
 ```
 
 
-# Schwierigkeit, BetreuerIn zu finden nach Geschlecht
+
+--------
+
+## Schwierigkeit, BetreuerIn zu finden nach Geschlecht
 ```{r betreuer_in}
 CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F, format = "SPSS")
 ```
@@ -107,22 +141,160 @@ CrossTable(df_sav$q_9, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F, format = "
 Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
 
 
-# Geschlecht von Betreuer_in mit Geschlecht des/der Befragten als UV
+--------
+
+## Geschlecht von Betreuer_in mit Geschlecht des/der Befragten als UV
 ```{r geschlecht betreuer mit geschlecht als AV}
 CrossTable(df_sav$q_8, df_sav$q_24, prop.r=F, prop.t=F, prop.chisq=F, format = "SPSS")
 ````
 
-# Grafik: Informationen über das Studium
+--------
+
+## Grafik: Informationen über das Studium
 Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
 ```{r informationen}
-motive <- df_sav %>%
+informationen <- df_sav %>%
   select(., q_20_1:q_20_8)
 
-# N für die einzelnen Items
-colSums(!is.na(motive))
+--------
+
+## N für die einzelnen Items
+colSums(!is.na(informationen))
 
 ```
 
 
+--------
+
+## XXX schon mal gemacht?
+
+```{r haben_sie_schon}
+x1 <- df_haven %>%
+  select(q_23_1:q_23_8, studiendauer_2_bis3, q_24) %>% 
+  lapply(., unlabelled_complete) %>% # strip labels from vectors for dplyr
+  as_data_frame %>% 
+  filter(q_24 != "NA", studiendauer_2_bis3 != "NA")
+
+colSums(!is.na(x1[,1:8]))
+```
+
+
+--------
+
+## Zeitliche Aufwendungen
+
+```{r zeitl_aufwendungen}
+pdata <- df_haven_neu %>%
+  select(q_26_1:q_26_5, q_24) %>%
+  lapply(., unlabelled_complete) %>% # strip labels from vectors for dplyr
+  as_data_frame %>% 
+  filter(q_24 != "NA")
+
+colSums(!is.na(pdata[,1:4]))
+```
+
+--------
+
+## Berufstätigkeit
+
+```{r berufstätigkeit}
+pdata <- df_haven_neu %>%
+  select(q_35_1:q_35_5) %>%
+  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
+  as_data_frame 
+
+colSums(!is.na(pdata))
+```
+
+**Die niedrige Fallzahl kommt wohl von unserem fehlerhaften Fragebogen... :|**
+
+--------
+
+## Zufriedenheit mit Betreuung
+
+```{r betreuung_zufriedenheit}
+pdata <- df_haven_neu %>%
+  select(q_12_1:q_12_3, q_24) %>%
+  lapply(., unlabelled_complete) %>% # strip labels from vectors for dplyr
+  as_data_frame %>% 
+  filter(q_24 != "NA")
+
+colSums(!is.na(pdata[,1:3]))
+```
+
+--------
+
+## Bild der Wissenschaft
+```{r bild_wissenschaft}
+pdata <- df_haven_neu %>%
+  select(q_22_2, q_22_3, q_22_6, q_24) %>%
+  lapply(., unlabelled_complete) %>% # strip labels from vectors for dplyr
+  as_data_frame %>% 
+  filter(q_24 != "NA")
+
+colSums(!is.na(pdata[,1:3]))
+```
+
+Auffallend: (relativ) viele Missings bei "Frauen haben die gleichen Chancen".
+
+
+### Indizes
+```{r bild_wissenschaft_indizes}
+df_haven_neu %>%
+  select(unterbrechung_index, mobilität_index, engagement_index, q_24)  %>% 
+  lapply(., unlabelled_complete) %>% # strip labels from vectors for dplyr
+  as_data_frame %>% 
+  filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
+
+colSums(!is.na(pdata[,1:3]))
+```
+
+
+--------
+
+## Perspektiven wissenschaftliche Karriere
+
+```{r perspektive_wiss_karriere}
+perspektive_wiss_karriere <- df_sav %>%
+  select(., q_19_1:q_19_6)
+
+colSums(!is.na(perspektive_wiss_karriere))
+```
+
+Auffallend, die vielen Missings bei "Strebe eine Professur an".
+
+--------
+
+## Indizes Karrierewunsch
+### Nach Geschlecht
+
+```{r indizes_karrierewunsch_geschlecht}
+df_haven_neu %>%
+  select(WiKarrierewunsch_Index, q_24)  %>% 
+  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>%
+  mutate(WiKarrierewunsch_Index = unlabelled_complete(WiKarrierewunsch_Index)) %>% 
+  filter(q_24 != "NA", WiKarrierewunsch_Index != "NA") %>% 
+  group_by(q_24) %>% tally 
+```
+
+### Nach Studienrichtung
+```{r indizes_karrierewunsch_studienrichtung}
+df_haven_neu %>%
+  select(q_1) %>% 
+  mutate(q_1 = recode(q_1, "1 = 1; 2 = 2; 3 = 3; 4 = 1")) %>%
+  mutate(q_1 = factor(q_1, labels=c("BWL",
+                                    "SOZ",
+                                    "VWL"))) -> pdata_1
+
+df_haven_neu %>%
+  select(WiKarrierewunsch_Index) %>% 
+  lapply(., unlabelled_complete) %>% # strip labels from vectors for dplyr
+  data.frame -> pdata_2
+
+bind_cols(pdata_1, pdata_2) %>%
+  filter(q_1 != "NA", WiKarrierewunsch_Index != "NA") %>% 
+  group_by(q_1) %>% 
+  tally
+```
 

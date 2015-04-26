@@ -5,10 +5,15 @@
 
 
 
+
+
+
 In diesem File finden sich die Kreuztabellen und sonstige Darstellungen mit den zu den Grafiken gehörenden Stichprobengrößen.
 
 
-# Grafik: Motivationsskalen
+--------
+
+## Grafik: Motivationsskalen
 
 
 ```
@@ -18,7 +23,9 @@ In diesem File finden sich die Kreuztabellen und sonstige Darstellungen mit den 
 ##                         79                         77
 ```
 
-# Grafik: Motive ein Doktoratsstudium aufzunehmen
+--------
+
+## Grafik: Motive ein Doktoratsstudium aufzunehmen
 Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
 
@@ -29,8 +36,10 @@ Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 ##     80     80     81     80     78     80
 ```
 
-# Grafik: Nachgedacht, abzubrechen
 
+--------
+
+## Grafik: Nachgedacht, abzubrechen
 
 
 **Stichprobengröße Frauen**
@@ -53,7 +62,10 @@ Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 ```
 
 
-# Schwierigkeit, BetreuerIn zu finden nach Geschlecht
+
+--------
+
+## Schwierigkeit, BetreuerIn zu finden nach Geschlecht
 
 ```
 ## 
@@ -90,7 +102,9 @@ Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n BetreuerIn zu finden, von denen gaben aber 2 bei Geschlecht nichts an, daher ist N bei dieser Grafik insgesamt nur 37.
 
 
-# Geschlecht von Betreuer_in mit Geschlecht des/der Befragten als UV
+--------
+
+## Geschlecht von Betreuer_in mit Geschlecht des/der Befragten als UV
 
 ```
 ## 
@@ -118,7 +132,9 @@ Insgesamt hatten 25 Personen angegeben, dass es sehr einfach war, eine/n Betreue
 ## 
 ```
 
-# Grafik: Informationen über das Studium
+--------
+
+## Grafik: Informationen über das Studium
 Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 
 
@@ -128,4 +144,103 @@ Dargestellt sind jeweils die Ns für die einzelnen Variablen.
 ```
 
 
+--------
+
+## XXX schon mal gemacht?
+
+
+```
+## q_23_1 q_23_2 q_23_3 q_23_4 q_23_5 q_23_6 q_23_7 q_23_8 
+##     73     73     73     73     73     73     73     73
+```
+
+
+--------
+
+## Zeitliche Aufwendungen
+
+
+```
+## q_26_1 q_26_2 q_26_3 q_26_4 
+##     75     73     75     75
+```
+
+--------
+
+## Berufstätigkeit
+
+
+```
+## q_35_1 q_35_2 q_35_3 q_35_4 q_35_5 
+##     62     61     61     62     60
+```
+
+**Die niedrige Fallzahl kommt wohl von unserem fehlerhaften Fragebogen... :|**
+
+--------
+
+## Zufriedenheit mit Betreuung
+
+
+```
+## q_12_1 q_12_2 q_12_3 
+##     29     29     29
+```
+
+--------
+
+## Bild der Wissenschaft
+
+```
+## q_22_2 q_22_3 q_22_6 
+##     63     69     67
+```
+
+Auffallend: (relativ) viele Missings bei "Frauen haben die gleichen Chancen".
+
+
+### Indizes
+
+```
+## unterbrechung_index     mobilität_index    engagement_index 
+##                  67                  70                  73
+```
+
+
+--------
+
+## Perspektiven wissenschaftliche Karriere
+
+
+```
+## q_19_1 q_19_2 q_19_3 q_19_4 q_19_5 q_19_6 
+##     80     73     74     75     79     67
+```
+
+Auffallend, die vielen Missings bei "Strebe eine Professur an".
+
+--------
+
+## Indizes Karrierewunsch
+### Nach Geschlecht
+
+
+```
+## Source: local data frame [2 x 2]
+## 
+##       q_24  n
+## 1 weiblich 31
+## 2 männlich 43
+```
+
+### Nach Studienrichtung
+
+```
+## Source: local data frame [3 x 2]
+## 
+##   q_1  n
+## 1 BWL 41
+## 2 SOZ 29
+## 3 VWL  5
+```
 
