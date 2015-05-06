@@ -1272,6 +1272,21 @@ ggsave(filename = "Grafiken/Laufbahnorientierung_Studienrichtung.png",
        dpi = 150, width = 7, height = 6)
 
 
+# Faktorenanalyse Motivationsindex ------------
+motive <- df_sav %>%
+  select(., q_6_1:q_6_16) %>%
+  data.matrix %>%
+  na.omit %>%
+  as.data.frame
+
+ev <- eigen(cor(motive, use = "pairwise.complete.obs")) # get eigenvalues
+ap <- parallel(subject = nrow(motive), var = ncol(motive), rep = 100, cent = 0.05)
+nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
+
+png("../Faktorenanalysen/Faktorenanalyse_Motivation.png", width = 1000, height = 800, res = 150)
+plotnScree(nS, main = NULL)
+dev.off()
+
 # copy all graphs and the html documentation to delivery folder
 filelist <- list.files("Grafiken", pattern = "png|html", full.names = TRUE)
 folderlist <- list.files("Grafiken/Haben_Sie_schon", pattern = "png", full.names = TRUE)
