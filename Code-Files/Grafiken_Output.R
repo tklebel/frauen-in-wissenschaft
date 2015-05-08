@@ -1273,18 +1273,38 @@ ggsave(filename = "Grafiken/Laufbahnorientierung_Studienrichtung.png",
 
 
 # Faktorenanalyse Motivationsindex ------------
+# wrapper for plot
+fa_parallel <- function(x, main = NULL) {
+  ev <- eigen(cor(x, use = "pairwise.complete.obs")) # get eigenvalues
+  ap <- parallel(subject = nrow(x), var = ncol(x), rep = 100, cent = 0.05)
+  nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
+  plotnScree(nS, main = main)
+}
+
+# data to plot
 motive <- df_sav %>%
   select(., q_6_1:q_6_16) %>%
   data.matrix %>%
   na.omit %>%
   as.data.frame
 
-ev <- eigen(cor(motive, use = "pairwise.complete.obs")) # get eigenvalues
-ap <- parallel(subject = nrow(motive), var = ncol(motive), rep = 100, cent = 0.05)
-nS <- nScree(x = ev$values, aparallel = ap$eigen$qevpea)
-
+# plot
 png("../Faktorenanalysen/Faktorenanalyse_Motivation.png", width = 1000, height = 800, res = 150)
-plotnScree(nS, main = NULL)
+fa_parallel(motive)
+dev.off()
+
+
+# Faktorenanalyse Zukunftsvorstellungen ---------------
+# data to plot
+zukunft <- df_sav %>%
+  select(., q_19_1:q_19_6) %>%
+  data.matrix %>%
+  na.omit %>%
+  as.data.frame
+
+
+png("../Faktorenanalysen/Faktorenanalyse_Zukunftsfvorstellungen.png", width = 1000, height = 800, res = 150)
+fa_parallel(zukunft)
 dev.off()
 
 # copy all graphs and the html documentation to delivery folder
