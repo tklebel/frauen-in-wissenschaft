@@ -1536,10 +1536,14 @@ unlabelled_complete <- function(x) {
 
 df_haven_neu %>%
   select(q_1) %>% 
+  mutate(fächer_gesamt = factor(q_1, labels = c("BWL",
+                                                "SOZ",
+                                                "VWL",
+                                                "WiPäd"))) %>% 
   mutate(q_1 = recode(q_1, "1 = 1; 2 = 2; 3 = 3; 4 = 1")) %>%
-  mutate(q_1 = factor(q_1, labels=c("BWL",
-                                    "SOZ",
-                                    "VWL"))) -> pdata_1
+  mutate(q_1 = factor(q_1, labels = c("BWL",
+                                      "SOZ",
+                                      "VWL"))) -> pdata_1
 
 df_haven_neu %>%
   select(WiKarrierewunsch_Index) %>% 
@@ -1552,7 +1556,7 @@ pdata <- bind_cols(pdata_1, pdata_2) %>%
 wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewunsch_Index)) +
   geom_boxplot(width = .6, alpha = .7) +
   geom_jitter(position = position_jitter(height = .1, width = .1),
-              aes(colour = q_1),
+              aes(colour = fächer_gesamt),
               size = 4,
               alpha = .7) +
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
@@ -1568,6 +1572,7 @@ wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewu
   theme(axis.text = element_text(size = 12),
         axis.title = element_text(size = 13),
         title = element_text(size = 14)) +
-  guides(colour = FALSE) # remove legend 
+  annotate("text", x = 1.2, y = 11.5, label = "WiPäd", colour = "#807DBA") +
+  guides(colour = FALSE) # remove legend
 wiss_laufbahnorientierung_studienrichtung
 
