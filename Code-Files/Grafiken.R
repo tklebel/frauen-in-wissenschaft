@@ -1572,7 +1572,7 @@ wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewu
   theme(axis.text = element_text(size = 12),
         axis.title = element_text(size = 13),
         title = element_text(size = 14)) +
-  annotate("text", x = 1.2, y = 11.5, label = "WiPäd", colour = "#807DBA") +
+  annotate("text", x = 1.3, y = 11.2, label = "WiPäd", colour = "#807DBA") +
   guides(colour = FALSE) # remove legend
 wiss_laufbahnorientierung_studienrichtung
 
