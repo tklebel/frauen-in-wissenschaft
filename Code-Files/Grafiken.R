@@ -35,6 +35,8 @@ palette_blue
 palette_red <- brewer.pal(7, "Reds")
 palette_red
 
+palette_red <- brewer.pal(7, "Purples")
+palette_red
 
 # #A1D99B für Männer (Grün) als Grundfarbe 
 # #4292C6 für Frauen (Blau)
@@ -43,7 +45,9 @@ palette_red
 # Basisgrün: #74C476
 
 # Farben für "scale_fill_manual"
-colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C", weiblich = "#4292C6", männlich = "#A1D99B", BWL = "#A1D99B", SOZ = "#4292C6", VWL = "#EF3B2C")
+colours <- c(Mann = "#A1D99B", Frau = "#4292C6", gesamt = "#EF3B2C",
+             weiblich = "#4292C6", männlich = "#A1D99B",
+             BWL = "#A1D99B", SOZ = "#4292C6", VWL = "#EF3B2C", WiPäd = "#807DBA")
 
 
 # helper function: strip label from vector
