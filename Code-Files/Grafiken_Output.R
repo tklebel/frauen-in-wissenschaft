@@ -1247,20 +1247,20 @@ df_haven_neu %>%
   select(WiKarrierewunsch_Index, q_24)  %>% 
   as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
   data.frame %>%
-  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  mutate(q_24 = factor(q_24, labels = c("weiblich", "männlich")))  %>% 
   filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
 
 
 # karrierewunsch nach geschlecht
 wiss_laufbahnorientierung_geschlecht <- ggplot(pdata, aes(q_24, WiKarrierewunsch_Index)) +
   theme_bw() +  
-  geom_boxplot(width = .7, alpha = .95) + 
+  geom_boxplot(width = .6, alpha = .95) + 
   geom_jitter(position = position_jitter(height = .1, width = .1),
               aes(colour = q_24),
               size = 4,
               alpha = .7)  +  
-  stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
-  labs(x = "Geschlecht",
+  stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
+  labs(x = NULL,
        y = NULL,
        title = "Wissenschaftliche Karriereorientierung") +
   theme(legend.position = "none") + # remove superflous legend
@@ -1269,9 +1269,14 @@ wiss_laufbahnorientierung_geschlecht <- ggplot(pdata, aes(q_24, WiKarrierewunsch
   theme(axis.text = element_text(size = 12),
         axis.title = element_text(size = 13),
         title = element_text(size = 14)) +
-  scale_colour_manual(values = colours)
+  scale_colour_manual(values = colours) +
+  scale_x_discrete(labels = c("weiblich\n(n = 31)", "männlich\n(n = 43)"))
 
 ggsave(filename = "Grafiken/Laufbahnorientierung_Geschlecht.png",
+       plot = wiss_laufbahnorientierung_geschlecht,
+       dpi = 150, width = 5, height = 7)
+
+ggsave(filename = "../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_14.png",
        plot = wiss_laufbahnorientierung_geschlecht,
        dpi = 150, width = 5, height = 7)
 
@@ -1321,6 +1326,7 @@ wiss_laufbahnorientierung_studienrichtung <- ggplot(pdata, aes(q_1, WiKarrierewu
                      labels = c("niedrig",
                                 seq(3, 15, 2),
                                 "hoch")) +
+  scale_x_discrete(labels = c("BWL\n(n = 41)", "SOZ\n(n = 29)", "VWL\n(n = 5)")) +
   theme(axis.text = element_text(size = 12),
         axis.title = element_text(size = 13),
         title = element_text(size = 14)) +
@@ -1331,6 +1337,9 @@ ggsave(filename = "Grafiken/Laufbahnorientierung_Studienrichtung.png",
        plot = wiss_laufbahnorientierung_studienrichtung,
        dpi = 150, width = 7, height = 6)
 
+ggsave(filename = "../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_15.png",
+       plot = wiss_laufbahnorientierung_studienrichtung,
+       dpi = 150, width = 7, height = 6)
 
 # Faktorenanalyse Motivationsindex ------------
 # wrapper for plot
