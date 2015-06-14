@@ -882,6 +882,12 @@ labels_berufstätigkeit_1n <- c("Meine derzeitige Erwerbstätigkeit lässt sich 
                                "Ich würde gerne den Umfang meiner Erwerbstätigkeit reduzieren,\num mehr Zeit für das Doktoratsstudium zu haben")
 
 
+labels_berufstätigkeit_2n <- c("Meine derzeitige Erwerbstätigkeit lässt sich\nsehr gut mit den Inhalten\ndes Doktoratsstudiums/der Dissertation vereinen",
+                               "Es ist schwierig, Doktoratsstudium\nund Erwerbstätigkeit zu vereinbaren", 
+                               "Meine derzeitige Erwerbstätigkeit ist für den\nweiteren Verlauf meiner beruflichen Laufbahn förderlich",
+                               "Ich kann meine Arbeitszeit im Hinblick auf die\nAnforderungen des Doktoratsstudiums frei einteilen",
+                               "Ich würde gerne den Umfang\nmeiner Erwerbstätigkeit reduzieren,\num mehr Zeit für das Doktoratsstudium zu haben")
+
 # univariat
 # get number of valid observations for further computation of percentages
 cases <- df_haven_neu %>%
@@ -895,7 +901,7 @@ reihenfolge <- df_haven_neu %>%
   summarise_each(., funs(sum(. == "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
   gather(id, häufigkeit) %>%
   mutate(häufigkeit = häufigkeit / cases) %>% # divide counts by cases for correct percentages
-  cbind(., `labels_berufstätigkeit_1n`) 
+  cbind(., `labels_berufstätigkeit_2n`) 
 
 # select data to plot and gather it in long format, remove NAs
 berufstätigkeit <- df_haven_neu %>%
@@ -915,11 +921,11 @@ berufstätigkeit$variable <- factor(berufstätigkeit$variable,
                                               "trifft eher nicht zu",
                                               "trifft gar nicht zu"))
 
-berufstätigkeit$labels_berufstätigkeit_1n <- factor(berufstätigkeit$labels_berufstätigkeit_1n,
-                                                    levels = berufstätigkeit$labels_berufstätigkeit_1n[order(berufstätigkeit$häufigkeit)])
+berufstätigkeit$labels_berufstätigkeit_2n <- factor(berufstätigkeit$labels_berufstätigkeit_2n,
+                                                    levels = berufstätigkeit$labels_berufstätigkeit_2n[order(berufstätigkeit$häufigkeit)])
 
 # plot data
-berufsplot <- ggplot(berufstätigkeit, aes(`labels_berufstätigkeit_1n`, fill = variable))  +
+berufsplot <- ggplot(berufstätigkeit, aes(`labels_berufstätigkeit_2n`, fill = variable))  +
   geom_bar(position = "fill", width = .7) +
   coord_flip() +
   scale_fill_manual(values = colours_skala_blue_green) +
