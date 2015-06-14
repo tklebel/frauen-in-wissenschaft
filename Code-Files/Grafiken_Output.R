@@ -125,9 +125,7 @@ rm(motive, reihenfolge, labels_motivplot, motivplot, cases)
 # select data to plot
 df_haven %>%
   select(contains("Motivation"), q_24)  %>% 
-  as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
-  data.frame %>%
-  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  mutate(q_24 = factor(q_24, labels = c("weiblich", "männlich")))  %>% 
   filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
 
 
@@ -140,28 +138,30 @@ p1 <- ggplot(pdata, aes(q_24, Inst_Einbindung_Motivation)) +
   theme(plot.title = element_text(size = 10),
         axis.text = element_text(size = 8.5),
         axis.title = element_text(size = 9.5)) + # reduce title size
-  labs(title = "Institutionelle Einbindung als Motivation") +
-  labs(x = "Geschlecht") + 
-  labs(y = "Motivation") +
+  labs(title = "Institutionelle Einbindung als Motivation",
+       x = NULL,
+       y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
+  scale_x_discrete(labels = c("weiblich\n(n = 33)", "männlich\n(n = 46)")) + 
+  scale_y_continuous(limits = c(1, 12), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # Verlegenheit
 p2 <- ggplot(pdata, aes(q_24, Verlegenheit_Motivation)) +
   theme_bw() +  
   geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .8, width = 1) + 
-  geom_boxplot(width = .08, alpha = .95) +
-  stat_summary(fun.y = "mean", geom = "point", size = 3, shape = 4) +
+  geom_boxplot(width = .12, alpha = .95) +
+  stat_summary(fun.y = "mean", geom = "point", size = 4, shape = 4) +
   theme(plot.title = element_text(size = 10),
         axis.text = element_text(size = 8.5),
         axis.title = element_text(size = 9.5)) + # reduce title size
-  labs(title = "Verlegenheit als Motivation") +
-  labs(x = "Geschlecht") + 
-  labs(y = "Motivation") +
+  labs(title = "Verlegenheit als Motivation",
+       x = NULL,
+       y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
+  scale_x_discrete(labels = c("weiblich\n(n = 33)", "männlich\n(n = 45)")) + 
+  scale_y_continuous(limits = c(1, 6), breaks = c(1, 3.5, 6), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # Wi_interesse
 p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
@@ -172,12 +172,13 @@ p3 <- ggplot(pdata, aes(q_24, Wi_Interesse_Motivation)) +
   theme(plot.title = element_text(size = 10),
         axis.text = element_text(size = 8.5),
         axis.title = element_text(size = 9.5)) + # reduce title size
-  labs(title = "Wissenschaftliches Interesse als Motivation") +
-  labs(x = "Geschlecht") + 
-  labs(y = "Motivation") +
+  labs(title = "Wissenschaftliches Interesse als Motivation",
+       x = NULL,
+       y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
+  scale_x_discrete(labels = c("weiblich\n(n = 33)", "männlich\n(n = 46)")) + 
+  scale_y_continuous(limits = c(1, 12), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # Prestige_Motivation
 p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
@@ -188,15 +189,20 @@ p4 <- ggplot(pdata, aes(q_24, Prestige_Motivation)) +
   theme(plot.title = element_text(size = 10),
         axis.text = element_text(size = 8.5),
         axis.title = element_text(size = 9.5)) + # reduce title size
-  labs(title = "Prestige als Motivation") +
-  labs(x = "Geschlecht") + 
-  labs(y = "Motivation") +
+  labs(title = "Prestige als Motivation",
+       x = NULL,
+       y = "Motivation") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  scale_y_continuous(limits = c(1, 12.5), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
+  scale_x_discrete(labels = c("weiblich\n(n = 33)", "männlich\n(n = 44)")) + 
+  scale_y_continuous(limits = c(1, 12), breaks = c(1, 6.5, 12), labels = c("niedrig", "mittel", "hoch"))  # extend y scale to range of data
 
 # zusammenführen
 png("Grafiken/Motivationsindizes.png", width = 1600, height = 1200, res = 200)
+grid.arrange(p1, p2, p3, p4)
+dev.off()
+
+png("../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_5.png", width = 1600, height = 1200, res = 200)
 grid.arrange(p1, p2, p3, p4)
 dev.off()
 
@@ -381,21 +387,25 @@ pdata <- pdata %>%
 # Plot
 Stichprobenplot <- ggplot(pdata, aes(x = herkunft, y = perc, fill = Geschlecht)) +
   geom_bar(stat = "identity", width = .8) +
-  facet_wrap(~ Studienrichtung) +
+  facet_wrap(~Studienrichtung) +
   theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   scale_fill_manual(values = colours) +
   labs(x = NULL, y = "Prozentanteile nach Geschlecht") +
-  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm")) +
+  theme(axis.text.y = element_text(size = 13),
+        axis.text.x = element_text(size = 13),
+        legend.text = element_text(size = 12)) 
 
 # n's zu plot hinzufügen
 p <- arrangeGrob(Stichprobenplot, sub = textGrob(c("n = 258", "n = 40", "n = 77", "n = 32", "n = 33", "n = 6"),
-                                                 x = c(0.013, .152, .29, .40, .537, .675),
-                                                 hjust = -3.2, vjust = -2.8,
-                                                 gp = gpar(fontsize = 10, col = "grey40")))
+                                                 x = c(0.013, .145, .285, .395, .528, .665),
+                                                 hjust = -2.7, vjust = -2.5,
+                                                 gp = gpar(fontsize = 12, col = "grey40")))
 
 
 ggsave("Grafiken/Stichprobendarstellung.png", p, width = 11, height = 7.2, dpi = 100)
+ggsave("../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_1.png", p, width = 11, height = 7.2, dpi = 100)
 
 rm(pdata)
 
@@ -420,7 +430,7 @@ labels_infoplot <- c("Ablauf und Rahmenbedingungen des\n Doktoratsstudiums (z.B.
 # get frequencies of first two levels, in order to get order of variables for plot
 reihenfolge <- df_sav %>%
   select(q_20_1:q_20_8) %>%
-  summarise_each(., funs(sum(.== "mehr als genug" | . == "ausreichend", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
+  summarise_each(., funs(sum(. == "mehr als genug" | . == "ausreichend", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
   gather(id, häufigkeit) %>%
   cbind(., labels_infoplot) 
 
@@ -436,7 +446,7 @@ infos <- full_join(infos, reihenfolge, by = "id")
 # reorder the levels for the plot
 infos$variable <- factor(infos$variable, levels = c("mehr als genug", "ausreichend", "zu wenig", "Ist für mich nicht wichtig"))
 infos$labels_infoplot <- factor(infos$labels_infoplot, levels = infos$labels_infoplot[order(infos$häufigkeit)])
-levels(infos$variable)[levels(infos$variable)=="Ist für mich nicht wichtig"] <- "ist für mich nicht wichtig" # level des Factors anpassen (Kleinschreibung)
+levels(infos$variable)[levels(infos$variable) == "Ist für mich nicht wichtig"] <- "ist für mich nicht wichtig" # level des Factors anpassen (Kleinschreibung)
 
 # plot data
 infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
@@ -445,12 +455,14 @@ infoplot <- ggplot(infos, aes(labels_infoplot, fill = variable))  +
   scale_fill_manual(values = colours_skala_blue_green) +
   theme_bw() +
   scale_y_continuous(breaks = pretty_breaks(n = 8), labels = percent_format()) +
-  theme(axis.text.y = element_text(size = 13),
-        axis.text.x = element_text(size = 12),
-        legend.text = element_text(size=11)) +
+  theme(axis.text.y = element_text(size = 15),
+        axis.text.x = element_text(size = 11),
+        legend.text = element_text(size = 13),
+        legend.title = element_text(size = 14)) +
   labs(x = NULL, y = NULL, fill = "Haben Sie genügend\nInformationen?") # remove labels of axes and legend
 
-ggsave(filename = "Grafiken/Informationen.png", plot = infoplot, dpi = 150, width = 12.5, height = 5.2)
+ggsave(filename = "Grafiken/Informationen.png", plot = infoplot, dpi = 150, width = 12, height = 5.2)
+ggsave(filename = "../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_9.png", plot = infoplot, dpi = 150, width = 12, height = 5.2)
 
 
 # clean up 
@@ -671,7 +683,13 @@ rm(pdata)
 png("Grafiken/Haben_Sie_schon/Haben_Sie_schon.png", width = 2280, height = 2800, res = 200)
 grid.arrange(p1, p3, p2, p4, p5, p6, p7, p8,
              nrow = 4,
-             main = textGrob("Haben Sie schon...?", gp = gpar(cex = 2)))
+             main = textGrob("Haben Sie schon...?", gp = gpar(cex = 1.7)))
+dev.off()
+
+png("../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_10.png", width = 2280, height = 2800, res = 200)
+grid.arrange(p1, p3, p2, p4, p5, p6, p7, p8,
+             nrow = 4,
+             main = textGrob("Haben Sie schon...?", gp = gpar(cex = 1.7)))
 dev.off()
 
 rm(p1, p2, p3, p4, p5, p6, p7, p8)
@@ -685,11 +703,11 @@ pdata <- df_sav %>%
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
   rename(., Betreuer = q_9, Geschlecht = q_24)
 
-schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
-  geom_bar(stat="identity", position="dodge") +
+schwierigkeitsplot <- ggplot(pdata, aes(Betreuer, p, fill = Geschlecht)) +
+  geom_bar(stat = "identity", position = "dodge") +
   theme_bw() + scale_y_continuous(labels = percent_format()) +
   scale_fill_manual(values = colours) +
-  labs(y="Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
+  labs(y = "Prozentanteile innerhalb der Geschlechter", x = "Schwierigkeit, eine/n BetreuerIn zu finden") 
 schwierigkeitsplot
 
 ggsave(filename = "Grafiken/Schwierigkeit_betreuer_finden.png", plot = schwierigkeitsplot, dpi = 150, width = 8, height = 5.6)
@@ -706,21 +724,33 @@ pdata <- df_sav %>%
   as.data.frame %>% # coerce to data.frame -> computes frequencies (Freq)
   group_by(q_24) %>% # group by categorial variable
   mutate(p = Freq/sum(Freq)) %>% # compute grouped percentage
-  rename(., Betreuer = q_8, Geschlecht = q_24)
+  rename(., Betreuer = q_8, Geschlecht = q_24) %>%
+  ungroup %>% 
+  mutate(Geschlecht = factor(Geschlecht, labels = c("weiblich (n = 16)", "männlich (n = 20)")))
 
-betreuerplot_2 <- ggplot(pdata, aes(Betreuer, p, fill=Geschlecht)) +
-  geom_bar(stat="identity", position="dodge") +
+betreuerplot_2 <- ggplot(pdata, aes(Betreuer, p, fill = Geschlecht)) +
+  geom_bar(stat = "identity", position = "dodge") +
   theme_bw() +
   scale_y_continuous(labels = percent_format()) +
   scale_x_discrete(breaks = c("Frau", "Mann"), labels = c("weiblich", "männlich")) +
-  scale_fill_manual(values = colours) +
+  scale_fill_manual(values =  c(`weiblich (n = 16)` = "#4292C6", `männlich (n = 20)` = "#A1D99B")) +
   labs(y    = "Prozentanteile innerhalb Geschlecht des/der Studierenden",
        x    = "Geschlecht des/der BetreuerIn",
-       fill = "Geschlecht des/der\nStudierenden")
+       fill = "Geschlecht des/der\nStudierenden") +
+  theme(axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14),
+        legend.text = element_text(size = 13),
+        legend.title = element_text(size = 14)) 
+  
 
 ggsave(filename = "Grafiken/Geschlecht_betreuer.png",
        plot = betreuerplot_2,
        dpi = 150, width = 8, height = 6.5)
+
+ggsave(filename = "../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_7.png",
+       plot = betreuerplot_2,
+       dpi = 150, width = 8, height = 6.5)
+
 rm(pdata, betreuerplot_1, betreuerplot_2)
 
 
@@ -730,8 +760,6 @@ rm(pdata, betreuerplot_1, betreuerplot_2)
 df_haven_neu %>%
   select(q_26_1:q_26_5, q_24) %>%
   mutate(q_24 = as_factor(q_24)) %>%
-  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
-  data.frame %>% 
   filter(q_24 != "NA", q_26_1 != "NA") -> pdata
 
 p1 <- ggplot(pdata, aes(q_24, q_26_1)) +
@@ -740,20 +768,19 @@ p1 <- ggplot(pdata, aes(q_24, q_26_1)) +
   theme_bw() +    
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Studium") +
-  labs(x = "Geschlecht") + 
+  labs(x = NULL) + 
   labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  ylim(c(0, 80))
+  ylim(c(0, 80)) +
+  scale_x_discrete(labels = c("weiblich\n(n = 32)", "männlich\n(n = 43)"))
 
 
 # Aufwand für Erwerbstätigkeit
 df_haven_neu %>%
-  select(q_26_1:q_26_5, q_24) %>%
+  select(q_26_1:q_26_5, q_24, q_31) %>%
   mutate(q_24 = as_factor(q_24)) %>%
-  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
-  data.frame %>% 
-  filter(q_24 != "NA", q_26_2 != "NA") -> pdata
+  filter(q_24 != "NA", q_26_2 != "NA", q_31 == 1) -> pdata
 
 p2 <- ggplot(pdata, aes(q_24, q_26_2)) +
   geom_violin(aes(fill = q_24), trim = T, alpha = .85, adjust = .6, width = 1) + 
@@ -761,11 +788,12 @@ p2 <- ggplot(pdata, aes(q_24, q_26_2)) +
   theme_bw() +    
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Erwerbstätigkeit") +
-  labs(x = "Geschlecht") + 
+  labs(x = NULL) + 
   labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  ylim(c(0, 80))
+  ylim(c(0, 80)) +
+  scale_x_discrete(labels = c("weiblich\n(n = 28)", "männlich\n(n = 38)"))
 
 
 
@@ -773,8 +801,6 @@ p2 <- ggplot(pdata, aes(q_24, q_26_2)) +
 df_haven_neu %>%
   select(q_26_1:q_26_5, q_24) %>%
   mutate(q_24 = as_factor(q_24)) %>%
-  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
-  data.frame %>% 
   filter(q_24 != "NA", q_26_3 != "NA") -> pdata
 
 p3 <- ggplot(pdata, aes(q_24, q_26_3)) +
@@ -783,11 +809,12 @@ p3 <- ggplot(pdata, aes(q_24, q_26_3)) +
   theme_bw() +    
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Haushaltsführung") +
-  labs(x = "Geschlecht") + 
+  labs(x = NULL) + 
   labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  ylim(c(0, 80))
+  ylim(c(0, 80)) +
+  scale_x_discrete(labels = c("weiblich\n(n = 32)", "männlich\n(n = 43)"))
 
 
 
@@ -795,8 +822,6 @@ p3 <- ggplot(pdata, aes(q_24, q_26_3)) +
 df_haven_neu %>%
   select(q_26_1:q_26_5, q_24) %>%
   mutate(q_24 = as_factor(q_24)) %>%
-  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
-  data.frame %>% 
   filter(q_24 != "NA", q_26_4 != "NA") -> pdata
 
 p4 <- ggplot(pdata, aes(q_24, q_26_4)) +
@@ -805,19 +830,18 @@ p4 <- ggplot(pdata, aes(q_24, q_26_4)) +
   theme_bw() +    
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Hobbies und Sport") +
-  labs(x = "Geschlecht") + 
+  labs(x = NULL) + 
   labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  ylim(c(0, 80))
+  ylim(c(0, 80)) +
+  scale_x_discrete(labels = c("weiblich\n(n = 32)", "männlich\n(n = 43)"))
 
 
 # Aufwand für Betreungspflichten (Kinder/Angehörige)
 df_haven_neu %>%
   select(q_26_1:q_26_5, q_24) %>%
   mutate(q_24 = as_factor(q_24)) %>%
-  lapply(., unlabelled) %>% # strip labels from vectors for dplyr
-  data.frame %>% 
   filter(q_24 != "NA", q_26_5 != "NA") -> pdata 
 
 p5 <- ggplot(pdata, aes(q_24, q_26_5)) +
@@ -826,11 +850,12 @@ p5 <- ggplot(pdata, aes(q_24, q_26_5)) +
   theme_bw() +    
   stat_summary(fun.y = "mean", geom = "point", size = 5, shape = 4) +
   labs(title = "Betreungspflichten (Kinder/Angehörige)") +
-  labs(x = "Geschlecht") + 
+  labs(x = NULL) + 
   labs(y = "Aufwand [in Stunden]") +
   theme(legend.position = "none") + # remove superflous legend
   scale_fill_manual(values = colours) +
-  ylim(c(0, 80))
+  ylim(c(0, 80)) +
+  scale_x_discrete(labels = c("weiblich", "männlich"))
 
 
 
@@ -838,6 +863,9 @@ png("Grafiken/Zeitaufwand.png", width = 1500, height = 1400, res = 200)
 grid.arrange(p1, p2, p3, p4, nrow = 2)
 dev.off()
 
+png("../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_3.png", width = 1500, height = 1400, res = 200)
+grid.arrange(p1, p2, p3, p4, nrow = 2)
+dev.off()
 
 ## Berufstätigkeit ---------------
 # Farben für skala
@@ -864,7 +892,7 @@ cases <- colSums(!is.na(cases))
 reihenfolge <- df_haven_neu %>%
   select(q_35_1:q_35_5) %>% 
   lapply(as_factor) %>% as_data_frame %>% 
-  summarise_each(., funs(sum(.== "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
+  summarise_each(., funs(sum(. == "trifft zu" | . == "trifft eher zu", na.rm = T))) %>% # summiere die ausprägungen für die ersten beiden levels
   gather(id, häufigkeit) %>%
   mutate(häufigkeit = häufigkeit / cases) %>% # divide counts by cases for correct percentages
   cbind(., `labels_berufstätigkeit_1n`) 
@@ -898,14 +926,18 @@ berufsplot <- ggplot(berufstätigkeit, aes(`labels_berufstätigkeit_1n`, fill = 
   theme_bw() +
   theme(axis.text.y = element_text(size = 13),
         axis.text.x = element_text(size = 12),
-        legend.text = element_text(size=11)) +
+        legend.text = element_text(size = 11)) +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL) # remove labels of axes and legend
 
 
 ggsave(filename = "Grafiken/Berufstätigkeit.png",
        plot = berufsplot,
-       dpi = 150, height = 4, width = 12.5)
+       dpi = 150, height = 4, width = 10)
+
+ggsave(filename = "../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_2.png",
+       plot = berufsplot,
+       dpi = 150, height = 4, width = 10)
 
 
 ## Zufriedenheit mit Betreuung ----------
@@ -933,7 +965,8 @@ p1 <- ggplot(pdata, aes(q_24, fill = q_12_1))  +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_betreuung[1]) +
   coord_flip() +
-  theme(axis.text = element_text(size = 12))
+  theme(axis.text = element_text(size = 12)) + 
+  scale_x_discrete(labels = c("weiblich\n(n = 12)", "männlich\n(n = 17)"))
 
 # q_12_2
 df_haven_neu %>%
@@ -951,7 +984,8 @@ p2 <- ggplot(pdata, aes(q_24, fill = q_12_2))  +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_betreuung[2]) +
   coord_flip() +
-  theme(axis.text = element_text(size = 12))
+  theme(axis.text = element_text(size = 12)) + 
+  scale_x_discrete(labels = c("weiblich\n(n = 12)", "männlich\n(n = 17)"))
 
 # q_12_3
 df_haven_neu %>%
@@ -969,9 +1003,16 @@ p3 <- ggplot(pdata, aes(q_24, fill = q_12_3))  +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_betreuung[3]) +
   coord_flip() +
-  theme(axis.text = element_text(size = 12))
+  theme(axis.text = element_text(size = 12)) + 
+  scale_x_discrete(labels = c("weiblich\n(n = 13)", "männlich\n(n = 16)"))
 
 png("Grafiken/Betreuungszufriedenheit.png", width = 1400, height = 1200, res = 200)
+grid.arrange(p1, p2, p3, nrow = 3,
+             main = textGrob("Wie zufrieden sind Sie mit der Betreuung Ihrer Dissertation?",
+                             gp = gpar(fontsize = 16)))
+dev.off()
+
+png("../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_8.png", width = 1400, height = 1200, res = 200)
 grid.arrange(p1, p2, p3, nrow = 3,
              main = textGrob("Wie zufrieden sind Sie mit der Betreuung Ihrer Dissertation?",
                              gp = gpar(fontsize = 16)))
@@ -990,7 +1031,6 @@ labels_bild <- c("Frauen haben im universitären Umfeld gleich\nhohe Chancen auf
                  "Eine Vereinbarkeit von Familie und Beruf\nist im wissenschaftlichen Berufsfeld gut möglich")
 
 
-
 # q_22_2
 df_haven_neu %>%
   select(q_22_2, q_24) %>%
@@ -1006,7 +1046,9 @@ p1 <- ggplot(pdata, aes(q_24, fill = q_22_2))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_bild[1]) +
-  coord_flip() 
+  coord_flip() +
+  theme(title  = element_text(size = 10)) +
+  scale_x_discrete(labels = c("weiblich\n(n = 29)", "männlich\n(n = 34)"))
 
 # q_22_3
 df_haven_neu %>%
@@ -1023,7 +1065,9 @@ p2 <- ggplot(pdata, aes(q_24, fill = q_22_3))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_bild[2]) +
-  coord_flip() 
+  coord_flip() +
+  theme(title  = element_text(size = 10)) +
+  scale_x_discrete(labels = c("weiblich\n(n = 31)", "männlich\n(n = 38)"))
 
 # q_22_6
 df_haven_neu %>%
@@ -1040,21 +1084,26 @@ p3 <- ggplot(pdata, aes(q_24, fill = q_22_6))  +
   scale_y_continuous(breaks = pretty_breaks(n = 6), labels = percent_format()) +
   labs(x = NULL, y = NULL, fill = NULL, # remove labels of axes and legend
        title = labels_bild[3]) +
-  coord_flip() 
-
+  coord_flip() +
+  theme(title = element_text(size = 10)) +
+  scale_x_discrete(labels = c("weiblich\n(n = 29)", "männlich\n(n = 38)"))
 
 png("Grafiken/Bild_der_Wissenschaft.png", width = 1400, height = 1200, res = 200)
 grid.arrange(p1, p2, p3, nrow = 3)
 dev.off()
 
+png("../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_11.png", width = 1400, height = 1200, res = 200)
+grid.arrange(p1, p2, p3, nrow = 3)
+dev.off()
 
 ## Bild der Wissenschaft - Indizes ------------
 # select data to plot
 df_haven %>%
   select(unterbrechung_index, mobilität_index, engagement_index, q_24)  %>% 
-  as.matrix %>% # get rid of "labelled" class which doesn't work with dplyr right now
-  data.frame %>%
-  mutate(q_24 = factor(q_24, labels=c("weiblich", "männlich")))  %>% 
+  mutate(unterbrechung_index = 5 - unterbrechung_index,
+         mobilität_index = 5 - mobilität_index,
+         engagement_index = 5 - engagement_index) %>% 
+  mutate(q_24 = factor(q_24, labels = c("weiblich", "männlich")))  %>% 
   filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
 
 
@@ -1068,12 +1117,13 @@ p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
               alpha = .7) +
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(title = "Unterbrechungen haben eine\nhemmende Auswirkungen auf\neine wissenschaftliche Laufbahn",
-       x = "Geschlecht",
+       x = NULL,
        y = NULL) +
   scale_colour_manual(values = colours) +
   theme_bw() +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
-                     labels = c("Zustimmung", "Ablehung")) + 
+                     labels = c("Ablehnung", "Zustimmung")) +
+  scale_x_discrete(labels = c("weiblich\n(n = 31)", "männlich\n(n = 36)")) +
   theme(axis.text = element_text(size = 12),
         axis.text = element_text(size = 13),
         title = element_text(size = 13)) +
@@ -1088,12 +1138,13 @@ p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
               alpha = .7) + 
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(title = "Wissenschaft erfordert\nein überdurchschnittliches\nEngagement",
-       x = "Geschlecht",
+       x = NULL,
        y = NULL) +
   scale_colour_manual(values = colours) +
   theme_bw() +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
-                     labels = c("Zustimmung", "Ablehung")) + 
+                     labels = c("Ablehnung", "Zustimmung")) +
+  scale_x_discrete(labels = c("weiblich\n(n = 32)", "männlich\n(n = 41)")) +
   theme(axis.text = element_text(size = 12),
         axis.text = element_text(size = 13),
         title = element_text(size = 13)) +
@@ -1109,12 +1160,13 @@ p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
               alpha = .7) +
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(title = "Für eine wissenschaftliche\nLaufbahn ist räumliche Mobilität\nerforderlich",
-       x = "Geschlecht",
+       x = NULL,
        y = NULL) +
   scale_colour_manual(values = colours) +
   theme_bw() +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
-                     labels = c("Zustimmung", "Ablehung")) + 
+                     labels = c("Ablehnung", "Zustimmung")) +
+  scale_x_discrete(labels = c("weiblich\n(n = 31)", "männlich\n(n = 39)")) +
   theme(axis.text = element_text(size = 12),
         axis.text = element_text(size = 13),
         title = element_text(size = 13)) +
@@ -1125,7 +1177,9 @@ png("Grafiken/Bild_der_Wissenschaft_Indizes.png", width = 1400, height = 1000, r
 grid.arrange(p1, p2, p3, nrow = 1)
 dev.off()
 
-
+png("../Fertige_Grafiken/Adaptiere Grafiken/Abbildung_12.png", width = 1400, height = 1000, res = 100)
+grid.arrange(p1, p2, p3, nrow = 1)
+dev.off()
 
 ## Perspektiven wissenschaftliche Karriere -----------------
 # angelehnt an plot "Motive"
