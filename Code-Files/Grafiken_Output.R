@@ -1113,6 +1113,11 @@ df_haven %>%
   filter(q_24 != "NA") -> pdata # personen rausschmeißen, die als Geschlecht NA haben
 
 
+# mittelwerte für sarah
+mean(pdata$unterbrechung_index, na.rm = T) # 2,72
+mean(pdata$engagement_index, na.rm = T) # 3.03
+mean(pdata$mobilität_index, na.rm = T) # 2.8
+
 # alternativ als jitterplot (violinplot ist für die Daten nicht ehrlich)
 # unterbrechung_index
 p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
@@ -1122,7 +1127,7 @@ p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
               size = 4,
               alpha = .7) +
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
-  labs(title = "Unterbrechungen haben eine\nhemmende Auswirkungen auf\neine wissenschaftliche Laufbahn",
+  labs(title = "Unterbrechungen haben eine\nhemmende Auswirkung auf\neine wissenschaftliche Laufbahn",
        x = NULL,
        y = NULL) +
   scale_colour_manual(values = colours) +
@@ -1130,9 +1135,8 @@ p1 <- ggplot(pdata, aes(q_24, unterbrechung_index)) +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
                      labels = c("Ablehnung", "Zustimmung")) +
   scale_x_discrete(labels = c("weiblich\n(n = 31)", "männlich\n(n = 36)")) +
-  theme(axis.text = element_text(size = 12),
-        axis.text = element_text(size = 13),
-        title = element_text(size = 13)) +
+  theme(axis.text = element_text(size = 14.5),
+        title = element_text(size = 15)) +
   guides(colour = FALSE) # remove legend
 
 # engagement_index
@@ -1151,9 +1155,8 @@ p2 <- ggplot(pdata, aes(q_24, engagement_index)) +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
                      labels = c("Ablehnung", "Zustimmung")) +
   scale_x_discrete(labels = c("weiblich\n(n = 32)", "männlich\n(n = 41)")) +
-  theme(axis.text = element_text(size = 12),
-        axis.text = element_text(size = 13),
-        title = element_text(size = 13)) +
+  theme(axis.text = element_text(size = 14.5),
+        title = element_text(size = 15)) +
   guides(colour = FALSE) # remove legend
 
 
@@ -1173,9 +1176,8 @@ p3 <- ggplot(pdata, aes(q_24, mobilität_index)) +
   scale_y_continuous(limits = c(.9, 4.1), breaks = c(1, 4),
                      labels = c("Ablehnung", "Zustimmung")) +
   scale_x_discrete(labels = c("weiblich\n(n = 31)", "männlich\n(n = 39)")) +
-  theme(axis.text = element_text(size = 12),
-        axis.text = element_text(size = 13),
-        title = element_text(size = 13)) +
+  theme(axis.text = element_text(size = 14.5),
+        title = element_text(size = 15)) +
   guides(colour = FALSE) # remove legend
 
 
@@ -1268,7 +1270,7 @@ wiss_laufbahnorientierung_geschlecht <- ggplot(pdata, aes(q_24, WiKarrierewunsch
   stat_summary(fun.y = "mean", geom = "point", size = 8, shape = 4) +
   labs(x = NULL,
        y = NULL,
-       title = "Wissenschaftliche Karriereorientierung") +
+       title = "Wissenschaftliche Laufbahnorientierung") +
   theme(legend.position = "none") + # remove superflous legend
   scale_y_continuous(limits = c(.89, 17.11), breaks = seq(1, 17, 2), # breaks an den ungeraden Zahlen
                      labels = c("niedrig", seq(3, 15, 2), "hoch")) +
